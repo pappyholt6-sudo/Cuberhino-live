@@ -3016,6 +3016,7 @@
       <div class="auth-strip">
         <img class="topbar-avatar" id="topbarAvatar" src="" alt="Profile" style="display:none;" title="Edit profile" />
         <div class="auth-status" id="authStatus" style="display:none;"></div>
+        <button class="auth-btn" id="topbarProfileBtn" title="Account">👤</button>
       </div>
     </div>
   </div>
@@ -7718,11 +7719,14 @@
     }
 
     function updateTopbarAvatar(url) {
+      const profileBtn = document.getElementById('topbarProfileBtn');
       if (url) {
         topbarAvatar.src = url;
         topbarAvatar.style.display = "";
+        if (profileBtn) profileBtn.style.display = "none";
       } else {
         topbarAvatar.style.display = "none";
+        if (profileBtn) profileBtn.style.display = "";
       }
     }
 
@@ -7824,6 +7828,10 @@
       await handleSignOut();
     });
     topbarAvatar.addEventListener("click", openProfileEditDialog);
+    document.getElementById('topbarProfileBtn').addEventListener('click', () => {
+      if (state.currentUser) { openProfileEditDialog(); }
+      else { syncSettingsUI(); activateTab('accountTab'); settingsDialog.showModal(); }
+    });
     // ── End Profile Edit Dialog ───────────────────────────────────────
 
     // ── End Profile Setup ─────────────────────────────────────────────
