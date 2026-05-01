@@ -9696,8 +9696,10 @@
     async function oneScramble(eventId) {
       const puzzle = ALL_COMP_EVENTS.find(e => e.id === eventId)?.puzzle;
       const ids = (puzzle && puzzle !== eventId) ? [eventId, puzzle] : [eventId];
+      const bigPuzzles = new Set(['555','666','777','444bf','555bf']);
+      const ms = bigPuzzles.has(eventId) ? 30000 : 10000;
       for (const id of ids) {
-        try { return await scrambleWithTimeout(id); } catch {}
+        try { return await scrambleWithTimeout(id, ms); } catch {}
       }
       return "No internet — scramble unavailable";
     }
@@ -11138,7 +11140,7 @@
       try {
         const scrambleStr = (state.nextScramble && state.nextScrambleEvent === currentEvent)
           ? state.nextScramble
-          : await scrambleWithTimeout(currentEvent, 8000);
+          : await scrambleWithTimeout(currentEvent, ['555','666','777','444bf','555bf'].includes(currentEvent) ? 30000 : 10000);
         state.nextScramble = null;
         state.nextScrambleEvent = null;
         state.currentScramble = scrambleStr;
