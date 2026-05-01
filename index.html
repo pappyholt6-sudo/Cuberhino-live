@@ -25,10 +25,10 @@
       --timer-scale: 0.78;
       --text-scale: 1;
       --scramble-scale: 1;
-      --sidebar-width: 320px;
+      --sidebar-width: 360px;
       --sidebar-min-width: 240px;
       --sidebar-max-width: 520px;
-      --tool-dock-height: 220px;
+      --tool-dock-height: 240px;
     }
 
     *{box-sizing:border-box}
@@ -4202,7 +4202,6 @@
     let auth = null;
     let db = null;
     let firebaseReady = false;
-    let syncing = false;
 
     const state = {
       mode: "idle",
@@ -4262,7 +4261,7 @@
         const raw = Number(localStorage.getItem(TOOL_DOCK_HEIGHT_KEY));
         if (Number.isFinite(raw)) return Math.max(140, Math.min(600, raw));
       } catch {}
-      return 220;
+      return 240;
     }
 
     function applyToolDockHeight(h, persist = true) {
@@ -4315,7 +4314,7 @@
         rafPending = false;
         resizerEl.classList.remove('dragging');
         resizerEl.releasePointerCapture?.(e.pointerId);
-        const h = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tool-dock-height')) || 220;
+        const h = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tool-dock-height')) || 240;
         try { localStorage.setItem(TOOL_DOCK_HEIGHT_KEY, String(h)); } catch {}
       };
 
@@ -4382,7 +4381,7 @@
         sidebarResizerEl.classList.remove('dragging');
         sidebarResizerEl.releasePointerCapture?.(e.pointerId);
         // Persist only once on release
-        const w = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 320;
+        const w = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 360;
         try { localStorage.setItem(SIDEBAR_WIDTH_KEY, String(w)); } catch {}
       };
 
@@ -4667,73 +4666,16 @@
         sum + (bundle.sessions||[]).reduce((s, sess) => s + (sess.solves?.length||0), 0), 0);
     }
 
-    const FIRESTORE_MAX_BYTES = 900_000; // 900KB — stay under Firestore's 1MB doc limit
 
     async function saveData() {
       data.currentEvent = currentEvent;
       data.settings = settings;
-      const json = JSON.stringify(data); // serialize once
+      const json = JSON.stringify(data);
       await idbSet(STORAGE_KEY, json);
-      await saveRemoteData(json);
-    }
-
-    async function saveRemoteData(json) {
-      if (!firebaseReady || !db || !state.currentUser || syncing) return;
-      if (json && json.length > FIRESTORE_MAX_BYTES) {
-        authStatusEl.textContent = `${state.currentUser.email} • too large to sync`;
-        return;
-      }
-      try {
-        const payload = json ? JSON.parse(json) : serializeData();
-        await setDoc(
-          doc(db, "timerUsers", state.currentUser.uid),
-          {
-            uid: state.currentUser.uid,
-            email: state.currentUser.email || "",
-            updatedAt: serverTimestamp(),
-            data: payload
-          },
-          { merge: true }
-        );
-        authStatusEl.textContent = `${state.currentUser.email} • synced`;
-      } catch (err) {
-        authStatusEl.textContent = `${state.currentUser.email} • sync failed`;
-        console.error(err);
-      }
     }
 
     async function loadRemoteData() {
-      if (!firebaseReady || !db || !state.currentUser) return;
-      try {
-        syncing = true;
-        const snap = await getDoc(doc(db, "timerUsers", state.currentUser.uid));
-        if (snap.exists()) {
-          const remoteData = mergeData(snap.data().data || {});
-          const remoteSolves = countAllSolves(remoteData);
-          const localSolves  = countAllSolves(data);
-          if (remoteSolves > localSolves) {
-            // Remote has more data (e.g. synced from another device) — load it
-            data = remoteData;
-            currentEvent = (data.currentEvent && data.sessionsByEvent[data.currentEvent]) ? data.currentEvent : "333";
-            settings = data.settings;
-            await saveData();
-            renderAll();
-            resetToIdle(true);
-            await generateScramble();
-          } else {
-            // Local is equal or ahead — keep local, try to push to remote
-            await saveRemoteData(null);
-          }
-          authStatusEl.textContent = `${state.currentUser.email} • synced`;
-        } else {
-          await saveRemoteData();
-        }
-      } catch (err) {
-        authStatusEl.textContent = `${state.currentUser.email} • sync failed`;
-        console.error(err);
-      } finally {
-        syncing = false;
-      }
+      // Times are local-only; nothing to load from remote
     }
 
     // ── Utilities ────────────────────────────────────────────────────
@@ -8063,15 +8005,16 @@
           root.style.setProperty("--bg", customBg);
           root.style.setProperty("--panel", hslToCss(bgHsl.h, bgHsl.s, panelL));
           root.style.setProperty("--panel-2", hslToCss(bgHsl.h, bgHsl.s, panel2L));
-          root.style.setProperty("--line", hslToCss(bgHsl.h, Math.max(0.12, bgHsl.s*0.5), Math.min(0.95, bgHsl.l + 0.18)));
+          root.style.setProperty("--line", hslToCss(bgHsl.h, bgHsl.s < 0.05 ? 0 : Math.max(0.12, bgHsl.s*0.5), Math.min(0.95, bgHsl.l + 0.18)));
         } else {
-          root.style.setProperty("--bg", hslToCss(hsl.h, Math.max(0.35, hsl.s*0.6), 0.08));
-          root.style.setProperty("--panel", hslToCss(hsl.h, Math.max(0.22, hsl.s*0.35), 0.13));
-          root.style.setProperty("--panel-2", hslToCss(hsl.h, Math.max(0.26, hsl.s*0.42), 0.18));
-          root.style.setProperty("--line", hslToCss(hsl.h, Math.max(0.18, hsl.s*0.22), 0.27));
+          const as = hsl.s < 0.05 ? 0 : 1;
+          root.style.setProperty("--bg", hslToCss(hsl.h, as * Math.max(0.35, hsl.s*0.6), 0.08));
+          root.style.setProperty("--panel", hslToCss(hsl.h, as * Math.max(0.22, hsl.s*0.35), 0.13));
+          root.style.setProperty("--panel-2", hslToCss(hsl.h, as * Math.max(0.26, hsl.s*0.42), 0.18));
+          root.style.setProperty("--line", hslToCss(hsl.h, as * Math.max(0.18, hsl.s*0.22), 0.27));
         }
         root.style.setProperty("--text", "#eef3fb");
-        root.style.setProperty("--muted", hslToCss(hsl.h, 0.28, 0.73));
+        root.style.setProperty("--muted", hslToCss(hsl.h, hsl.s < 0.05 ? 0 : 0.28, 0.73));
         root.style.setProperty("--good", "#3fb950");
         root.style.setProperty("--warn", "#d29922");
         root.style.setProperty("--bad", "#f85149");
@@ -8146,7 +8089,7 @@
 
     function updateToolDockCompaction() {
       if (!toolDockEl || !toolSlotsEl) return;
-      const dockH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tool-dock-height')) || 220;
+      const dockH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tool-dock-height')) || 240;
       toolSlotsEl.classList.toggle('compact', dockH < 180);
     }
 
@@ -11561,12 +11504,7 @@
     }
 
     async function handleSyncNow() {
-      if (state.currentUser) {
-        await saveRemoteData();
-        await loadRemoteData();
-      } else {
-        alert("Sign in first to sync across devices.");
-      }
+      // Times are local-only; no remote sync
     }
 
     // ── CSV helpers (csTimer-compatible) ────────────────────────────────────────
