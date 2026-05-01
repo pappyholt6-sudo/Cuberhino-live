@@ -9651,8 +9651,9 @@
       function getScramble(){
         for(;;){
           const{per,ori}=randState();
-          if(Math.max(oD[ori],pD[per])<9)continue;
-          return solve(ori,per).reverse().map(m=>FN[(m/3)|0]+SFX[INV[m%3]]).join(' ');
+          const path=solve(ori,per);
+          if(path.length<9)continue;
+          return path.reverse().map(m=>FN[(m/3)|0]+SFX[INV[m%3]]).join(' ');
         }
       }
 
