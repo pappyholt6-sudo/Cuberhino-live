@@ -7761,10 +7761,6 @@
       await handleSignOut();
     });
     topbarAvatar.addEventListener("click", () => { syncSettingsUI(); activateTab('accountTab'); settingsDialog.showModal(); });
-    document.getElementById('topbarProfileBtn').addEventListener('click', () => {
-      if (state.currentUser) { openProfileEditDialog(); }
-      else { syncSettingsUI(); activateTab('accountTab'); settingsDialog.showModal(); }
-    });
     // ── End Profile Edit Dialog ───────────────────────────────────────
 
     // ── End Profile Setup ─────────────────────────────────────────────
@@ -12795,3 +12791,4 @@
 
 </body>
 </html>
+                                                                                                                                                                                                                                            
