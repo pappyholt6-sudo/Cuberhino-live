@@ -3001,7 +3001,8 @@
       transform: translate(-50%, -50%);
       width: min(480px, 55vw);
       height: auto;
-      opacity: 0.035;
+      opacity: 0.08;
+      filter: invert(1) grayscale(1);
       pointer-events: none;
       user-select: none;
       z-index: 0;
@@ -12571,13 +12572,48 @@
       return new Promise(resolve => {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const W = 520, PAD = 24;
-        const BG = "#0b0f14", PANEL = "#121923", PANEL2 = "#192230";
+        const PANEL = "#121923", PANEL2 = "#192230";
         const TEXT = "#eef3fb", MUTED = "#9fb0c8", LINE = "#2a3648", ACCENT = "#58a6ff";
-        const GOOD = "#3fb950", BAD = "#f85149";
-        const ROW_H = 28, HEADER_H = PAD + 24 + 16 + 56 + 12 + 20 + 16;
+        const NUM_W = 32, SCR_FONT = "10px monospace", TIME_H = 18, SCR_LINE_H = 13, ROW_PAD = 6;
+        const SCR_MAX_W = W - PAD * 2 - NUM_W;
+        const HEADER_H = PAD + 24 + 16 + 56 + 12 + 20 + 16;
 
-        const rowCount = details.windowSolves.length;
-        const H = HEADER_H + rowCount * ROW_H + PAD;
+        // Helper: wrap text to lines within maxWidth
+        function wrapText(ctx, text, maxWidth) {
+          const words = text.split(' ');
+          const lines = [];
+          let line = '';
+          for (const word of words) {
+            const test = line ? line + ' ' + word : word;
+            if (ctx.measureText(test).width > maxWidth && line) {
+              lines.push(line); line = word;
+            } else { line = test; }
+          }
+          if (line) lines.push(line);
+          return lines;
+        }
+
+        // Measure canvas height using a temp context
+        const tmpCanvas = document.createElement("canvas");
+        tmpCanvas.width = W; tmpCanvas.height = 1;
+        const tmpCtx = tmpCanvas.getContext("2d");
+
+        // Pre-compute row heights
+        const rowData = details.windowSolves.map((solve, idx) => {
+          const isTrimmed = details.excluded.has(idx);
+          const num = endIndex - n + idx + 2;
+          const timeStr = isTrimmed ? `(${solveDisplay(solve)})` : solveDisplay(solve);
+          let scrLines = [];
+          if (solve.scramble) {
+            tmpCtx.font = SCR_FONT;
+            scrLines = wrapText(tmpCtx, solve.scramble, SCR_MAX_W);
+          }
+          const rowH = ROW_PAD + TIME_H + (scrLines.length ? scrLines.length * SCR_LINE_H + 2 : 0) + ROW_PAD;
+          return { isTrimmed, num, timeStr, scrLines, rowH };
+        });
+
+        const totalRowsH = rowData.reduce((s, r) => s + r.rowH, 0);
+        const H = HEADER_H + totalRowsH + PAD;
 
         const canvas = document.createElement("canvas");
         canvas.width = W * dpr;
@@ -12592,7 +12628,7 @@
 
         let y = PAD;
 
-        // Event + Ao badge
+        // Badge
         const badge = `${currentEventLabel()} · ${titlePrefix} Ao${n}`;
         ctx.font = "600 12px Arial,Helvetica,sans-serif";
         const bW = ctx.measureText(badge).width + 24;
@@ -12615,38 +12651,47 @@
         ctx.fillText(averageDisplay(details.avg), PAD, y);
         y += 56 + 12;
 
-        // Solve count subtitle
+        // Subtitle
         ctx.font = "13px Arial,Helvetica,sans-serif";
         ctx.fillStyle = MUTED;
         ctx.textBaseline = "top";
-        ctx.fillText(`${rowCount} solves · ending at #${endIndex + 1}`, PAD, y);
+        ctx.fillText(`${details.windowSolves.length} solves · ending at #${endIndex + 1}`, PAD, y);
         y += 20 + 16;
 
         // Solve rows
-        details.windowSolves.forEach((solve, idx) => {
-          const isTrimmed = details.excluded.has(idx);
-          const num = endIndex - n + idx + 2;
-          const timeStr = isTrimmed ? `(${solveDisplay(solve)})` : solveDisplay(solve);
-          const rowY = y + idx * ROW_H;
+        rowData.forEach((row, idx) => {
+          const { isTrimmed, num, timeStr, scrLines, rowH } = row;
 
-          // Alternating row bg
           if (idx % 2 === 0) {
             ctx.fillStyle = "rgba(255,255,255,0.025)";
-            roundRect(ctx, PAD - 8, rowY, W - PAD * 2 + 16, ROW_H, 4);
+            roundRect(ctx, PAD - 8, y, W - PAD * 2 + 16, rowH, 4);
             ctx.fill();
           }
+
+          const midY = y + ROW_PAD;
 
           // Index
           ctx.font = "12px Arial,Helvetica,sans-serif";
           ctx.fillStyle = MUTED;
-          ctx.textBaseline = "middle";
+          ctx.textBaseline = "top";
           ctx.textAlign = "left";
-          ctx.fillText(`${num}.`, PAD, rowY + ROW_H / 2);
+          ctx.fillText(`${num}.`, PAD, midY);
 
           // Time
           ctx.font = isTrimmed ? "italic 13px Arial,Helvetica,sans-serif" : "600 13px Arial,Helvetica,sans-serif";
           ctx.fillStyle = isTrimmed ? MUTED : TEXT;
-          ctx.fillText(timeStr, PAD + 32, rowY + ROW_H / 2);
+          ctx.fillText(timeStr, PAD + NUM_W, midY);
+
+          // Scramble
+          if (scrLines.length) {
+            ctx.font = SCR_FONT;
+            ctx.fillStyle = MUTED;
+            scrLines.forEach((line, li) => {
+              ctx.fillText(line, PAD + NUM_W, midY + TIME_H + 2 + li * SCR_LINE_H);
+            });
+          }
+
+          y += rowH;
         });
 
         // Watermark
