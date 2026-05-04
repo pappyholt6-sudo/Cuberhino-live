@@ -3013,7 +3013,7 @@
         <button class="view-tab-btn" id="timesViewBtn">Times</button>
         <button class="view-tab-btn" id="achViewBtn">Achievements</button>
         <button class="view-tab-btn" id="clubsViewBtn">Clubs</button>
-        <button class="view-tab-btn" id="globalLbViewBtn">Leaderboard</button>
+        <button class="view-tab-btn" id="globalLbViewBtn">Users</button>
         <button class="view-tab-btn" id="compsViewBtn">Comps</button>
       </div>
       <div class="auth-strip">
@@ -3034,7 +3034,7 @@
             <option value="times">📋 Times</option>
             <option value="achievements">🏆 Achievements</option>
             <option value="clubs">👥 Clubs</option>
-            <option value="globalLb">🌐 Leaderboard</option>
+            <option value="globalLb">👥 Users</option>
             <option value="comps">🏁 Comps</option>
             <option value="settings">⚙ Settings</option>
             <option value="account">👤 Profile</option>
@@ -3279,22 +3279,15 @@
       </section>
 
       <!-- Clubs View -->
-      <!-- Global Leaderboard View -->
-      <section class="history-view" id="globalLbView" aria-label="Global leaderboard" style="padding:20px 24px;">
+      <!-- Users View -->
+      <section class="history-view" id="globalLbView" aria-label="Users" style="padding:20px 24px;">
         <div class="history-header" style="margin-bottom:18px;">
           <div>
-            <h2 class="history-title">Leaderboard</h2>
-            <div class="history-subtitle">All-time personal bests for every registered user.</div>
+            <h2 class="history-title">Users</h2>
+            <div class="history-subtitle">All registered Cuberhino users.</div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
-          <select class="select" id="globalLbEventSelect" style="font-size:13px;padding:5px 8px;"></select>
-          <div class="clubs-filter-toggle">
-            <button class="clubs-filter-btn active" id="globalLbRankSingle">Single</button>
-            <button class="clubs-filter-btn" id="globalLbRankAo5">Ao5</button>
-            <button class="clubs-filter-btn" id="globalLbRankAo12">Ao12</button>
-            <button class="clubs-filter-btn" id="globalLbRankAo100">Ao100</button>
-          </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
           <span style="font-size:12px;color:var(--muted);" id="globalLbMeta"></span>
           <button class="small-btn" id="globalLbRefresh" style="margin-left:auto;">↻ Refresh</button>
         </div>
@@ -4749,81 +4742,39 @@
     const compsViewEl        = document.getElementById("compsView");
     const compsViewBtn       = document.getElementById("compsViewBtn");
     const globalLbList       = document.getElementById("globalLbList");
-    const globalLbEventSel   = document.getElementById("globalLbEventSelect");
     const globalLbMeta       = document.getElementById("globalLbMeta");
     const globalLbRefreshBtn = document.getElementById("globalLbRefresh");
-    let   globalLbEvent      = "333";
     let   globalLbLoaded     = false;
-    let   globalLbProfiles   = []; // cached profiles with pbs
+    let   globalLbProfiles   = [];
 
-    // Populate event selector
-    EVENTS.forEach(e => {
-      const opt = document.createElement("option");
-      opt.value = e.id; opt.textContent = e.label;
-      if (e.id === "333") opt.selected = true;
-      globalLbEventSel.appendChild(opt);
-    });
-
-    globalLbEventSel.addEventListener("change", () => {
-      globalLbEvent = globalLbEventSel.value;
-      renderGlobalLbForEvent();
-    });
     globalLbRefreshBtn.addEventListener("click", () => { globalLbLoaded = false; loadGlobalLb(); });
-    ['Single','Ao5','Ao12','Ao100'].forEach(mode => {
-      document.getElementById(`globalLbRank${mode}`)?.addEventListener('click', () => {
-        globalLbRankBy = mode.toLowerCase(); renderGlobalLbForEvent();
-      });
-    });
-
-    let globalLbRankBy = 'single';
 
     function renderGlobalLbForEvent() {
-      const medals = ['🥇','🥈','🥉'];
-      const eventLabel = EVENTS.find(e => e.id === globalLbEvent)?.label ?? globalLbEvent;
-      const getPb   = p => p.pbs?.[globalLbEvent]   ?? null;
-      const getAo5  = p => p.ao5s?.[globalLbEvent]  ?? null;
-      const getAo12 = p => p.ao12s?.[globalLbEvent] ?? null;
-      const getAo100= p => p.ao100s?.[globalLbEvent]?? null;
-      const getVal  = p => {
-        if (globalLbRankBy === 'ao5')  return getAo5(p);
-        if (globalLbRankBy === 'ao12') return getAo12(p);
-        if (globalLbRankBy === 'ao100')return getAo100(p);
-        return getPb(p);
-      };
-      const modeLabel = { single:'PB', ao5:'Ao5', ao12:'Ao12', ao100:'Ao100' }[globalLbRankBy] || 'PB';
-      const MIN_SOLVES = 25;
-      const eligible = globalLbProfiles.filter(p => (p.totalSolves ?? 0) >= MIN_SOLVES);
-      const withVal = eligible.filter(p => getVal(p) != null).sort((a,b) => getVal(a)-getVal(b));
-      const noVal   = eligible.filter(p => getVal(p) == null);
-      const ranked  = [...withVal, ...noVal];
+      // stub kept so existing callers don't break
+      renderUsersView();
+    }
 
-      ['Single','Ao5','Ao12','Ao100'].forEach(mode =>
-        document.getElementById(`globalLbRank${mode}`)?.classList.toggle('active', globalLbRankBy === mode.toLowerCase()));
-
-      globalLbMeta.textContent = `${eligible.length} user${eligible.length!==1?'s':''} · ${withVal.length} with ${eventLabel} ${modeLabel} · 25 solves required`;
-
-      if (!ranked.length) {
-        globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px 0;">No users found. Sign up to appear here!</div>`;
+    function renderUsersView() {
+      if (!globalLbProfiles.length) {
+        globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:12px 0;">No users found.</div>`;
         return;
       }
-      globalLbList.innerHTML = ranked.map((p,i) => {
-        const val  = getVal(p);
-        const pb   = getPb(p);
-        const badge = leagueBadgeHtml(p.league || "rookie", "sm");
-        const subLabel = globalLbRankBy !== 'single' && pb != null ? `Single: ${formatMs(pb)}` : '';
-        return `<div class="club-lb-item clickable-user" data-uid="${escapeHtml(p.uid||'')}">
-          <div class="club-lb-rank">${medals[i]??i+1}</div>
-          <img class="club-member-avatar" src="${escapeHtml(p.avatarUrl||defaultAvatarUrl(p.username||'?'))}" alt="" onerror="this.src='${defaultAvatarUrl(p.username||'?')}'"/>
+      const sorted = [...globalLbProfiles].sort((a, b) => {
+        const na = (a.displayName || a.username || '').toLowerCase();
+        const nb = (b.displayName || b.username || '').toLowerCase();
+        return na.localeCompare(nb);
+      });
+      globalLbMeta.textContent = `${sorted.length} user${sorted.length !== 1 ? 's' : ''}`;
+      globalLbList.innerHTML = sorted.map(p => {
+        const badge = leagueBadgeHtml(p.league || 'rookie', 'sm');
+        return `<div class="club-lb-item clickable-user" data-uid="${escapeHtml(p.uid || '')}">
+          <img class="club-member-avatar" src="${escapeHtml(p.avatarUrl || defaultAvatarUrl(p.username || '?'))}" alt="" onerror="this.src='${defaultAvatarUrl(p.username || '?')}'"/>
           <div class="club-member-info">
-            <div class="club-member-name">${badge} ${escapeHtml(p.displayName||p.username)}</div>
+            <div class="club-member-name">${badge} ${escapeHtml(p.displayName || p.username)}</div>
             <div class="club-member-username">@${escapeHtml(p.username)}</div>
           </div>
-          <div class="club-lb-meta">
-            <div class="club-lb-time${val==null?' no-pb':''}">${val!=null ? `<span style="color:var(--good);font-weight:700;">${formatMs(val)}</span>` : `<span style="color:var(--muted);font-size:12px;">No ${modeLabel}</span>`}</div>
-            <div class="club-lb-event-label">${escapeHtml(subLabel||eventLabel)}</div>
-          </div>
         </div>`;
-      }).join("");
+      }).join('');
       globalLbList.querySelectorAll('.club-lb-item[data-uid]').forEach(el => {
         el.addEventListener('click', () => {
           const p = globalLbProfiles.find(x => x.uid === el.dataset.uid);
@@ -4832,9 +4783,10 @@
       });
     }
 
+    // kept as dead stub to avoid breaking callers
     async function loadGlobalLb() {
       if (!firebaseReady || !db) {
-        globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;">Sign in to view the leaderboard.</div>`;
+        globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;">Sign in to view users.</div>`;
         return;
       }
       globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;">Loading…</div>`;
@@ -4894,9 +4846,9 @@
 
         globalLbProfiles = withPbs;
         globalLbLoaded   = true;
-        renderGlobalLbForEvent();
+        renderUsersView();
       } catch (err) {
-        globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;">Could not load leaderboard.</div>`;
+        globalLbList.innerHTML = `<div style="color:var(--muted);font-size:13px;">Could not load users.</div>`;
         console.error(err);
       }
     }
