@@ -4792,8 +4792,7 @@
       };
       const modeLabel = { single:'PB', ao5:'Ao5', ao12:'Ao12', ao100:'Ao100' }[globalLbRankBy] || 'PB';
       const MIN_SOLVES = 25;
-      const eligible = globalLbProfiles.filter(p =>
-        p.totalSolves != null ? p.totalSolves >= MIN_SOLVES : (p.pbs && Object.keys(p.pbs).length > 0));
+      const eligible = globalLbProfiles.filter(p => (p.totalSolves ?? 0) >= MIN_SOLVES);
       const withVal = eligible.filter(p => getVal(p) != null).sort((a,b) => getVal(a)-getVal(b));
       const noVal   = eligible.filter(p => getVal(p) == null);
       const ranked  = [...withVal, ...noVal];
