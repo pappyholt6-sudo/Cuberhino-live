@@ -4388,7 +4388,10 @@
       const coarse = window.matchMedia?.('(pointer: coarse)').matches || false;
       const noHover = window.matchMedia?.('(hover: none)').matches || false;
       const narrow = window.innerWidth <= 768;
-      const phoneLikeScreen = Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight) <= 1024;
+      // Don't trigger mobile for tablet/iPad-sized viewports in landscape (≥900px).
+      // Math.min catches iPad Pro whose shorter dimension is exactly 1024px.
+      const phoneLikeScreen = window.innerWidth < 900 &&
+        Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight) <= 1024;
       return narrow || (touchPoints > 0 && (coarse || noHover) && phoneLikeScreen);
     }
 
@@ -12062,7 +12065,8 @@
       state.mobilePointerId = null;
       mainAreaEl.releasePointerCapture?.(e.pointerId);
 
-      if (state.mode !== "arming" || !state.armReady) {
+      // Respect holdToArm: if disabled, a quick tap is enough (no need to wait for armReady).
+      if (state.mode !== "arming" || (settings.holdToArm && !state.armReady)) {
         cancelArming();
         return;
       }

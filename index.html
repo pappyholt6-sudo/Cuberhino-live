@@ -495,6 +495,54 @@
     @media (max-width: 600px) {
       .import-card { flex-direction: column; align-items: flex-start; }
     }
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media (max-width: 640px) {
+      /* Nav: tighter padding, hide secondary links */
+      nav {
+        padding: 0 16px;
+      }
+      .nav-timer,
+      #openDonate {
+        display: none;
+      }
+      .nav-signin {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+      .nav-cta {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+
+      /* Sections: reduce vertical breathing room */
+      section,
+      .inside-section {
+        padding: 64px 20px;
+      }
+      .cta-section {
+        padding: 64px 20px;
+      }
+      .cta-card {
+        padding: 44px 24px;
+        border-radius: 18px;
+      }
+      .section-sub {
+        margin-bottom: 40px;
+      }
+
+      /* Footer: tighter padding */
+      footer {
+        padding: 24px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      /* Hero: less top padding to avoid nav overlap */
+      .hero {
+        padding: 90px 20px 60px;
+      }
+    }
   </style>
 </head>
 <body>
