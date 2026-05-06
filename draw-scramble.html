@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Draw Scramble – CubeRhino</title>
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --card: #ffffff;
+      --text: #18181b;
+      --muted: #71717a;
+      --border: #d4d4d8;
+      --accent: #18181b;
+      --tab-active-bg: #18181b;
+      --tab-active-text: #ffffff;
+      --tab-bg: #e4e4e7;
+      --tab-text: #3f3f46;
+      --placeholder: #a1a1aa;
+      --badge-unofficial: #f97316;
+      --badge-unofficial-text: #fff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── Header ─────────────────────────────────── */
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .header p {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Event Tabs ──────────────────────────────── */
+    .events-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .group-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .tab-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tab-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--tab-bg);
+      color: var(--tab-text);
+      font-family: inherit;
+      transition: background .12s, color .12s, transform .08s;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: #d4d4d8;
+    }
+
+    .tab-btn.active {
+      background: var(--tab-active-bg);
+      color: var(--tab-active-text);
+    }
+
+    .tab-btn.unofficial {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1.5px solid #fed7aa;
+    }
+
+    .tab-btn.unofficial.active {
+      background: var(--badge-unofficial);
+      color: var(--badge-unofficial-text);
+      border-color: var(--badge-unofficial);
+    }
+
+    /* ── Scramble Input ───────────────────────────── */
+    .input-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-card label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .input-card textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 16px;
+      font-family: Consolas, Monaco, monospace;
+      outline: none;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .input-card textarea:focus {
+      border-color: #27272a;
+      background: var(--card);
+    }
+
+    .input-card textarea::placeholder {
+      color: var(--placeholder);
+    }
+
+    .draw-btn {
+      align-self: flex-start;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      font-family: inherit;
+      transition: opacity .12s, transform .08s;
+    }
+
+    .draw-btn:hover { opacity: .85; }
+    .draw-btn:active { transform: scale(.97); }
+
+    /* ── Visualization Area ───────────────────────── */
+    .viz-area {
+      min-height: 80px;
+    }
+
+    .viz-frame-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    }
+
+    .viz-frame-wrap iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      min-height: 360px;
+    }
+
+    /* Placeholder cards */
+    .placeholder-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 36px 24px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .placeholder-icon {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    .placeholder-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .placeholder-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 360px;
+      line-height: 1.5;
+    }
+
+    .placeholder-badge {
+      display: inline-block;
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1.5px solid #fed7aa;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    /* ── Event label strip ────────────────────────── */
+    .event-strip {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 0 2px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="brand">CubeRhino</div>
+    <h1>Draw Scramble</h1>
+    <p>Pick a puzzle, paste your scramble, and see the state of the top (or front) face.</p>
+  </div>
+
+  <div class="events-card">
+    <div>
+      <div class="group-label">NxN Cubes</div>
+      <div class="tab-row" id="tabsNxN"></div>
+    </div>
+    <div>
+      <div class="group-label">Other Official</div>
+      <div class="tab-row" id="tabsOther"></div>
+    </div>
+    <div>
+      <div class="group-label">Unofficial</div>
+      <div class="tab-row" id="tabsUnofficial"></div>
+    </div>
+  </div>
+
+  <div class="input-card" id="inputCard">
+    <label for="scrambleInput">Scramble</label>
+    <textarea id="scrambleInput" spellcheck="false" placeholder="Paste your scramble here…"></textarea>
+    <button class="draw-btn" id="drawBtn">Draw Scramble</button>
+  </div>
+
+  <div class="viz-area" id="vizArea"></div>
+
+</div>
+
+<script>
+  // ── Event definitions ──────────────────────────────────────────────────────
+  const EVENTS = [
+    // NxN cubes
+    { id: '222',      label: '2×2',       file: '2x2_scramble_top_view.html',        group: 'nxn'        },
+    { id: '333',      label: '3×3',       file: '3x3_scramble_top_view.html',        group: 'nxn'        },
+    { id: '444',      label: '4×4',       file: '4x4_scramble_top_view.html',        group: 'nxn'        },
+    { id: '555',      label: '5×5',       file: '5x5_scramble_top_view.html',        group: 'nxn'        },
+    { id: '666',      label: '6×6',       file: '6x6_scramble_top_view.html',        group: 'nxn'        },
+    { id: '777',      label: '7×7',       file: '7x7_scramble_top_view.html',        group: 'nxn'        },
+    { id: '333oh',    label: '3×3 OH',   file: '3x3_scramble_top_view.html',        group: 'nxn'        },
+    { id: '333bf',    label: '3×3 BLD',  file: '3x3_scramble_top_view.html',        group: 'nxn'        },
+    { id: '444bf',    label: '4×4 BLD',  file: '4x4_scramble_top_view.html',        group: 'nxn'        },
+    { id: '555bf',    label: '5×5 BLD',  file: '5x5_scramble_top_view.html',        group: 'nxn'        },
+    // Other official
+    { id: 'clock',    label: 'Clock',     file: 'clock_scramble_front_view.html',    group: 'other'      },
+    { id: 'pyram',    label: 'Pyraminx',  file: 'pyraminx_scramble_front_view.html', group: 'other'      },
+    { id: 'skewb',    label: 'Skewb',    file: 'skewb_scramble_top_view.html',      group: 'other'      },
+    { id: 'minx',     label: 'Megaminx', file: null,                                group: 'other'      },
+    { id: 'sq1',      label: 'Square-1', file: null,                                group: 'other'      },
+    // Unofficial
+    { id: 'fto',      label: 'FTO',       file: null, group: 'unofficial', unofficial: true },
+    { id: 'baby_fto', label: 'Baby FTO',  file: null, group: 'unofficial', unofficial: true },
+  ];
+
+  // Base path: same directory as this file (all files live at the GitHub repo root)
+  const BASE = '';
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  let activeId = '333';
+
+  // ── Build tabs ─────────────────────────────────────────────────────────────
+  function buildTabs() {
+    const containers = {
+      nxn:        document.getElementById('tabsNxN'),
+      other:      document.getElementById('tabsOther'),
+      unofficial: document.getElementById('tabsUnofficial'),
+    };
+
+    EVENTS.forEach(ev => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (ev.unofficial ? ' unofficial' : '') + (ev.id === activeId ? ' active' : '');
+      btn.textContent = ev.label;
+      btn.dataset.id = ev.id;
+      btn.addEventListener('click', () => selectEvent(ev.id));
+      containers[ev.group].appendChild(btn);
+    });
+  }
+
+  function selectEvent(id) {
+    activeId = id;
+
+    // Update tab styles
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      const isActive = btn.dataset.id === id;
+      btn.classList.toggle('active', isActive);
+    });
+
+    // Hide/show the scramble input depending on event type
+    const ev = EVENTS.find(e => e.id === id);
+    const inputCard = document.getElementById('inputCard');
+    inputCard.style.display = (ev && !ev.unofficial && ev.file) ? '' : 'none';
+
+    // Render placeholder or clear viz
+    renderViz(null);
+  }
+
+  // ── Render visualization ───────────────────────────────────────────────────
+  function renderViz(scramble) {
+    const ev = EVENTS.find(e => e.id === activeId);
+    const area = document.getElementById('vizArea');
+    area.innerHTML = '';
+
+    if (!ev) return;
+
+    // Unofficial – no draw scramble for unofficial events
+    if (ev.unofficial) {
+      area.innerHTML = `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔶</div>
+          <div class="placeholder-title">No draw scramble yet</div>
+          <div class="placeholder-badge">Unofficial event</div>
+          <div class="placeholder-sub">
+            Draw scrambles for unofficial events like ${ev.label} aren't available yet.
+            Check back later as more puzzles are added to CubeRhino.
+          </div>
+        </div>`;
+      return;
+    }
+
+    // Official but no file yet
+    if (!ev.file) {
+      area.innerHTML = `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔧</div>
+          <div class="placeholder-title">No draw scramble yet</div>
+          <div class="placeholder-sub">
+            A draw scramble viewer for ${ev.label} is coming soon.
+          </div>
+        </div>`;
+      return;
+    }
+
+    // Has a file – build iframe
+    const src = scramble
+      ? BASE + ev.file + '?embed=1&scramble=' + encodeURIComponent(scramble)
+      : BASE + ev.file + '?embed=1';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'viz-frame-wrap';
+
+    const frame = document.createElement('iframe');
+    frame.src = src;
+    frame.title = ev.label + ' scramble draw';
+    frame.setAttribute('loading', 'eager');
+    frame.setAttribute('scrolling', 'no');
+
+    // Auto-resize to content (same-origin GitHub Pages)
+    frame.addEventListener('load', () => {
+      try {
+        const h = frame.contentDocument.body.scrollHeight;
+        frame.style.height = Math.max(280, h + 16) + 'px';
+      } catch (_) {
+        frame.style.height = '420px';
+      }
+    });
+
+    wrap.appendChild(frame);
+    area.appendChild(wrap);
+  }
+
+  // ── Draw button ────────────────────────────────────────────────────────────
+  document.getElementById('drawBtn').addEventListener('click', () => {
+    const scramble = document.getElementById('scrambleInput').value.trim();
+    renderViz(scramble || null);
+  });
+
+  // ── Also draw on Enter in textarea ────────────────────────────────────────
+  document.getElementById('scrambleInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('drawBtn').click();
+    }
+  });
+
+  // ── URL param support (event + scramble) ──────────────────────────────────
+  // Allows timer to link here: draw-scramble.html?event=333&scramble=R+U+R%27
+  (function () {
+    const p = new URLSearchParams(location.search);
+    const evParam = p.get('event');
+    const scParam = p.get('scramble');
+
+    if (evParam && EVENTS.find(e => e.id === evParam)) {
+      activeId = evParam;
+    }
+    if (scParam) {
+      document.getElementById('scrambleInput').value = scParam;
+    }
+  })();
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  buildTabs();
+  selectEvent(activeId);
+
+  // Auto-draw if scramble was in URL
+  (function () {
+    const p = new URLSearchParams(location.search);
+    const sc = p.get('scramble');
+    if (sc) renderViz(sc);
+  })();
+</script>
+</body>
+</html

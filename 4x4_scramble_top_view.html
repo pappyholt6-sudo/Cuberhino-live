@@ -425,6 +425,32 @@
 
     renderLegend();
     showTopFace();
-  </script>
+  
+    // ── URL param support (embed + scramble) ──────────────────────────
+    (function () {
+      var p = new URLSearchParams(location.search);
+      if (p.has('embed')) {
+        var s = document.createElement('style');
+        s.textContent =
+          'body{background:transparent!important;min-height:unset!important;' +
+          'padding:4px 8px!important;align-items:flex-start!important}' +
+          'h1,h1~p,label,textarea,.buttons,.error,.note{display:none!important}' +
+          '.app{box-shadow:none!important;border:none!important;background:transparent!important;' +
+          'padding:0!important;max-width:100%!important}' +
+          '.output-wrap{border-top:none!important;padding-top:4px!important}';
+        document.head.appendChild(s);
+      }
+      var sc = p.get('scramble');
+      if (sc) {
+        var ta = document.getElementById('scramble');
+        if (ta) ta.value = sc;
+        requestAnimationFrame(function () {
+          var btn = document.getElementById('showBtn');
+          if (btn) btn.click();
+        });
+      }
+    })();
+    // ─────────────────────────────────────────────────────────────────
+</script>
 </body>
 </html>
