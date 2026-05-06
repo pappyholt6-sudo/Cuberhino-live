@@ -28,7 +28,7 @@
       --sidebar-width: 360px;
       --sidebar-min-width: 240px;
       --sidebar-max-width: 520px;
-      --tool-dock-height: 240px;
+      --tool-dock-height: 220px;
     }
 
     *{box-sizing:border-box}
@@ -419,12 +419,7 @@
     }
 
     .tool-dock-resizer{
-      height:10px;
-      flex-shrink:0;
-      cursor:row-resize;
-      position:relative;
-      touch-action:none;
-      user-select:none;
+      display:none;
     }
     .tool-dock-resizer::before{
       content:"";
@@ -941,13 +936,11 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      min-height:148px;
-      aspect-ratio:1/1;
       width:100%;
-      max-width:180px;
-      margin:0 auto;
+      height:100%;
+      flex:1 1 0;
       overflow:hidden;
-      border-radius:20px;
+      border-radius:14px;
       background:
         radial-gradient(circle at 32% 24%, rgba(255,255,255,.14), rgba(255,255,255,0) 34%),
         linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.16));
@@ -1334,8 +1327,7 @@
     }
 
     .tool-slots.compact .scramble-draw-wrap{
-      max-width:140px;
-      border-radius:16px;
+      border-radius:10px;
     }
 
     .sparkline{
@@ -4260,12 +4252,8 @@
     }
 
     function applyToolDockHeight(h, persist = true) {
-      const safe = Math.max(140, Math.min(600, Number(h) || 220));
-      document.documentElement.style.setProperty('--tool-dock-height', `${safe}px`);
-      if (persist) {
-        try { localStorage.setItem(TOOL_DOCK_HEIGHT_KEY, String(safe)); } catch {}
-      }
-      return safe;
+      // Tool dock height is fixed — ignore resize attempts
+      return 220;
     }
 
     function setupToolDockResize() {
