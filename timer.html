@@ -9147,33 +9147,31 @@
       return "";
     }
 
-    async function updateDrawScramblePlayer() {
+    function updateDrawScramblePlayer() {
       const mount = document.getElementById("drawScrambleMount");
       if (!mount) return;
 
-      await ensureTwisty();
+      const PUZZLE_TO_EVENT = {
+        '2x2x2':'222','3x3x3':'333','4x4x4':'444','5x5x5':'555',
+        '6x6x6':'666','7x7x7':'777','clock':'clock','pyraminx':'pyram',
+        'skewb':'skewb','megaminx':'minx','square1':'sq1',
+        'fto':'fto','baby_fto':'baby_fto'
+      };
+
+      const puzzle = eventConfig().puzzle || '3x3x3';
+      const eventId = PUZZLE_TO_EVENT[puzzle] || '333';
+      const scramble = state.currentScramble || '';
+      const src = 'draw-scramble.html?embed=1&event=' + encodeURIComponent(eventId) + '&scramble=' + encodeURIComponent(scramble);
 
       let player = document.getElementById("drawScramblePlayer");
-
       if (!player) {
-        mount.innerHTML = "";
-        player = document.createElement("twisty-player");
-        player.id = "drawScramblePlayer";
-        player.setAttribute("background", "none");
-        player.setAttribute("control-panel", "none");
-        player.setAttribute("back-view", "none");
-        player.setAttribute("viewer-link", "none");
-        player.setAttribute("experimental-drag-input", "none");
+        mount.innerHTML = '';
+        player = document.createElement('iframe');
+        player.id = 'drawScramblePlayer';
+        player.style.cssText = 'width:100%;height:100%;border:none;display:block;background:transparent;';
         mount.appendChild(player);
       }
-
-      const puzzle = eventConfig().puzzle;
-      player.setAttribute("puzzle", puzzle);
-      player.setAttribute("alg", state.currentScramble || "");
-      player.removeAttribute("hint-facelets");
-      player.removeAttribute("experimental-setup-alg");
-      player.removeAttribute("experimental-setup-anchor");
-      player.style.cssText = "width:160px;height:160px;display:block;";
+      player.src = src;
     }
 
     function bluetoothDeviceName(puzzle) {
@@ -12825,18 +12823,4 @@
     <div class="modal" style="min-width:260px;max-width:340px;">
       <h2 style="color:#f9a825;">Support Cuberhino</h2>
       <p style="color:var(--muted);font-size:14px;margin:0 0 18px;">Choose an amount — you'll be taken to a secure Stripe page.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
-        <a href="https://buy.stripe.com/cNibJ1ebgbqi6d65hffEk00" target="_blank" class="donate-amt-btn">$1</a>
-        <a href="https://buy.stripe.com/5kQbJ17MSame7haeRPfEk01" target="_blank" class="donate-amt-btn">$5</a>
-        <a href="https://buy.stripe.com/bJe8wP4AG7a27hafVTfEk02" target="_blank" class="donate-amt-btn">$10</a>
-        <a href="https://buy.stripe.com/4gMdR9ebgcum0SMgZXfEk03" target="_blank" class="donate-amt-btn">$20</a>
-      </div>
-      <div class="modal-actions">
-        <button class="small-btn" id="closeDonate">Cancel</button>
-      </div>
-    </div>
-  </dialog>
-
-</body>
-</html>
-                                                                                                                                                          
+      <div style="display:grid;grid-template-columns:1fr 1fr;g
