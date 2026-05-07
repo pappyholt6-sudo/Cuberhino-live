@@ -5,34 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Draw Scramble – CubeRhino</title>
   <style>
-    :root { --bg:#f4f4f5;--card:#fff;--text:#18181b;--muted:#71717a;--border:#d4d4d8;--accent:#18181b; }
+    :root { --bg:#000000;--card:#06080f;--text:#ffffff;--muted:#7b8fb8;--border:#1a2870;--accent:#2547d0; }
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:24px 16px 56px;}
     .page{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
     .brand{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:2px;}
     h1{font-size:32px;font-weight:900;}
     .subtitle{font-size:15px;color:var(--muted);margin-top:4px;}
-    .events-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px;box-shadow:0 4px 18px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:14px;}
+    .events-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:14px;}
     .group-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
     .tab-row{display:flex;flex-wrap:wrap;gap:6px;}
-    .tab-btn{border:none;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#e4e4e7;color:#3f3f46;font-family:inherit;transition:background .12s,color .12s;white-space:nowrap;}
-    .tab-btn:hover:not(.active){background:#d4d4d8;}
+    .tab-btn{border:none;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#0a0d1a;color:var(--muted);font-family:inherit;transition:background .12s,color .12s;white-space:nowrap;}
+    .tab-btn:hover:not(.active){background:#0f1428;}
     .tab-btn.active{background:var(--accent);color:#fff;}
     .tab-btn.unofficial{background:#fff7ed;color:#c2410c;border:1.5px solid #fed7aa;}
     .tab-btn.unofficial.active{background:#f97316;color:#fff;border-color:#f97316;}
-    .input-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:10px;}
+    .input-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px;}
     .input-card label{font-weight:700;font-size:14px;}
     .input-card textarea{width:100%;min-height:78px;resize:vertical;border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:16px;font-family:Consolas,Monaco,monospace;outline:none;background:var(--bg);color:var(--text);}
-    .input-card textarea:focus{border-color:#27272a;background:var(--card);}
+    .input-card textarea:focus{border-color:var(--accent);background:var(--card);}
     .draw-btn{align-self:flex-start;border:none;border-radius:999px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;font-family:inherit;}
     .draw-btn:hover{opacity:.85;}
     .draw-btn:active{transform:scale(.97);}
-    .viz-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px 20px;box-shadow:0 4px 18px rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;gap:18px;min-height:200px;}
+    .viz-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:18px;min-height:200px;}
     .face-label{font-weight:700;text-align:center;margin-bottom:10px;font-size:15px;}
     .sticker{border:2px solid rgba(0,0,0,0.18);}
     .err-msg{color:#b91c1c;font-weight:700;font-size:14px;margin-top:6px;}
     .legend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:420px;font-size:13px;}
-    .legend-item{display:flex;align-items:center;gap:7px;background:#fafafa;border:1px solid var(--border);border-radius:10px;padding:7px 10px;}
+    .legend-item{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:7px 10px;}
     .swatch{width:17px;height:17px;border-radius:4px;border:1px solid rgba(0,0,0,.22);flex-shrink:0;}
     svg{display:block;}
     .placeholder{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 0;}
@@ -76,8 +76,8 @@ if (IS_EMBED) {
     .page{width:100%;height:100%;gap:0!important;display:flex;flex-direction:column;}
     .viz-card{background:transparent!important;border:none!important;box-shadow:none!important;padding:2px!important;min-height:unset!important;gap:2px!important;flex:1;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
     #vizContainer{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;}
-    #vizContainer svg{max-width:100%;max-height:calc(100% - 18px);display:block;}
-    #vizContainer>div:not(.face-label):not(.err-msg){max-width:100%;max-height:calc(100% - 18px);}
+    #vizContainer svg{max-width:100%;max-height:100%;width:auto;height:auto;display:block;}
+    #vizContainer>div{max-width:100%;max-height:100%;}
     .face-label{font-size:11px!important;margin-bottom:2px!important;}
     .err-msg{font-size:11px!important;}
     .legend-grid{display:none!important;}
@@ -95,7 +95,7 @@ const LC2W={u:'Uw',d:'Dw',r:'Rw',l:'Lw',f:'Fw',b:'Bw'};
 function nxnParseTok(tok,N,mc){let base=tok,suf='';if(/[2']$/.test(base)){suf=base.slice(-1).replace('’',"'");base=base.slice(0,-1);}if(LC2W[base])base=LC2W[base];const m=base.match(/^([0-9]+)?([UDRLFB])w?$/);if(!m||!['','2',"'"].includes(suf))throw new Error('Unsupported move: '+tok);const face=m[2],fi=FI[face];const wide=base.includes('w')||Boolean(m[1]);const w=m[1]?Number(m[1]):wide?2:1;if(!fi||w<1||w>N)throw new Error('Unsupported move: '+tok);const layers=[];for(let i=0;i<w;i++)layers.push(fi.si*(mc-i));return{ax:fi.ax,turns:fi.t,layers,suf};}
 function nxnApply(text,c,mc,N){const cube=nxnSolved(c,mc);const toks=text.trim().replace(/[''`’]/g,"'").split(/\s+/).filter(Boolean);for(const tok of toks){const info=nxnParseTok(tok,N,mc);const ai={x:0,y:1,z:2}[info.ax];const mult=info.suf==='2'?2:info.suf==="'"?-1:1;const turns=info.turns*mult;for(const cb of cube){if(info.layers.includes(cb.pos[ai])){cb.pos=rotV(cb.pos,info.ax,turns);for(const s of cb.stickers)s.normal=rotV(s.normal,info.ax,turns);}}}return cube;}
 function nxnTopFace(cube,c,mc){const out=[];for(const z of c)for(const x of c){const cb=cube.find(cu=>cu.pos.join(',')===`${x},${mc},${z}`);out.push(cb.stickers.find(s=>s.normal.join(',')===`0,1,0`).color);}return out;}
-function renderNxN(scramble,cfgKey){const{N,mc,c}=NXN_CFG[cfgKey];let cube,err='';try{cube=nxnApply(scramble||'',c,mc,N);}catch(e){err=e.message;cube=nxnSolved(c,mc);}const stickers=nxnTopFace(cube,c,mc);const szPx=IS_EMBED?Math.max(70,130-(N-3)*12):Math.max(150,270-(N-3)*14);const sz=IS_EMBED?`min(${szPx}px,min(calc(100vw - 8px),calc(100vh - 8px)))`:szPx+'px';const gap=IS_EMBED?Math.max(2,5-(N-3)):Math.max(3,8-(N-3));const br=IS_EMBED?Math.max(3,5-(N-3)):Math.max(5,8-(N-3));const sbr=Math.max(3,8-(N-3));const viz=document.getElementById('vizContainer');viz.innerHTML=`<div class="face-label">Top / U Face</div><div style="width:${sz};height:${sz};display:grid;grid-template-columns:repeat(${N},1fr);grid-template-rows:repeat(${N},1fr);gap:${gap}px;background:#18181b;border:${br}px solid #18181b;border-radius:${Math.max(8,16-(N-3)*2)}px">${stickers.map(col=>`<div class="sticker" style="background:${COLORS[col]};border-radius:${sbr}px"></div>`).join('')}</div>${err?`<div class="err-msg">${err}</div>`:''}`; document.getElementById('legendContainer').innerHTML=`<div class="legend-grid">${['U','D','F','B','R','L'].map(f=>`<div class="legend-item"><span class="swatch" style="background:${COLORS[f]}"></span><span>${COLOR_NAMES[f]}</span></div>`).join('')}</div>`;}
+function renderNxN(scramble,cfgKey){const{N,mc,c}=NXN_CFG[cfgKey];let cube,err='';try{cube=nxnApply(scramble||'',c,mc,N);}catch(e){err=e.message;cube=nxnSolved(c,mc);}const stickers=nxnTopFace(cube,c,mc);const szPx=IS_EMBED?Math.max(70,130-(N-3)*12):Math.max(150,270-(N-3)*14);const sz=IS_EMBED?`min(${szPx}px,min(calc(100vw - 4px),calc(100vh - 4px)))`:szPx+'px';const gap=IS_EMBED?Math.max(2,5-(N-3)):Math.max(3,8-(N-3));const br=IS_EMBED?Math.max(3,5-(N-3)):Math.max(5,8-(N-3));const sbr=Math.max(3,8-(N-3));const viz=document.getElementById('vizContainer');viz.innerHTML=`<div style="width:${sz};height:${sz};display:grid;grid-template-columns:repeat(${N},1fr);grid-template-rows:repeat(${N},1fr);gap:${gap}px;background:#18181b;border:${br}px solid #18181b;border-radius:${Math.max(8,16-(N-3)*2)}px">${stickers.map(col=>`<div class="sticker" style="background:${COLORS[col]};border-radius:${sbr}px"></div>`).join('')}</div>${err?`<div class="err-msg">${err}</div>`:''}`; document.getElementById('legendContainer').innerHTML=`<div class="legend-grid">${['U','D','F','B','R','L'].map(f=>`<div class="legend-item"><span class="swatch" style="background:${COLORS[f]}"></span><span>${COLOR_NAMES[f]}</span></div>`).join('')}</div>`;}
 
 // ── SKEWB ──────────────────────────────────────────────────────────────────
 function skewbSolve(text){
@@ -125,7 +125,7 @@ function renderSkewb(scramble){
   // Re-do cleanly:
   const regionList=[{pts:[[24,24],tM,lM],col:fd.TL},{pts:[[276,24],rM,tM],col:fd.TR},{pts:[[24,276],lM,bM],col:fd.BL},{pts:[[276,276],bM,rM],col:fd.BR},{pts:[tM,rM,bM,lM],col:fd.center}];
   for(const{pts,col}of regionList){const inner=inset(pts,0.88);const path=document.createElementNS(ns,'path');path.setAttribute('d',rPath(inner,6.2));path.setAttribute('fill',COLORS[col]);path.setAttribute('stroke','rgba(0,0,0,.10)');path.setAttribute('stroke-width','0.7');svg.appendChild(path);}
-  const viz=document.getElementById('vizContainer');viz.innerHTML=`<div class="face-label">Top / U Face</div>`;if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);
+  const viz=document.getElementById('vizContainer');viz.innerHTML='';if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);
   document.getElementById('legendContainer').innerHTML=`<div class="legend-grid">${['U','D','F','B','R','L'].map(f=>`<div class="legend-item"><span class="swatch" style="background:${COLORS[f]}"></span><span>${COLOR_NAMES[f]}</span></div>`).join('')}</div>`;}
 
 // ── PYRAMINX ──────────────────────────────────────────────────────────────────
@@ -153,7 +153,7 @@ function renderPyraminx(scramble){
   const ns='http://www.w3.org/2000/svg';const svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 300 270');const pyW=IS_EMBED?130:300,pyH=IS_EMBED?117:270;if(IS_EMBED){svg.setAttribute('width','100%');svg.setAttribute('height','100%');}else{svg.setAttribute('width',pyW);svg.setAttribute('height',pyH);}
   const border=document.createElementNS(ns,'polygon');border.setAttribute('points',`${U2[0]},${U2[1]} ${L2[0]},${L2[1]} ${R2[0]},${R2[1]}`);border.setAttribute('fill','#18181b');svg.appendChild(border);
   for(const fl of front){const pts2d=fl.tri.map(proj),inner=insetTri(pts2d,0.905);const path=document.createElementNS(ns,'path');path.setAttribute('d',triPath(inner));path.setAttribute('fill',pyC[fl.color]);path.setAttribute('stroke','rgba(0,0,0,.12)');path.setAttribute('stroke-width','0.8');path.setAttribute('stroke-linejoin','round');svg.appendChild(path);}
-  const viz=document.getElementById('vizContainer');viz.innerHTML=`<div class="face-label">Front Face</div>`;if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);
+  const viz=document.getElementById('vizContainer');viz.innerHTML='';if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);
   document.getElementById('legendContainer').innerHTML=`<div class="legend-grid" style="grid-template-columns:repeat(2,1fr);max-width:280px">${['F','L','R','D'].map(f=>`<div class="legend-item"><span class="swatch" style="background:${pyC[f]}"></span><span>${pyN[f]}</span></div>`).join('')}</div>`;}
 
 // ── CLOCK ──────────────────────────────────────────────────────────────────
@@ -168,7 +168,7 @@ function renderClock(scramble){
   svg.appendChild(mel('circle',{cx:260,cy:260,r:252,fill:'#101011'}));svg.appendChild(mel('circle',{cx:260,cy:260,r:226,fill:'#141416',stroke:'#232327','stroke-width':1.5}));
   for(let row=0;row<3;row++)for(let col=0;col<3;col++){const cx=110+col*150,cy=110+row*150,r=50,val=st.black[row*3+col];svg.appendChild(mel('circle',{cx,cy,r:r+16,fill:'#0b0b0c'}));svg.appendChild(mel('circle',{cx,cy,r:r+10,fill:'#111112'}));svg.appendChild(mel('circle',{cx,cy,r,fill:'#ffffff',stroke:'#d4d4d8','stroke-width':2}));for(let h=0;h<12;h++){const ang=(h*30-90)*Math.PI/180;svg.appendChild(mel('line',{x1:cx+Math.cos(ang)*(r+5),y1:cy+Math.sin(ang)*(r+5),x2:cx+Math.cos(ang)*(r+9),y2:cy+Math.sin(ang)*(r+9),stroke:h%3===0?'#f5f5f5':'#a1a1aa','stroke-width':h%3===0?2.5:1.5,'stroke-linecap':'round'}));}const topY=cy-r-11;svg.appendChild(mel('line',{x1:cx,y1:topY-6,x2:cx,y2:topY+5,stroke:'#dc2626','stroke-width':3,'stroke-linecap':'round'}));const ha=(val*30-90)*Math.PI/180;svg.appendChild(mel('line',{x1:cx,y1:cy,x2:cx+Math.cos(ha)*(r-16),y2:cy+Math.sin(ha)*(r-16),stroke:'#111827','stroke-width':5,'stroke-linecap':'round'}));svg.appendChild(mel('circle',{cx,cy,r:7,fill:'#111112'}));svg.appendChild(mel('circle',{cx,cy,r:3,fill:'#ffffff'}));}
   [[185,185],[335,185],[185,335],[335,335]].forEach(([cx,cy])=>svg.appendChild(mel('circle',{cx,cy,r:16,fill:'#f8f8f8',stroke:'#111112','stroke-width':5})));
-  const viz=document.getElementById('vizContainer');viz.innerHTML=`<div class="face-label">Clock — Black Side</div>`;if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);document.getElementById('legendContainer').innerHTML='';}
+  const viz=document.getElementById('vizContainer');viz.innerHTML='';if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);document.getElementById('legendContainer').innerHTML='';}
 
 // ── EVENTS & UI ──────────────────────────────────────────────────────────────
 const EVENTS=[
