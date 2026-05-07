@@ -12161,9 +12161,9 @@
     });
 
     const donateDialog = document.getElementById("donateDialog");
-    document.getElementById("openDonate").addEventListener("click", () => donateDialog.showModal());
-    document.getElementById("closeDonate").addEventListener("click", () => donateDialog.close());
-    donateDialog.addEventListener("click", e => { if (e.target === donateDialog) donateDialog.close(); });
+    document.getElementById("openDonate")?.addEventListener("click", () => donateDialog?.showModal());
+    document.getElementById("closeDonate")?.addEventListener("click", () => donateDialog?.close());
+    donateDialog?.addEventListener("click", e => { if (e.target === donateDialog) donateDialog.close(); });
 
     closeSettingsBtn.addEventListener("click", () => settingsDialog.close());
     resetSidebarWidthBtn?.addEventListener("click", () => {
@@ -12863,7 +12863,7 @@
         <a class="donate-amt-btn" href="https://buy.stripe.com/PLACEHOLDER_10" target="_blank" rel="noopener">$10</a>
         <a class="donate-amt-btn" href="https://buy.stripe.com/PLACEHOLDER_20" target="_blank" rel="noopener">$20</a>
       </div>
-      <button class="modal-close-btn" id="closeDonateBtn" style="width:100%;margin-top:4px;">Maybe later</button>
+      <button class="small-btn" id="closeDonate" style="width:100%;margin-top:4px;">Maybe later</button>
     </div>
   </dialog>
 
