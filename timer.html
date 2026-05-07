@@ -28,7 +28,7 @@
       --sidebar-width: 360px;
       --sidebar-min-width: 240px;
       --sidebar-max-width: 520px;
-      --tool-dock-height: 220px;
+      --tool-dock-height: 200px;
     }
 
     *{box-sizing:border-box}
@@ -4253,7 +4253,7 @@
 
     function applyToolDockHeight(h, persist = true) {
       // Tool dock height is fixed — ignore resize attempts
-      return 220;
+      return 200;
     }
 
     function setupToolDockResize() {
@@ -9151,15 +9151,15 @@
       const scramble = state.currentScramble || '';
       const src = 'draw-scramble.html?embed=1&event=' + encodeURIComponent(eventId) + '&scramble=' + encodeURIComponent(scramble);
 
-      let player = document.getElementById("drawScramblePlayer");
+      // Scope to mount — stale clones in the mobile dock share the same id
+      let player = mount.querySelector('iframe');
       if (!player) {
         mount.innerHTML = '';
         player = document.createElement('iframe');
-        player.id = 'drawScramblePlayer';
         player.style.cssText = 'width:100%;height:100%;border:none;display:block;background:transparent;';
         mount.appendChild(player);
       }
-      player.src = src;
+      if (player.src !== new URL(src, location.href).href) player.src = src;
     }
 
     function bluetoothDeviceName(puzzle) {
@@ -11087,10 +11087,22 @@
         if (settings.scramble.autoSize) {
           const len = state.currentScramble.length;
           let scale = settings.scramble.scale;
-          if (len > 120) scale = 0.82;
-          else if (len > 90) scale = 0.9;
-          else if (len > 60) scale = 0.98;
+          if (len > 120) scale = Math.min(scale, 0.78);
+          else if (len > 90) scale = Math.min(scale, 0.87);
+          else if (len > 60) scale = Math.min(scale, 0.96);
           document.documentElement.style.setProperty("--scramble-scale", scale);
+          // Post-render: shrink further if scramble wrap is eating too much vertical space
+          requestAnimationFrame(() => {
+            const wrap = document.getElementById('scrambleWrap');
+            const topZone = wrap && wrap.closest('.top-zone');
+            if (!wrap || !topZone) return;
+            const maxH = topZone.clientHeight * 0.38;
+            if (wrap.scrollHeight > maxH) {
+              const ratio = maxH / wrap.scrollHeight;
+              const reduced = Math.max(0.58, scale * ratio * 0.92);
+              document.documentElement.style.setProperty("--scramble-scale", reduced);
+            }
+          });
         } else {
           document.documentElement.style.setProperty("--scramble-scale", settings.scramble.scale);
         }
