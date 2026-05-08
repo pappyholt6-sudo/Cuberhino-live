@@ -6889,7 +6889,7 @@
       }
     }
 
-    // After deleting a closed club comp, recompute any club records that were set by it.
+    // After deleting a club comp, remove any club records that were set by it.
     async function recomputeClubRecordsAfterDelete(clubId, deletedCompId) {
       try {
         const clubSnap = await getDoc(doc(db, 'clubs', clubId));
@@ -6901,51 +6901,13 @@
           .map(([evId]) => evId);
         if (!affectedEvIds.length) return;
 
-        // Fetch all remaining closed comps for this club
-        const closedSnap = await getDocs(query(
-          collection(db, 'clubs', clubId, 'competitions'),
-          where('status', '==', 'closed')
-        ));
-        // Explicitly exclude the deleted comp in case local cache hasn't caught up
-        const closedComps = closedSnap.docs
-          .filter(d => d.id !== deletedCompId)
-          .map(d => ({id: d.id, ...d.data()}));
-
+        // Just delete those records — don't scan other comps for replacements.
         const updates = {};
         for (const evId of affectedEvIds) {
-          let bestMs = null, bestHolder = null, bestCompId = null, bestCompName = null, bestEvLabel = null;
-          for (const comp of closedComps) {
-            const compEvents = comp.events?.length
-              ? comp.events
-              : [{id: comp.event||'333', label: EVENTS.find(e=>e.id===(comp.event||'333'))?.label||'3x3x3'}];
-            const ev = compEvents.find(e => e.id === evId);
-            if (!ev) continue;
-            const entriesSnap = await getDocs(collection(db, 'clubs', clubId, 'competitions', comp.id, 'entries'));
-            for (const d of entriesSnap.docs) {
-              const entry = d.data();
-              const times = comp.events?.length > 1
-                ? (entry.timesByEvent?.[evId] || [])
-                : (entry.times || []);
-              for (const t of times) {
-                if (!t || t <= 0) continue;
-                if (bestMs == null || t < bestMs) {
-                  bestMs = t;
-                  bestHolder = {uid: entry.uid, username: entry.username, displayName: entry.displayName};
-                  bestCompId = comp.id;
-                  bestCompName = comp.name || '';
-                  bestEvLabel = ev.label;
-                }
-              }
-            }
-          }
-          updates[`records.${evId}`] = bestMs != null
-            ? {eventId: evId, eventLabel: bestEvLabel, timeMs: bestMs, holder: bestHolder, compId: bestCompId, compName: bestCompName}
-            : deleteField();
+          updates[`records.${evId}`] = deleteField();
         }
-        if (Object.keys(updates).length) {
-          await updateDoc(doc(db, 'clubs', clubId), updates);
-        }
-      } catch(e) { console.warn('Club record recompute failed:', e.message); }
+        await updateDoc(doc(db, 'clubs', clubId), updates);
+      } catch(e) { console.warn('Club record cleanup failed:', e.message); }
     }
 
     // State for Records tab event filter and view mode (per club session)
