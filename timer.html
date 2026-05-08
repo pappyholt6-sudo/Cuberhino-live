@@ -11866,6 +11866,7 @@
       resetToIdle(true);
       await generateScramble();
       updateDeleteCustomBtn();
+      eventSelectEl.blur();
     });
 
     sessionSelectEl.addEventListener("change", () => {
