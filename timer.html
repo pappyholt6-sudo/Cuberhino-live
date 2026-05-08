@@ -3660,48 +3660,19 @@
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend>Side Tools</legend>
-          <div class="tool-manage-list">
-            <div class="tool-manage-header"><span>Tool</span><span>Show</span><span>Pos</span></div>
-            <div class="tool-manage-row">
-              <span class="tool-manage-label"><span class="tool-manage-icon">📈</span>Time Trend</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showTrendSide" /></label>
-              <select class="select tool-manage-slot" id="trendSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
-            </div>
-            <div class="tool-manage-row">
-              <span class="tool-manage-label"><span class="tool-manage-icon">📊</span>Distribution</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showDistributionSide" /></label>
-              <select class="select tool-manage-slot" id="distributionSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
-            </div>
-            <div class="tool-manage-row">
-              <span class="tool-manage-label"><span class="tool-manage-icon">🎲</span>Draw Scramble</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showDrawScrambleSide" /></label>
-              <select class="select tool-manage-slot" id="drawScrambleSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
-            </div>
-            <div class="tool-manage-row">
-              <span class="tool-manage-label"><span class="tool-manage-icon">🔀</span>Scramble Gen</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showScrambleGenSide" /></label>
-              <select class="select tool-manage-slot" id="scrambleGenSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
-            </div>
-            <div class="tool-manage-row">
-              <span class="tool-manage-label"><span class="tool-manage-icon">📡</span>Bluetooth Timer</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showBluetoothSide" /></label>
-              <select class="select tool-manage-slot" id="bluetoothSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
-            </div>
-            <div class="tool-manage-row">
-              <span class="tool-manage-label"><span class="tool-manage-icon">🕐</span>Recent Solves</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showRecentSide" /></label>
-              <select class="select tool-manage-slot" id="recentSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
-            </div>
-          </div>
-        </fieldset>
 
         <fieldset>
           <legend>Sidebar Options</legend>
           <div class="row">
             <label for="showSessionSummary">Show session summary cards</label>
             <input type="checkbox" id="showSessionSummary" />
+          </div>
+          <div id="sessionSummaryCardToggles" style="margin-left:12px;margin-top:4px;display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:13px;display:flex;align-items:center;gap:8px;"><input type="checkbox" id="showStatBestSingle" checked /> Best Single</label>
+            <label style="font-size:13px;display:flex;align-items:center;gap:8px;"><input type="checkbox" id="showStatMean" checked /> Session Mean</label>
+            <label style="font-size:13px;display:flex;align-items:center;gap:8px;"><input type="checkbox" id="showStatBestMo3" checked /> Best Mo3</label>
+            <label style="font-size:13px;display:flex;align-items:center;gap:8px;"><input type="checkbox" id="showStatBestAo5" checked /> Best Ao5</label>
+            <label style="font-size:13px;display:flex;align-items:center;gap:8px;"><input type="checkbox" id="showStatBestAo12" checked /> Best Ao12</label>
           </div>
           <div class="row">
             <label for="showAoColumn">Show Ao5 column in list</label>
@@ -3710,10 +3681,6 @@
           <div class="row">
             <label for="showAo12Column">Show Ao12 column in list</label>
             <input type="checkbox" id="showAo12Column" />
-          </div>
-          <div class="row">
-            <label for="inverseTimeList">Newest solves at bottom</label>
-            <input type="checkbox" id="inverseTimeList" />
           </div>
         </fieldset>
 
@@ -4143,6 +4110,11 @@
       list: {
         showAoColumn: true,
         showAo12Column: false,
+        statBestSingle: true,
+        statMean: true,
+        statBestMo3: true,
+        statBestAo5: true,
+        statBestAo12: true,
         inverseTimeList: false,
         showSessionSummary: true,
         showDelta: true
@@ -4529,9 +4501,14 @@
     const showAo500El  = document.getElementById("showAo500");
     const showAo1000El = document.getElementById("showAo1000");
     const showAo5000El = document.getElementById("showAo5000");
-    const showAo12ColumnEl = document.getElementById("showAo12Column");
+    const showAo12ColumnEl     = document.getElementById("showAo12Column");
+    const showStatBestSingleEl = document.getElementById("showStatBestSingle");
+    const showStatMeanEl        = document.getElementById("showStatMean");
+    const showStatBestMo3El     = document.getElementById("showStatBestMo3");
+    const showStatBestAo5El     = document.getElementById("showStatBestAo5");
+    const showStatBestAo12El    = document.getElementById("showStatBestAo12");
+    const sessionSummaryCardTogglesEl = document.getElementById("sessionSummaryCardToggles");
     const showAoColumnEl = document.getElementById("showAoColumn");
-    const inverseTimeListEl = document.getElementById("inverseTimeList");
     const showSessionSummaryEl = document.getElementById("showSessionSummary");
     const showDeltaEl = document.getElementById("showDelta");
 
@@ -4554,18 +4531,6 @@
     const bluetoothBottomSlotEl    = document.getElementById("bluetoothBottomSlot");
     const recentBottomSlotEl       = document.getElementById("recentBottomSlot");
     // Side tool show + slot
-    const showTrendSideEl          = document.getElementById("showTrendSide");
-    const showDistributionSideEl   = document.getElementById("showDistributionSide");
-    const showDrawScrambleSideEl   = document.getElementById("showDrawScrambleSide");
-    const showScrambleGenSideEl    = document.getElementById("showScrambleGenSide");
-    const showBluetoothSideEl      = document.getElementById("showBluetoothSide");
-    const showRecentSideEl         = document.getElementById("showRecentSide");
-    const trendSideSlotEl          = document.getElementById("trendSideSlot");
-    const distributionSideSlotEl   = document.getElementById("distributionSideSlot");
-    const drawScrambleSideSlotEl   = document.getElementById("drawScrambleSideSlot");
-    const scrambleGenSideSlotEl    = document.getElementById("scrambleGenSideSlot");
-    const bluetoothSideSlotEl      = document.getElementById("bluetoothSideSlot");
-    const recentSideSlotEl         = document.getElementById("recentSideSlot");
     const sideToolZoneEl = document.getElementById("sideToolZone");
     const sideToolSlotsEl = document.getElementById("sideToolSlots");
     const middleToolZoneEl = document.getElementById("middleToolZone");
@@ -7984,7 +7949,12 @@
       showAo5000El.checked = settings.averages.ao5000;
       showAoColumnEl.checked = settings.list.showAoColumn;
       if (showAo12ColumnEl) showAo12ColumnEl.checked = !!settings.list.showAo12Column;
-      inverseTimeListEl.checked = settings.list.inverseTimeList;
+      if (showStatBestSingleEl) showStatBestSingleEl.checked = (settings.list.statBestSingle !== false);
+      if (showStatMeanEl)        showStatMeanEl.checked        = (settings.list.statMean       !== false);
+      if (showStatBestMo3El)     showStatBestMo3El.checked     = (settings.list.statBestMo3    !== false);
+      if (showStatBestAo5El)     showStatBestAo5El.checked     = (settings.list.statBestAo5    !== false);
+      if (showStatBestAo12El)    showStatBestAo12El.checked    = (settings.list.statBestAo12   !== false);
+      if (sessionSummaryCardTogglesEl) sessionSummaryCardTogglesEl.style.display = settings.list.showSessionSummary ? "" : "none";
       showSessionSummaryEl.checked = settings.list.showSessionSummary;
       showDeltaEl.checked = settings.list.showDelta;
 
@@ -8005,7 +7975,7 @@
         if (!isBottom && bottomSlotEl) bottomSlotEl.value = tool.slot || "slot1";
         if (!isSide   && sideSlotEl)   sideSlotEl.value   = tool.slot || "slot1";
       }
-      syncToolPair(settings.tools.trend,        showTrendBottomEl,        trendBottomSlotEl,        showTrendSideEl,        trendSideSlotEl);
+      syncToolPair(settings.tools.trend,        showTrendBottomEl,        trendBottomSlotEl,        null, null);
       syncToolPair(settings.tools.distribution, showDistributionBottomEl, distributionBottomSlotEl, showDistributionSideEl, distributionSideSlotEl);
       syncToolPair(settings.tools.drawScramble, showDrawScrambleBottomEl, drawScrambleBottomSlotEl, showDrawScrambleSideEl, drawScrambleSideSlotEl);
       syncToolPair(settings.tools.scrambleGen,  showScrambleGenBottomEl,  scrambleGenBottomSlotEl,  showScrambleGenSideEl,  scrambleGenSideSlotEl);
@@ -8054,8 +8024,12 @@
       settings.averages.ao5000 = showAo5000El.checked;
 
       settings.list.showAoColumn    = showAoColumnEl.checked;
-      if (showAo12ColumnEl) settings.list.showAo12Column = showAo12ColumnEl.checked;
-      settings.list.inverseTimeList = inverseTimeListEl.checked;
+      if (showAo12ColumnEl)     settings.list.showAo12Column = showAo12ColumnEl.checked;
+      if (showStatBestSingleEl) settings.list.statBestSingle = showStatBestSingleEl.checked;
+      if (showStatMeanEl)        settings.list.statMean        = showStatMeanEl.checked;
+      if (showStatBestMo3El)     settings.list.statBestMo3     = showStatBestMo3El.checked;
+      if (showStatBestAo5El)     settings.list.statBestAo5     = showStatBestAo5El.checked;
+      if (showStatBestAo12El)    settings.list.statBestAo12    = showStatBestAo12El.checked;
       settings.list.showSessionSummary = showSessionSummaryEl.checked;
       settings.list.showDelta = showDeltaEl.checked;
 
@@ -8077,7 +8051,7 @@
           tool.enabled = false;
         }
       }
-      pullToolPair(settings.tools.trend,        showTrendBottomEl,        trendBottomSlotEl,        showTrendSideEl,        trendSideSlotEl);
+      pullToolPair(settings.tools.trend,        showTrendBottomEl,        trendBottomSlotEl,        null, null);
       pullToolPair(settings.tools.distribution, showDistributionBottomEl, distributionBottomSlotEl, showDistributionSideEl, distributionSideSlotEl);
       pullToolPair(settings.tools.drawScramble, showDrawScrambleBottomEl, drawScrambleBottomSlotEl, showDrawScrambleSideEl, drawScrambleSideSlotEl);
       pullToolPair(settings.tools.scrambleGen,  showScrambleGenBottomEl,  scrambleGenBottomSlotEl,  showScrambleGenSideEl,  scrambleGenSideSlotEl);
@@ -8461,13 +8435,14 @@
       const ao5 = bestAoNWithIdx(5);
       const ao12 = bestAoNWithIdx(12);
 
-      const stats = [
-        { label: "Best Single",  value: bestSingle(),    n: null, idx: -1 },
-        { label: "Session Mean", value: meanOfSession(), n: null, idx: -1 },
-        { label: "Best Mo3",     value: bestMeanOf3(),   n: null, idx: -1 },
-        { label: "Best Ao5",     value: ao5.val,         n: 5,    idx: ao5.idx },
-        { label: "Best Ao12",    value: ao12.val,        n: 12,   idx: ao12.idx }
+      const allStats = [
+        { label: "Best Single",  value: bestSingle(),    n: null, idx: -1,      key: "statBestSingle" },
+        { label: "Session Mean", value: meanOfSession(), n: null, idx: -1,      key: "statMean"       },
+        { label: "Best Mo3",     value: bestMeanOf3(),   n: null, idx: -1,      key: "statBestMo3"    },
+        { label: "Best Ao5",     value: ao5.val,         n: 5,    idx: ao5.idx, key: "statBestAo5"    },
+        { label: "Best Ao12",    value: ao12.val,        n: 12,   idx: ao12.idx,key: "statBestAo12"   }
       ];
+      const stats = allStats.filter(s => settings.list[s.key] !== false);
 
       sessionStatsEl.innerHTML = stats.map(s => `
         <div class="session-stat" data-label="${s.label}">
@@ -12254,22 +12229,13 @@
       });
     });
 
-    // Mutual exclusion: checking bottom unchecks side and vice versa
-    [
-      [showTrendBottomEl,        showTrendSideEl],
-      [showDistributionBottomEl, showDistributionSideEl],
-      [showDrawScrambleBottomEl, showDrawScrambleSideEl],
-      [showScrambleGenBottomEl,  showScrambleGenSideEl],
-      [showBluetoothBottomEl,    showBluetoothSideEl],
-      [showRecentBottomEl,       showRecentSideEl],
-    ].forEach(([bEl, sEl]) => {
-      bEl?.addEventListener("change", () => { if (bEl.checked && sEl) sEl.checked = false; });
-      sEl?.addEventListener("change", () => { if (sEl.checked && bEl) bEl.checked = false; });
-    });
-
     timerScaleEl.addEventListener("input", () => {
       timerScaleValueEl.textContent = Number(timerScaleEl.value).toFixed(2) + "x";
       scheduleSettingsApply();
+    });
+
+    document.getElementById("showSessionSummary")?.addEventListener("change", function() {
+      if (sessionSummaryCardTogglesEl) sessionSummaryCardTogglesEl.style.display = this.checked ? "" : "none";
     });
 
     textScaleEl.addEventListener("input", () => {
