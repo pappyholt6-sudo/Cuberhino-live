@@ -171,6 +171,88 @@ function renderClock(scramble){
   [[185,185],[335,185],[185,335],[335,335]].forEach(([cx,cy])=>svg.appendChild(mel('circle',{cx,cy,r:16,fill:'#f8f8f8',stroke:'#111112','stroke-width':5})));
   const viz=document.getElementById('vizContainer');viz.innerHTML='';if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);document.getElementById('legendContainer').innerHTML='';}
 
+// ── SQUARE-1 ──────────────────────────────────────────────────────────────────
+function renderSq1(scramble) {
+  const viz = document.getElementById('vizContainer');
+  const leg = document.getElementById('legendContainer');
+  const YELLOW = "#ffd500", WHITE_C = "#ffffff", BASE_START_ANGLE = -165;
+  function mkP(id,type,color){return{id,type,color,width:type==="corner"?2:1};}
+  const C1=mkP("C1","corner",YELLOW),E1=mkP("E1","edge",YELLOW),C2=mkP("C2","corner",YELLOW),E2=mkP("E2","edge",YELLOW),
+        C3=mkP("C3","corner",YELLOW),E3=mkP("E3","edge",YELLOW),C4=mkP("C4","corner",YELLOW),E4=mkP("E4","edge",YELLOW),
+        c1=mkP("c1","corner",WHITE_C),e1=mkP("e1","edge",WHITE_C),c2=mkP("c2","corner",WHITE_C),e2=mkP("e2","edge",WHITE_C),
+        c3=mkP("c3","corner",WHITE_C),e3=mkP("e3","edge",WHITE_C),c4=mkP("c4","corner",WHITE_C),e4=mkP("e4","edge",WHITE_C);
+  const solvedTop=[C1,C1,E1,C2,C2,E2,C3,C3,E3,C4,C4,E4];
+  const solvedBot=[e1,c2,c2,e2,c3,c3,e3,c4,c4,e4,c1,c1];
+  let topU=[...solvedTop],botU=[...solvedBot];
+  function rotU(u,a){a=((a%12)+12)%12;return u.slice(-a).concat(u.slice(0,-a));}
+  function sliceOk(u){return u[5]!==u[6];}
+  function doSlice(){
+    if(!sliceOk(topU)||!sliceOk(botU))throw new Error("Slash would cut through a piece.");
+    const tL=topU.slice(0,6),tR=topU.slice(6),bL=botU.slice(0,6),bR=botU.slice(6);
+    topU=tL.concat(bR);botU=bL.concat(tR);
+  }
+  function tokenize(alg){
+    const re=/\/|\((-?\d+)\s*,\s*(-?\d+)\)|(-?\d+)\s*,\s*(-?\d+)/g,tokens=[];let m;
+    while((m=re.exec(alg))!==null){
+      if(m[0]==="/")tokens.push({type:"slash"});
+      else if(m[1]!=null)tokens.push({type:"turn",top:+m[1],bot:+m[2]});
+      else tokens.push({type:"turn",top:+m[3],bot:+m[4]});
+    }return tokens;
+  }
+  function applyAlg(alg){
+    topU=[...solvedTop];botU=[...solvedBot];
+    for(const t of tokenize(alg)){
+      if(t.type==="slash")doSlice();
+      else{topU=rotU(topU,t.top);botU=rotU(botU,t.bot);}
+    }
+  }
+  function ptAt(deg,r){const a=deg*Math.PI/180;return{x:Math.cos(a)*r,y:Math.sin(a)*r};}
+  function pPath(s,e,type){
+    while(e<=s)e+=360;
+    const mid=(s+e)/2,p1=ptAt(s,104),p2=ptAt(e,104);
+    if(type==="corner"){const t=ptAt(mid,141.4);return`M 0 0 L ${p1.x.toFixed(3)} ${p1.y.toFixed(3)} L ${t.x.toFixed(3)} ${t.y.toFixed(3)} L ${p2.x.toFixed(3)} ${p2.y.toFixed(3)} Z`;}
+    return`M 0 0 L ${p1.x.toFixed(3)} ${p1.y.toFixed(3)} L ${p2.x.toFixed(3)} ${p2.y.toFixed(3)} Z`;
+  }
+  function uniq(u){const s=new Set(),r=[];for(const p of u)if(!s.has(p.id)){s.add(p.id);r.push(p);}return r;}
+  function segs(u,p){
+    const idx=[];for(let i=0;i<u.length;i++)if(u[i]===p)idx.push(i);
+    if(!idx.length)return[];
+    if(p.width===1)return[{start:idx[0],len:1}];
+    const[a,b]=idx;
+    if((a+1)%12===b)return[{start:a,len:2}];
+    if((b+1)%12===a)return[{start:b,len:2}];
+    return[{start:a,len:1},{start:b,len:1}];
+  }
+  let errMsg='';
+  try{applyAlg(scramble||'');}catch(e){errMsg=e.message;}
+  const ns='http://www.w3.org/2000/svg';
+  const sz=IS_EMBED?130:280;
+  const svg=document.createElementNS(ns,'svg');
+  svg.setAttribute('viewBox','-140 -140 280 280');
+  if(IS_EMBED){svg.setAttribute('width','100%');svg.setAttribute('height','100%');}
+  else{svg.setAttribute('width',sz);svg.setAttribute('height',sz);}
+  const bg=document.createElementNS(ns,'rect');
+  bg.setAttribute('x','-140');bg.setAttribute('y','-140');bg.setAttribute('width','280');bg.setAttribute('height','280');
+  bg.setAttribute('rx','18');bg.setAttribute('fill','#18181b');svg.appendChild(bg);
+  const g=document.createElementNS(ns,'g');g.setAttribute('transform','rotate(-90)');
+  for(const piece of uniq(topU)){
+    for(const seg of segs(topU,piece)){
+      const start=BASE_START_ANGLE+seg.start*30,end=start+seg.len*30;
+      const path=document.createElementNS(ns,'path');
+      path.setAttribute('d',pPath(start,end,piece.type));
+      path.setAttribute('fill',piece.color);
+      path.setAttribute('stroke','#050505');path.setAttribute('stroke-width','4.5');
+      path.setAttribute('stroke-linejoin','round');path.setAttribute('stroke-linecap','round');
+      g.appendChild(path);
+    }
+  }
+  svg.appendChild(g);
+  viz.innerHTML='';
+  if(errMsg){const d=document.createElement('div');d.className='err-msg';d.textContent=errMsg;viz.appendChild(d);}
+  viz.appendChild(svg);
+  leg.innerHTML=`<div class="legend-grid" style="grid-template-columns:repeat(2,1fr);max-width:280px"><div class="legend-item"><span class="swatch" style="background:${YELLOW}"></span><span>Top layer</span></div><div class="legend-item"><span class="swatch" style="background:#ffffff"></span><span>Bottom layer</span></div></div>`;
+}
+
 // ── MEGAMINX ──────────────────────────────────────────────────────────────────
 function renderMegaminx(scramble) {
   const viz = document.getElementById('vizContainer');
@@ -195,10 +277,10 @@ const EVENTS=[
   {id:'333oh',label:'3×3 OH',group:'nxn',cubeKey:'333'},{id:'333bf',label:'3×3 BLD',group:'nxn',cubeKey:'333'},
   {id:'444bf',label:'4×4 BLD',group:'nxn',cubeKey:'444'},{id:'555bf',label:'5×5 BLD',group:'nxn',cubeKey:'555'},
   {id:'clock',label:'Clock',group:'other'},{id:'pyram',label:'Pyraminx',group:'other'},{id:'skewb',label:'Skewb',group:'other'},
-  {id:'minx',label:'Megaminx',group:'other'},{id:'sq1',label:'Square-1',group:'other',noFile:true},
+  {id:'minx',label:'Megaminx',group:'other'},{id:'sq1',label:'Square-1',group:'other'},
   {id:'fto',label:'FTO',group:'unofficial',unofficial:true},{id:'baby_fto',label:'Baby FTO',group:'unofficial',unofficial:true},
 ];
-const SAMPLES={'222':"R U R' F2 U' F",'333':"R U R' F2 U' R2 F R",minx:"R++ D++ R-- D-- R++ D-- R-- D++ U' R-- D-- R++ D++ R-- D++ R++ D-- U",'444':"Rw2 B2 U2 Lw U2 Rw' U2 Rw U2 F2 Rw F2 Lw' B2 Rw2",'555':"Rw U2 Lw' F2 Rw' F2 Lw U2 Rw' U2 Rw U2 F2 Rw F2",'666':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",'777':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",clock:"UR3+ DR6+ DL5+ UL1- U4+ R2- D5+ L1+ ALL6+ y2 U2+ R3- D1+ L2+ ALL4-",pyram:"U L R B u l r b",skewb:"R U B' L R'"};
+const SAMPLES={'222':"R U R' F2 U' F",'333':"R U R' F2 U' R2 F R",minx:"R++ D++ R-- D-- R++ D-- R-- D++ U' R-- D-- R++ D++ R-- D++ R++ D-- U",sq1:"/ -3,0 / 0,3 / 0,-3 / 0,3 / 2,0 / 0,2 / -2,0 / 4,0 / 0,-2 / 0,2 / -1,4 / 0,-3 / 0,3",'444':"Rw2 B2 U2 Lw U2 Rw' U2 Rw U2 F2 Rw F2 Lw' B2 Rw2",'555':"Rw U2 Lw' F2 Rw' F2 Lw U2 Rw' U2 Rw U2 F2 Rw F2",'666':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",'777':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",clock:"UR3+ DR6+ DL5+ UL1- U4+ R2- D5+ L1+ ALL6+ y2 U2+ R3- D1+ L2+ ALL4-",pyram:"U L R B u l r b",skewb:"R U B' L R'"};
 
 let activeId='333';
 
@@ -232,6 +314,7 @@ function drawActive(){
   if(ev.id==='pyram'){renderPyraminx(scramble);return;}
   if(ev.id==='clock'){renderClock(scramble);return;}
   if(ev.id==='minx'){renderMegaminx(scramble);return;}
+  if(ev.id==='sq1'){renderSq1(scramble);return;}
 }
 
 document.getElementById('drawBtn').addEventListener('click',drawActive);
