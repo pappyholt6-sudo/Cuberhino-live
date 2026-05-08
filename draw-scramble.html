@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Draw Scramble – CubeRhino</title>
+  <script type="module" src="https://cdn.cubing.net/js/cubing/twisty"></script>
   <style>
     :root { --bg:#000000;--card:#06080f;--text:#ffffff;--muted:#7b8fb8;--border:#1a2870;--accent:#2547d0; }
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -170,6 +171,23 @@ function renderClock(scramble){
   [[185,185],[335,185],[185,335],[335,335]].forEach(([cx,cy])=>svg.appendChild(mel('circle',{cx,cy,r:16,fill:'#f8f8f8',stroke:'#111112','stroke-width':5})));
   const viz=document.getElementById('vizContainer');viz.innerHTML='';if(err){const d=document.createElement('div');d.className='err-msg';d.textContent=err;viz.appendChild(d);}viz.appendChild(svg);document.getElementById('legendContainer').innerHTML='';}
 
+// ── MEGAMINX ──────────────────────────────────────────────────────────────────
+function renderMegaminx(scramble) {
+  const viz = document.getElementById('vizContainer');
+  const leg = document.getElementById('legendContainer');
+  const clean = (scramble || '').replace(/[''`'‘’]/g, "'").trim();
+  const sz = IS_EMBED ? 'min(92vw,92vh)' : '340px';
+  viz.innerHTML = `<div style="width:${sz};height:${sz};border-radius:18px;overflow:hidden;background:#18181b;display:grid;place-items:center;"><twisty-player id="megaminxPlayer" puzzle="megaminx" visualization="experimental-2D-LL-face" background="none" control-panel="none" hint-facelets="none" experimental-setup-anchor="end" style="width:100%;height:100%;"></twisty-player></div>`;
+  leg.innerHTML = '';
+  const player = document.getElementById('megaminxPlayer');
+  function applyScramble() {
+    player.setAttribute('alg', '');
+    player.setAttribute('experimental-setup-alg', clean);
+    player.setAttribute('visualization', 'experimental-2D-LL-face');
+  }
+  customElements.whenDefined('twisty-player').then(applyScramble);
+}
+
 // ── EVENTS & UI ──────────────────────────────────────────────────────────────
 const EVENTS=[
   {id:'222',label:'2×2',group:'nxn'},{id:'333',label:'3×3',group:'nxn'},{id:'444',label:'4×4',group:'nxn'},
@@ -177,10 +195,10 @@ const EVENTS=[
   {id:'333oh',label:'3×3 OH',group:'nxn',cubeKey:'333'},{id:'333bf',label:'3×3 BLD',group:'nxn',cubeKey:'333'},
   {id:'444bf',label:'4×4 BLD',group:'nxn',cubeKey:'444'},{id:'555bf',label:'5×5 BLD',group:'nxn',cubeKey:'555'},
   {id:'clock',label:'Clock',group:'other'},{id:'pyram',label:'Pyraminx',group:'other'},{id:'skewb',label:'Skewb',group:'other'},
-  {id:'minx',label:'Megaminx',group:'other',noFile:true},{id:'sq1',label:'Square-1',group:'other',noFile:true},
+  {id:'minx',label:'Megaminx',group:'other'},{id:'sq1',label:'Square-1',group:'other',noFile:true},
   {id:'fto',label:'FTO',group:'unofficial',unofficial:true},{id:'baby_fto',label:'Baby FTO',group:'unofficial',unofficial:true},
 ];
-const SAMPLES={'222':"R U R' F2 U' F",'333':"R U R' F2 U' R2 F R",'444':"Rw2 B2 U2 Lw U2 Rw' U2 Rw U2 F2 Rw F2 Lw' B2 Rw2",'555':"Rw U2 Lw' F2 Rw' F2 Lw U2 Rw' U2 Rw U2 F2 Rw F2",'666':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",'777':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",clock:"UR3+ DR6+ DL5+ UL1- U4+ R2- D5+ L1+ ALL6+ y2 U2+ R3- D1+ L2+ ALL4-",pyram:"U L R B u l r b",skewb:"R U B' L R'"};
+const SAMPLES={'222':"R U R' F2 U' F",'333':"R U R' F2 U' R2 F R",minx:"R++ D++ R-- D-- R++ D-- R-- D++ U' R-- D-- R++ D++ R-- D++ R++ D-- U",'444':"Rw2 B2 U2 Lw U2 Rw' U2 Rw U2 F2 Rw F2 Lw' B2 Rw2",'555':"Rw U2 Lw' F2 Rw' F2 Lw U2 Rw' U2 Rw U2 F2 Rw F2",'666':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",'777':"3Rw2 Fw2 U2 3Lw U2 3Rw' U2 3Rw U2 Fw2 3Rw Fw2",clock:"UR3+ DR6+ DL5+ UL1- U4+ R2- D5+ L1+ ALL6+ y2 U2+ R3- D1+ L2+ ALL4-",pyram:"U L R B u l r b",skewb:"R U B' L R'"};
 
 let activeId='333';
 
@@ -213,6 +231,7 @@ function drawActive(){
   if(ev.id==='skewb'){renderSkewb(scramble);return;}
   if(ev.id==='pyram'){renderPyraminx(scramble);return;}
   if(ev.id==='clock'){renderClock(scramble);return;}
+  if(ev.id==='minx'){renderMegaminx(scramble);return;}
 }
 
 document.getElementById('drawBtn').addEventListener('click',drawActive);
