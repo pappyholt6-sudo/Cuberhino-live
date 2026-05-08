@@ -8480,8 +8480,8 @@
     const SOLVE_LOAD_STEP  = 100;
     let   _solveObserver   = null;
 
-    function buildSolveRow(solve, originalIndex, ao5Values, pbIds, pbAo5Indexes) {
-      const displayIndex = originalIndex + 1;
+    function buildSolveRow(solve, originalIndex, ao5Values, pbIds, pbAo5Indexes, totalSolves) {
+      const displayIndex = totalSolves - originalIndex;
       const showAo = settings.list.showAoColumn;
       const row = document.createElement("div");
       row.className = "solve-row";
@@ -8576,7 +8576,7 @@
       }
 
       visible.forEach((solve) => {
-        frag.appendChild(buildSolveRow(solve, idToIndex.get(solve.id), ao5Values, pbIds, pbAo5Indexes));
+        frag.appendChild(buildSolveRow(solve, idToIndex.get(solve.id), ao5Values, pbIds, pbAo5Indexes, solves.length));
       });
 
       // Normal: sentinel at bottom so scrolling down loads older solves
@@ -9575,7 +9575,7 @@
         for(;;){
           const{per,ori}=randState();
           const path=solve(ori,per);
-          if(path.length<9)continue;
+          if(path.length<11)continue;
           return path.reverse().map(m=>FN[(m/3)|0]+SFX[INV[m%3]]).join(' ');
         }
       }
@@ -9806,7 +9806,7 @@
 
     function historyDailyData() {
       const map = new Map();
-      for (const solve of getAllSolvesWithEvent()) {
+      for (const { solve } of getHistoryFilteredSolves()) {
         const date = new Date(solve.createdAt);
         if (Number.isNaN(date.getTime())) continue;
         const key = date.toISOString().slice(0, 10);
@@ -9822,10 +9822,10 @@
 
     function historyEventData() {
       const times = new Map();
-      for (const solve of getAllSolvesWithEvent()) {
+      for (const { solve, eventLabel } of getHistoryFilteredSolves()) {
         if (solve.penalty === 'DNF') continue;
         const ms = (solve.baseTimeMs ?? solve.time ?? 0) + (solve.penalty === '+2' ? 2000 : 0);
-        times.set(solve.eventLabel, (times.get(solve.eventLabel) || 0) + ms);
+        times.set(eventLabel, (times.get(eventLabel) || 0) + ms);
       }
       return Array.from(times.entries())
         .map(([label, totalMs]) => ({ label, totalMs }))
