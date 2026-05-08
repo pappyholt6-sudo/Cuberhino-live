@@ -3771,18 +3771,14 @@
             <input type="color" id="accentColor" />
           </div>
 
-          <div class="row">
-            <label for="useCustomBg">Custom background color</label>
-            <input type="checkbox" id="useCustomBg" />
-          </div>
-          <div class="row" id="bgColorRow" style="display:none;">
-            <label for="bgColor" style="color:var(--muted);font-size:13px;">Background color</label>
+          <div class="row" id="bgColorRow">
+            <label for="bgColor">Background color</label>
             <input type="color" id="bgColor" />
           </div>
 
           <div class="row">
-            <label for="backdropColor">Backdrop rhino color</label>
-            <input type="color" id="backdropColor" value="#4a6ff5" />
+            <label for="showBackdropRhino">Show backdrop rhino</label>
+            <input type="checkbox" id="showBackdropRhino" />
           </div>
 
           <div>
@@ -3827,13 +3823,6 @@
             </div>
           </div>
 
-          <div class="row">
-            <label for="settingsSidebarWidth">Left panel width</label>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <input type="number" id="settingsSidebarWidth" min="240" max="520" step="10" />
-              <button class="small-btn" id="resetSidebarWidthBtn" type="button">Reset</button>
-            </div>
-          </div>
         </fieldset>
       </div>
 
@@ -4157,7 +4146,7 @@
         lightMode: false,
         accentColor: "#2547d0",
         bgColor: "",
-        backdropColor: "#4a6ff5"
+        showBackdropRhino: true
       },
       font: {
         family: "Arial, Helvetica, sans-serif",
@@ -4321,11 +4310,11 @@
         const raw = Number(localStorage.getItem(SIDEBAR_WIDTH_KEY));
         if (Number.isFinite(raw)) return Math.max(240, Math.min(520, raw));
       } catch {}
-      return 320;
+      return 300;
     }
 
     function applySidebarWidth(width, persist = true) {
-      const safe = Math.max(240, Math.min(520, Number(width) || 320));
+      const safe = Math.max(240, Math.min(520, Number(width) || 300));
       document.documentElement.style.setProperty('--sidebar-width', `${safe}px`);
       if (settingsSidebarWidthEl) settingsSidebarWidthEl.value = String(safe);
       if (persist) {
@@ -4558,10 +4547,8 @@
 
     const lightModeEl    = document.getElementById("lightMode");
     const accentColorEl  = document.getElementById("accentColor");
-    const useCustomBgEl  = document.getElementById("useCustomBg");
     const bgColorEl      = document.getElementById("bgColor");
-    const bgColorRowEl   = document.getElementById("bgColorRow");
-    const backdropColorEl = document.getElementById("backdropColor");
+    const showBackdropRhinoEl = document.getElementById("showBackdropRhino");
     const backdropEl      = document.getElementById("backdropRhino");
     const fontFamilyEl   = document.getElementById("fontFamily");
     const timerScaleEl = document.getElementById("timerScale");
@@ -7939,10 +7926,10 @@
         root.style.setProperty("--warn", "#d29922");
         root.style.setProperty("--bad", "#f85149");
       }
-      // Apply backdrop rhino color
+      // Apply backdrop rhino
       if (backdropEl) {
-        const bdColor = settings.theme.backdropColor || "#4a6ff5";
-        backdropEl.style.filter = colorToBackdropFilter(bdColor);
+        backdropEl.style.filter = colorToBackdropFilter("#ffffff");
+        backdropEl.style.display = (settings.theme.showBackdropRhino !== false) ? "" : "none";
       }
 
       scrambleEl.className = "scramble " + settings.scramble.align + (settings.scramble.monospace ? " mono" : "");
@@ -8001,10 +7988,8 @@
 
       lightModeEl.checked = settings.theme.lightMode;
       accentColorEl.value = settings.theme.accentColor;
-      if (useCustomBgEl) useCustomBgEl.checked = !!settings.theme.bgColor;
       if (bgColorEl) bgColorEl.value = settings.theme.bgColor || "#0b0f14";
-      if (backdropColorEl) backdropColorEl.value = settings.theme.backdropColor || "#4a6ff5";
-      if (bgColorRowEl) bgColorRowEl.style.display = settings.theme.bgColor ? "" : "none";
+      if (showBackdropRhinoEl) showBackdropRhinoEl.checked = (settings.theme.showBackdropRhino !== false);
       fontFamilyEl.value = settings.font.family;
       timerScaleEl.value = settings.font.timerScale;
       textScaleEl.value = settings.font.textScale;
@@ -8073,16 +8058,13 @@
 
       settings.theme.lightMode = lightModeEl.checked;
       settings.theme.accentColor = accentColorEl.value;
-      const useCustomBg = useCustomBgEl?.checked ?? false;
-      settings.theme.bgColor = useCustomBg ? (bgColorEl?.value || "") : "";
-      settings.theme.backdropColor = backdropColorEl?.value || "#4a6ff5";
-      if (bgColorRowEl) bgColorRowEl.style.display = useCustomBg ? "" : "none";
+      settings.theme.bgColor = bgColorEl?.value || "";
+      settings.theme.showBackdropRhino = showBackdropRhinoEl?.checked ?? true;
 
       settings.font.family = fontFamilyEl.value;
       settings.font.timerScale = Number(timerScaleEl.value);
       settings.font.textScale = Number(textScaleEl.value);
 
-      if (settingsSidebarWidthEl) applySidebarWidth(Number(settingsSidebarWidthEl.value) || 320);
 
       await saveData();
       renderAll();
@@ -12130,7 +12112,7 @@
 
     closeSettingsBtn.addEventListener("click", () => settingsDialog.close());
     resetSidebarWidthBtn?.addEventListener("click", () => {
-      applySidebarWidth(320);
+      applySidebarWidth(300);
       scheduleSettingsApply();
     });
 
@@ -12261,11 +12243,6 @@
         accentColorEl.value = btn.dataset.color;
         scheduleSettingsApply();
       });
-    });
-
-    // Live backdrop color update — fires instantly as the picker is dragged
-    backdropColorEl?.addEventListener("input", () => {
-      if (backdropEl) backdropEl.style.filter = colorToBackdropFilter(backdropColorEl.value);
     });
 
     timerScaleEl.addEventListener("input", () => {

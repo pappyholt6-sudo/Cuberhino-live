@@ -559,7 +559,7 @@
 <img id="backdropRhino" src="favicon.ico" aria-hidden="true" alt="" style="position:fixed;top:50%;left:57%;transform:translate(-50%,-50%);width:92vmin;height:92vmin;object-fit:contain;opacity:0.07;filter:brightness(1.9);pointer-events:none;z-index:0;user-select:none;">
 <!-- NAV -->
   <nav>
-    <a href="https://cuberhino.com" class="nav-logo" style="text-decoration:none;"><img src="favicon.ico" alt="CubeRhino" style="width:40px;height:40px;object-fit:contain;border-radius:6px;margin-right:8px;vertical-align:middle;filter:brightness(1.9);">Cube<span>Rhino</span></a>
+    <a href="https://cuberhino.com" class="nav-logo" style="text-decoration:none;"><img src="images/logo-icon.png" alt="CubeRhino" style="width:40px;height:40px;object-fit:contain;border-radius:8px;margin-right:8px;vertical-align:middle;">Cube<span>Rhino</span></a>
     <div class="nav-right">
       <a href="https://cuberhino.com/timer" class="nav-timer">Launch Timer</a>
       <button id="openDonate" class="nav-signin" style="background:none;border:none;cursor:pointer;color:#f9a825;font:600 14px var(--font);">Donate</button>
@@ -571,10 +571,10 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-glow"></div>
-    <img src="favicon.ico" alt="CubeRhino" style="width:min(180px,40vw);margin-bottom:28px;">
+    <img src="images/logo-icon.png" alt="CubeRhino" style="width:min(160px,38vw);margin-bottom:28px;border-radius:22px;">
     <p class="hero-eyebrow">Redefining Cubing</p>
     <h1 class="hero-title"><span>Redefining</span> Cubing.</h1>
-    <p class="hero-sub">Not just a timer — achievements, leaderboards, clubs, and live competition. The platform csTimer was never going to become.</p>
+    <p class="hero-sub">Not just a timer — clubs, competitions, detailed stats, and every WCA event covered. The platform csTimer was never going to become.</p>
     <div class="hero-actions">
       <a href="timer.html" class="btn-primary">Sign up free</a>
       <a href="timer.html" class="btn-ghost">Try without an account</a>
@@ -635,35 +635,32 @@
   <!-- INSIDE -->
   <div class="inside-section">
     <p class="section-label">What's inside</p>
-    <h2 class="section-title">Six sections. One app.</h2>
+    <h2 class="section-title">Four sections. One app.</h2>
     <p class="section-sub" style="margin-bottom:44px;">Everything you need to train, track, and compete — all in one place.</p>
 
-    <img src="images/screenshots/img-nav.png" alt="CubeRhino navigation" class="inside-nav-img" />
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:48px;">
+      <div style="background:#0a0d1a;border:1.5px solid #2547d0;border-radius:12px;padding:10px 22px;font-weight:700;font-size:15px;color:#4a6ff5;">Timer</div>
+      <div style="background:#06080f;border:1px solid #1a2870;border-radius:12px;padding:10px 22px;font-weight:700;font-size:15px;color:#7b8fb8;">Times</div>
+      <div style="background:#06080f;border:1px solid #1a2870;border-radius:12px;padding:10px 22px;font-weight:700;font-size:15px;color:#7b8fb8;">Clubs</div>
+      <div style="background:#06080f;border:1px solid #1a2870;border-radius:12px;padding:10px 22px;font-weight:700;font-size:15px;color:#7b8fb8;">Comps</div>
+    </div>
 
-    <div class="inside-grid">
+    <div class="inside-grid" style="grid-template-columns:repeat(2,1fr);">
       <div class="inside-card">
         <div class="inside-card-name">Timer</div>
-        <div class="inside-card-desc">Precision timing with inspection countdown, +2/DNF penalties, and instant scramble generation for any event.</div>
+        <div class="inside-card-desc">Precision timing with inspection countdown, +2/DNF penalties, and instant random-state scramble generation for every event.</div>
       </div>
       <div class="inside-card">
         <div class="inside-card-name">Times</div>
-        <div class="inside-card-desc">Your full solve history. Filter by event or date, see time trends, distributions, and personal bests across all sessions.</div>
-      </div>
-      <div class="inside-card">
-        <div class="inside-card-name">Achievements</div>
-        <div class="inside-card-desc">Milestones and goals that keep training interesting. Hit new PBs, solve streaks, and event-specific challenges.</div>
+        <div class="inside-card-desc">Your full solve history with time trends, distributions, personal bests, and session averages — all filterable by event and date.</div>
       </div>
       <div class="inside-card">
         <div class="inside-card-name">Clubs</div>
-        <div class="inside-card-desc">Create or join clubs with other cubers. Share sessions, compare progress, and train together.</div>
-      </div>
-      <div class="inside-card">
-        <div class="inside-card-name">Leaderboard</div>
-        <div class="inside-card-desc">See where you rank globally or within your clubs. Updated live as you solve.</div>
+        <div class="inside-card-desc">Create or join clubs with other cubers. Run internal competitions, track club records, and train together.</div>
       </div>
       <div class="inside-card">
         <div class="inside-card-name">Comps</div>
-        <div class="inside-card-desc">Head-to-head competitions and timed races. Compete against others in real time or async.</div>
+        <div class="inside-card-desc">Head-to-head competitions and timed races. Compete against others in real time or async — across any event.</div>
       </div>
     </div>
     <div style="text-align:center;margin-top:40px;">
@@ -715,7 +712,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo"><img src="favicon.ico" alt="CubeRhino" style="width:26px;height:26px;object-fit:contain;border-radius:5px;margin-right:8px;vertical-align:middle;filter:brightness(1.9);">Cube<span>Rhino</span></div>
+    <div class="footer-logo"><img src="images/logo-icon.png" alt="CubeRhino" style="width:26px;height:26px;object-fit:contain;border-radius:5px;margin-right:8px;vertical-align:middle;">Cube<span>Rhino</span></div>
     <div class="footer-copy">© 2026 CubeRhino · Redefining Cubing</div>
   </footer>
 
