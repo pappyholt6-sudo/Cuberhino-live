@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Square-1 Top View</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: grid;
+      place-items: center;
+    }
+
+    .app {
+      width: min(760px, 94vw);
+      background: #1b1b1b;
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.4);
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: 24px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    input {
+      background: #0d0d0d;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 16px;
+      font-weight: 700;
+      background: #ff3333;
+      color: white;
+      cursor: pointer;
+    }
+
+    .viewer {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: white;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    svg {
+      width: 92%;
+      height: 92%;
+      display: block;
+    }
+
+    .piece {
+      stroke: #050505;
+      stroke-width: 4.5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: #ff9999;
+      min-height: 20px;
+      font-size: 14px;
+    }
+
+    .note {
+      margin-top: 12px;
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <h1>Square-1 Top Pieces Only</h1>
+
+    <div class="controls">
+      <input
+        id="algInput"
+        value="/ -3,0 / 0,3 / 0,-3 / 0,3 / 2,0 / 0,2 / -2,0 / 4,0 / 0,-2 / 0,2 / -1,4 / 0,-3 / 0,3"
+        placeholder='Example: / -3,0 / 0,3 / ... or / (-3,0) / (0,3) / ...'
+      />
+      <button id="drawBtn">Draw</button>
+    </div>
+
+    <div class="viewer">
+      <svg id="svg" viewBox="-140 -140 280 280" aria-label="Square-1 top face only">
+        <g id="puzzleGroup" transform="rotate(-90)"></g>
+      </svg>
+    </div>
+
+    <div id="error" class="error"></div>
+
+    <p class="note">
+      Top-only Square-1 view. Yellow = original top layer. White = original bottom layer.
+      This version accepts both <strong>(a,b)</strong> and <strong>a,b</strong> move notation.
+    </p>
+  </main>
+
+  <script>
+    const puzzleGroup = document.getElementById("puzzleGroup");
+    const input = document.getElementById("algInput");
+    const button = document.getElementById("drawBtn");
+    const errorBox = document.getElementById("error");
+
+    const YELLOW = "#ffd500";
+    const WHITE = "#ffffff";
+
+    const BASE_START_ANGLE = -165;
+
+    function makePiece(id, type, color) {
+      return {
+        id,
+        type,
+        color,
+        width: type === "corner" ? 2 : 1
+      };
+    }
+
+    const C1 = makePiece("C1", "corner", YELLOW);
+    const E1 = makePiece("E1", "edge",   YELLOW);
+    const C2 = makePiece("C2", "corner", YELLOW);
+    const E2 = makePiece("E2", "edge",   YELLOW);
+    const C3 = makePiece("C3", "corner", YELLOW);
+    const E3 = makePiece("E3", "edge",   YELLOW);
+    const C4 = makePiece("C4", "corner", YELLOW);
+    const E4 = makePiece("E4", "edge",   YELLOW);
+
+    const c1 = makePiece("c1", "corner", WHITE);
+    const e1 = makePiece("e1", "edge",   WHITE);
+    const c2 = makePiece("c2", "corner", WHITE);
+    const e2 = makePiece("e2", "edge",   WHITE);
+    const c3 = makePiece("c3", "corner", WHITE);
+    const e3 = makePiece("e3", "edge",   WHITE);
+    const c4 = makePiece("c4", "corner", WHITE);
+    const e4 = makePiece("e4", "edge",   WHITE);
+
+    const solvedTopUnits = [
+      C1, C1,
+      E1,
+      C2, C2,
+      E2,
+      C3, C3,
+      E3,
+      C4, C4,
+      E4
+    ];
+
+    const solvedBottomUnits = [
+      e1,
+      c2, c2,
+      e2,
+      c3, c3,
+      e3,
+      c4, c4,
+      e4,
+      c1, c1
+    ];
+
+    let topUnits = [];
+    let bottomUnits = [];
+
+    function resetPuzzle() {
+      topUnits = [...solvedTopUnits];
+      bottomUnits = [...solvedBottomUnits];
+    }
+
+    function rotateUnits(units, amount) {
+      amount = ((amount % 12) + 12) % 12;
+      return units.slice(-amount).concat(units.slice(0, -amount));
+    }
+
+    function canSlice(units) {
+      return units[5] !== units[6];
+    }
+
+    function sliceMove() {
+      if (!canSlice(topUnits) || !canSlice(bottomUnits)) {
+        throw new Error("Error: slash would cut through a piece.");
+      }
+
+      const topLeft = topUnits.slice(0, 6);
+      const topRight = topUnits.slice(6);
+
+      const bottomLeft = bottomUnits.slice(0, 6);
+      const bottomRight = bottomUnits.slice(6);
+
+      topUnits = topLeft.concat(bottomRight);
+      bottomUnits = bottomLeft.concat(topRight);
+    }
+
+    function tokenizeAlg(alg) {
+      const regex = /\/|\((-?\d+)\s*,\s*(-?\d+)\)|(-?\d+)\s*,\s*(-?\d+)/g;
+      const tokens = [];
+      let match;
+
+      while ((match = regex.exec(alg)) !== null) {
+        if (match[0] === "/") {
+          tokens.push({ type: "slash" });
+        } else if (match[1] !== undefined && match[2] !== undefined) {
+          tokens.push({
+            type: "turn",
+            top: Number(match[1]),
+            bottom: Number(match[2])
+          });
+        } else if (match[3] !== undefined && match[4] !== undefined) {
+          tokens.push({
+            type: "turn",
+            top: Number(match[3]),
+            bottom: Number(match[4])
+          });
+        }
+      }
+
+      return tokens;
+    }
+
+    function parseAndApplyAlg(alg) {
+      resetPuzzle();
+
+      const tokens = tokenizeAlg(alg);
+
+      for (const token of tokens) {
+        if (token.type === "slash") {
+          sliceMove();
+        } else if (token.type === "turn") {
+          topUnits = rotateUnits(topUnits, token.top);
+          bottomUnits = rotateUnits(bottomUnits, token.bottom);
+        }
+      }
+    }
+
+    function normalizeEnd(startDeg, endDeg) {
+      while (endDeg <= startDeg) endDeg += 360;
+      return endDeg;
+    }
+
+    function pointOnAngle(angleDeg, radius) {
+      const a = angleDeg * Math.PI / 180;
+      return {
+        x: Math.cos(a) * radius,
+        y: Math.sin(a) * radius
+      };
+    }
+
+    function piecePath(startDeg, endDeg, pieceType) {
+      endDeg = normalizeEnd(startDeg, endDeg);
+
+      const centerDeg = (startDeg + endDeg) / 2;
+
+      const EDGE_RADIUS = 104;
+      const CORNER_RADIUS = 141.4;
+
+      const p1 = pointOnAngle(startDeg, EDGE_RADIUS);
+      const p2 = pointOnAngle(endDeg, EDGE_RADIUS);
+
+      if (pieceType === "corner") {
+        const tip = pointOnAngle(centerDeg, CORNER_RADIUS);
+
+        return [
+          `M 0 0`,
+          `L ${p1.x.toFixed(3)} ${p1.y.toFixed(3)}`,
+          `L ${tip.x.toFixed(3)} ${tip.y.toFixed(3)}`,
+          `L ${p2.x.toFixed(3)} ${p2.y.toFixed(3)}`,
+          `Z`
+        ].join(" ");
+      }
+
+      return [
+        `M 0 0`,
+        `L ${p1.x.toFixed(3)} ${p1.y.toFixed(3)}`,
+        `L ${p2.x.toFixed(3)} ${p2.y.toFixed(3)}`,
+        `Z`
+      ].join(" ");
+    }
+
+    function uniquePieces(units) {
+      const seen = new Set();
+      const result = [];
+
+      for (const p of units) {
+        if (!seen.has(p.id)) {
+          seen.add(p.id);
+          result.push(p);
+        }
+      }
+
+      return result;
+    }
+
+    function findSegmentsForPiece(units, pieceObj) {
+      const indices = [];
+
+      for (let i = 0; i < units.length; i++) {
+        if (units[i] === pieceObj) indices.push(i);
+      }
+
+      if (indices.length === 0) return [];
+
+      if (pieceObj.width === 1) {
+        return [{ start: indices[0], length: 1 }];
+      }
+
+      const a = indices[0];
+      const b = indices[1];
+
+      if ((a + 1) % 12 === b) {
+        return [{ start: a, length: 2 }];
+      }
+
+      if ((b + 1) % 12 === a) {
+        return [{ start: b, length: 2 }];
+      }
+
+      return [
+        { start: a, length: 1 },
+        { start: b, length: 1 }
+      ];
+    }
+
+    function drawTop() {
+      puzzleGroup.innerHTML = "";
+
+      for (const piece of uniquePieces(topUnits)) {
+        const segments = findSegmentsForPiece(topUnits, piece);
+
+        for (const segment of segments) {
+          const start = BASE_START_ANGLE + segment.start * 30;
+          const end = start + segment.length * 30;
+
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", piecePath(start, end, piece.type));
+          path.setAttribute("fill", piece.color);
+          path.setAttribute("class", "piece");
+          path.setAttribute("data-piece", piece.id);
+
+          puzzleGroup.appendChild(path);
+        }
+      }
+    }
+
+    function redraw() {
+      try {
+        errorBox.textContent = "";
+        parseAndApplyAlg(input.value.trim());
+        drawTop();
+      } catch (err) {
+        errorBox.textContent = err.message || "Error";
+      }
+    }
+
+    button.addEventListener("click", redraw);
+
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") redraw();
+    });
+
+    redraw();
+  </script>
+</body>
+</html>
