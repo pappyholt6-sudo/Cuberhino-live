@@ -366,6 +366,8 @@
       text-shadow:0 0 8px color-mix(in srgb, var(--good) 55%, transparent);
     }
 
+    .has-ao12 .solve-row{ grid-template-columns:minmax(0,1fr) 44px 44px 46px 52px; }
+
     .pill-btn{
       border:1px solid var(--line);
       background:rgba(255,255,255,.03);
@@ -3622,51 +3624,81 @@
 
       <div class="tab-panel" id="toolsTab">
         <fieldset>
-          <legend>Tools</legend>
+          <legend>Bottom Tools</legend>
           <div class="tool-manage-list">
-            <div class="tool-manage-header"><span>Tool</span><span>Show</span><span>Area</span><span>Pos</span></div>
+            <div class="tool-manage-header"><span>Tool</span><span>Show</span><span>Pos</span></div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">📈</span>Time Trend</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showTrendTool" /></label>
-              <select class="select tool-manage-area" id="trendToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
-              <select class="select tool-manage-slot" id="trendToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+              <label class="tool-manage-check"><input type="checkbox" id="showTrendBottom" /></label>
+              <select class="select tool-manage-slot" id="trendBottomSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">📊</span>Distribution</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showDistributionTool" /></label>
-              <select class="select tool-manage-area" id="distributionToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
-              <select class="select tool-manage-slot" id="distributionToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+              <label class="tool-manage-check"><input type="checkbox" id="showDistributionBottom" /></label>
+              <select class="select tool-manage-slot" id="distributionBottomSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">🎲</span>Draw Scramble</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showDrawScrambleTool" /></label>
-              <select class="select tool-manage-area" id="drawScrambleToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
-              <select class="select tool-manage-slot" id="drawScrambleToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+              <label class="tool-manage-check"><input type="checkbox" id="showDrawScrambleBottom" /></label>
+              <select class="select tool-manage-slot" id="drawScrambleBottomSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">🔀</span>Scramble Gen</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showScrambleGenTool" /></label>
-              <select class="select tool-manage-area" id="scrambleGenToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
-              <select class="select tool-manage-slot" id="scrambleGenToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+              <label class="tool-manage-check"><input type="checkbox" id="showScrambleGenBottom" /></label>
+              <select class="select tool-manage-slot" id="scrambleGenBottomSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">📡</span>Bluetooth Timer</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showBluetoothToolTools" /></label>
-              <select class="select tool-manage-area" id="bluetoothToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
-              <select class="select tool-manage-slot" id="bluetoothToolSlotTools"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+              <label class="tool-manage-check"><input type="checkbox" id="showBluetoothBottom" /></label>
+              <select class="select tool-manage-slot" id="bluetoothBottomSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">🕐</span>Recent Solves</span>
-              <label class="tool-manage-check"><input type="checkbox" id="showRecentTool" /></label>
-              <select class="select tool-manage-area" id="recentToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
-              <select class="select tool-manage-slot" id="recentToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+              <label class="tool-manage-check"><input type="checkbox" id="showRecentBottom" /></label>
+              <select class="select tool-manage-slot" id="recentBottomSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
           </div>
         </fieldset>
 
         <fieldset>
           <legend>Side Tools</legend>
-          <p style="margin:0 0 10px;font-size:13px;color:var(--muted);">Cards shown in the sidebar above your times list.</p>
+          <div class="tool-manage-list">
+            <div class="tool-manage-header"><span>Tool</span><span>Show</span><span>Pos</span></div>
+            <div class="tool-manage-row">
+              <span class="tool-manage-label"><span class="tool-manage-icon">📈</span>Time Trend</span>
+              <label class="tool-manage-check"><input type="checkbox" id="showTrendSide" /></label>
+              <select class="select tool-manage-slot" id="trendSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+            </div>
+            <div class="tool-manage-row">
+              <span class="tool-manage-label"><span class="tool-manage-icon">📊</span>Distribution</span>
+              <label class="tool-manage-check"><input type="checkbox" id="showDistributionSide" /></label>
+              <select class="select tool-manage-slot" id="distributionSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+            </div>
+            <div class="tool-manage-row">
+              <span class="tool-manage-label"><span class="tool-manage-icon">🎲</span>Draw Scramble</span>
+              <label class="tool-manage-check"><input type="checkbox" id="showDrawScrambleSide" /></label>
+              <select class="select tool-manage-slot" id="drawScrambleSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+            </div>
+            <div class="tool-manage-row">
+              <span class="tool-manage-label"><span class="tool-manage-icon">🔀</span>Scramble Gen</span>
+              <label class="tool-manage-check"><input type="checkbox" id="showScrambleGenSide" /></label>
+              <select class="select tool-manage-slot" id="scrambleGenSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+            </div>
+            <div class="tool-manage-row">
+              <span class="tool-manage-label"><span class="tool-manage-icon">📡</span>Bluetooth Timer</span>
+              <label class="tool-manage-check"><input type="checkbox" id="showBluetoothSide" /></label>
+              <select class="select tool-manage-slot" id="bluetoothSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+            </div>
+            <div class="tool-manage-row">
+              <span class="tool-manage-label"><span class="tool-manage-icon">🕐</span>Recent Solves</span>
+              <label class="tool-manage-check"><input type="checkbox" id="showRecentSide" /></label>
+              <select class="select tool-manage-slot" id="recentSideSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Sidebar Options</legend>
           <div class="row">
             <label for="showSessionSummary">Show session summary cards</label>
             <input type="checkbox" id="showSessionSummary" />
@@ -3676,17 +3708,22 @@
             <input type="checkbox" id="showAoColumn" />
           </div>
           <div class="row">
+            <label for="showAo12Column">Show Ao12 column in list</label>
+            <input type="checkbox" id="showAo12Column" />
+          </div>
+          <div class="row">
             <label for="inverseTimeList">Newest solves at bottom</label>
             <input type="checkbox" id="inverseTimeList" />
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Bottom Tools</legend>
-          <p style="margin:0 0 10px;font-size:13px;color:var(--muted);">Stat cards shown below the timer. Ao5 and Ao12 are always shown.</p>
+          <legend>Stats Cards</legend>
+          <p style="margin:0 0 10px;font-size:13px;color:var(--muted);">Stat cards shown below the timer.</p>
           <div class="avg-grid">
-            <label><input type="checkbox" checked disabled /> Ao5</label>
-            <label><input type="checkbox" checked disabled /> Ao12</label>
+            <label><input type="checkbox" id="showMo3" checked /> Mo3</label>
+            <label><input type="checkbox" id="showAo5" checked /> Ao5</label>
+            <label><input type="checkbox" id="showAo12" checked /> Ao12</label>
             <label><input type="checkbox" id="showAo50" /> Ao50</label>
             <label><input type="checkbox" id="showAo100" /> Ao100</label>
             <label><input type="checkbox" id="showAo500" /> Ao500</label>
@@ -4098,10 +4135,14 @@
       manualEntry: false,
       inputMode: 'spacebar',
       averages: {
+        mo3: true,
+        ao5: true,
+        ao12: true,
         ao50: false, ao100: false, ao500: false, ao1000: false, ao5000: false
       },
       list: {
         showAoColumn: true,
+        showAo12Column: false,
         inverseTimeList: false,
         showSessionSummary: true,
         showDelta: true
@@ -4480,11 +4521,15 @@
     const manualEntryEl     = document.getElementById("manualEntry");
     const manualTimeInputEl = document.getElementById("manualTimeInput");
 
-    const showAo50El = document.getElementById("showAo50");
-    const showAo100El = document.getElementById("showAo100");
-    const showAo500El = document.getElementById("showAo500");
+    const showMo3El    = document.getElementById("showMo3");
+    const showAo5El    = document.getElementById("showAo5");
+    const showAo12El   = document.getElementById("showAo12");
+    const showAo50El   = document.getElementById("showAo50");
+    const showAo100El  = document.getElementById("showAo100");
+    const showAo500El  = document.getElementById("showAo500");
     const showAo1000El = document.getElementById("showAo1000");
     const showAo5000El = document.getElementById("showAo5000");
+    const showAo12ColumnEl = document.getElementById("showAo12Column");
     const showAoColumnEl = document.getElementById("showAoColumn");
     const inverseTimeListEl = document.getElementById("inverseTimeList");
     const showSessionSummaryEl = document.getElementById("showSessionSummary");
@@ -4495,24 +4540,32 @@
     const scrambleScaleValueEl = document.getElementById("scrambleScaleValue");
     const scrambleAlignEl = document.getElementById("scrambleAlign");
 
-    const showTrendToolEl = document.getElementById("showTrendTool");
-    const showDistributionToolEl = document.getElementById("showDistributionTool");
-    const showDrawScrambleToolEl = document.getElementById("showDrawScrambleTool");
-    const showScrambleGenToolEl = document.getElementById("showScrambleGenTool");
-    const showBluetoothToolToolsEl = document.getElementById("showBluetoothToolTools");
-    const showRecentToolEl = document.getElementById("showRecentTool");
-    const trendToolSlotEl = document.getElementById("trendToolSlot");
-    const distributionToolSlotEl = document.getElementById("distributionToolSlot");
-    const drawScrambleToolSlotEl = document.getElementById("drawScrambleToolSlot");
-    const scrambleGenToolSlotEl = document.getElementById("scrambleGenToolSlot");
-    const bluetoothToolSlotToolsEl = document.getElementById("bluetoothToolSlotTools");
-    const recentToolSlotEl = document.getElementById("recentToolSlot");
-    const trendToolAreaEl = document.getElementById("trendToolArea");
-    const distributionToolAreaEl = document.getElementById("distributionToolArea");
-    const drawScrambleToolAreaEl = document.getElementById("drawScrambleToolArea");
-    const scrambleGenToolAreaEl = document.getElementById("scrambleGenToolArea");
-    const bluetoothToolAreaEl = document.getElementById("bluetoothToolArea");
-    const recentToolAreaEl = document.getElementById("recentToolArea");
+    // Bottom tool show + slot
+    const showTrendBottomEl        = document.getElementById("showTrendBottom");
+    const showDistributionBottomEl = document.getElementById("showDistributionBottom");
+    const showDrawScrambleBottomEl = document.getElementById("showDrawScrambleBottom");
+    const showScrambleGenBottomEl  = document.getElementById("showScrambleGenBottom");
+    const showBluetoothBottomEl    = document.getElementById("showBluetoothBottom");
+    const showRecentBottomEl       = document.getElementById("showRecentBottom");
+    const trendBottomSlotEl        = document.getElementById("trendBottomSlot");
+    const distributionBottomSlotEl = document.getElementById("distributionBottomSlot");
+    const drawScrambleBottomSlotEl = document.getElementById("drawScrambleBottomSlot");
+    const scrambleGenBottomSlotEl  = document.getElementById("scrambleGenBottomSlot");
+    const bluetoothBottomSlotEl    = document.getElementById("bluetoothBottomSlot");
+    const recentBottomSlotEl       = document.getElementById("recentBottomSlot");
+    // Side tool show + slot
+    const showTrendSideEl          = document.getElementById("showTrendSide");
+    const showDistributionSideEl   = document.getElementById("showDistributionSide");
+    const showDrawScrambleSideEl   = document.getElementById("showDrawScrambleSide");
+    const showScrambleGenSideEl    = document.getElementById("showScrambleGenSide");
+    const showBluetoothSideEl      = document.getElementById("showBluetoothSide");
+    const showRecentSideEl         = document.getElementById("showRecentSide");
+    const trendSideSlotEl          = document.getElementById("trendSideSlot");
+    const distributionSideSlotEl   = document.getElementById("distributionSideSlot");
+    const drawScrambleSideSlotEl   = document.getElementById("drawScrambleSideSlot");
+    const scrambleGenSideSlotEl    = document.getElementById("scrambleGenSideSlot");
+    const bluetoothSideSlotEl      = document.getElementById("bluetoothSideSlot");
+    const recentSideSlotEl         = document.getElementById("recentSideSlot");
     const sideToolZoneEl = document.getElementById("sideToolZone");
     const sideToolSlotsEl = document.getElementById("sideToolSlots");
     const middleToolZoneEl = document.getElementById("middleToolZone");
@@ -7921,12 +7974,16 @@
       if (inputModeEl) inputModeEl.value = settings.manualEntry ? 'typing' : (settings.inputMode || 'spacebar');
       applyManualEntryMode();
 
-      showAo50El.checked = settings.averages.ao50;
-      showAo100El.checked = settings.averages.ao100;
-      showAo500El.checked = settings.averages.ao500;
+      if (showMo3El)  showMo3El.checked  = (settings.averages.mo3  !== false);
+      if (showAo5El)  showAo5El.checked  = (settings.averages.ao5  !== false);
+      if (showAo12El) showAo12El.checked = (settings.averages.ao12 !== false);
+      showAo50El.checked   = settings.averages.ao50;
+      showAo100El.checked  = settings.averages.ao100;
+      showAo500El.checked  = settings.averages.ao500;
       showAo1000El.checked = settings.averages.ao1000;
       showAo5000El.checked = settings.averages.ao5000;
       showAoColumnEl.checked = settings.list.showAoColumn;
+      if (showAo12ColumnEl) showAo12ColumnEl.checked = !!settings.list.showAo12Column;
       inverseTimeListEl.checked = settings.list.inverseTimeList;
       showSessionSummaryEl.checked = settings.list.showSessionSummary;
       showDeltaEl.checked = settings.list.showDelta;
@@ -7936,24 +7993,24 @@
       scrambleScaleValueEl.textContent = Number(settings.scramble.scale).toFixed(2) + "x";
       scrambleAlignEl.value = settings.scramble.align;
 
-      showTrendToolEl.checked = settings.tools.trend.enabled;
-      showDistributionToolEl.checked = settings.tools.distribution.enabled;
-      showDrawScrambleToolEl.checked = settings.tools.drawScramble.enabled;
-      if (showScrambleGenToolEl) showScrambleGenToolEl.checked = settings.tools.scrambleGen.enabled;
-      showBluetoothToolToolsEl.checked = settings.tools.bluetooth.enabled;
-      showRecentToolEl.checked = settings.tools.recent.enabled;
-      if (trendToolSlotEl) trendToolSlotEl.value = settings.tools.trend.slot;
-      if (distributionToolSlotEl) distributionToolSlotEl.value = settings.tools.distribution.slot;
-      if (drawScrambleToolSlotEl) drawScrambleToolSlotEl.value = settings.tools.drawScramble.slot;
-      if (scrambleGenToolSlotEl) scrambleGenToolSlotEl.value = settings.tools.scrambleGen.slot;
-      if (bluetoothToolSlotToolsEl) bluetoothToolSlotToolsEl.value = settings.tools.bluetooth.slot;
-      if (recentToolSlotEl) recentToolSlotEl.value = settings.tools.recent.slot;
-      if (trendToolAreaEl) trendToolAreaEl.value = settings.tools.trend.area || "bottom";
-      if (distributionToolAreaEl) distributionToolAreaEl.value = settings.tools.distribution.area || "bottom";
-      if (drawScrambleToolAreaEl) drawScrambleToolAreaEl.value = settings.tools.drawScramble.area || "bottom";
-      if (scrambleGenToolAreaEl) scrambleGenToolAreaEl.value = settings.tools.scrambleGen.area || "bottom";
-      if (bluetoothToolAreaEl) bluetoothToolAreaEl.value = settings.tools.bluetooth.area || "bottom";
-      if (recentToolAreaEl) recentToolAreaEl.value = settings.tools.recent.area || "bottom";
+      // Sync bottom/side tool checkboxes based on area + enabled
+      function syncToolPair(tool, bottomEl, bottomSlotEl, sideEl, sideSlotEl) {
+        if (!tool) return;
+        const isBottom = tool.enabled && tool.area !== "side";
+        const isSide   = tool.enabled && tool.area === "side";
+        if (bottomEl) { bottomEl.checked = isBottom; }
+        if (sideEl)   { sideEl.checked   = isSide;   }
+        if (isBottom && bottomSlotEl) bottomSlotEl.value = tool.slot || "slot1";
+        if (isSide   && sideSlotEl)   sideSlotEl.value   = tool.slot || "slot1";
+        if (!isBottom && bottomSlotEl) bottomSlotEl.value = tool.slot || "slot1";
+        if (!isSide   && sideSlotEl)   sideSlotEl.value   = tool.slot || "slot1";
+      }
+      syncToolPair(settings.tools.trend,        showTrendBottomEl,        trendBottomSlotEl,        showTrendSideEl,        trendSideSlotEl);
+      syncToolPair(settings.tools.distribution, showDistributionBottomEl, distributionBottomSlotEl, showDistributionSideEl, distributionSideSlotEl);
+      syncToolPair(settings.tools.drawScramble, showDrawScrambleBottomEl, drawScrambleBottomSlotEl, showDrawScrambleSideEl, drawScrambleSideSlotEl);
+      syncToolPair(settings.tools.scrambleGen,  showScrambleGenBottomEl,  scrambleGenBottomSlotEl,  showScrambleGenSideEl,  scrambleGenSideSlotEl);
+      syncToolPair(settings.tools.bluetooth,    showBluetoothBottomEl,    bluetoothBottomSlotEl,    showBluetoothSideEl,    bluetoothSideSlotEl);
+      syncToolPair(settings.tools.recent,       showRecentBottomEl,       recentBottomSlotEl,       showRecentSideEl,       recentSideSlotEl);
 
       lightModeEl.checked = settings.theme.lightMode;
       accentColorEl.value = settings.theme.accentColor;
@@ -7987,13 +8044,17 @@
       settings.manualEntry = im === 'typing';
       applyManualEntryMode();
 
-      settings.averages.ao50 = showAo50El.checked;
-      settings.averages.ao100 = showAo100El.checked;
-      settings.averages.ao500 = showAo500El.checked;
+      if (showMo3El)  settings.averages.mo3  = showMo3El.checked;
+      if (showAo5El)  settings.averages.ao5  = showAo5El.checked;
+      if (showAo12El) settings.averages.ao12 = showAo12El.checked;
+      settings.averages.ao50   = showAo50El.checked;
+      settings.averages.ao100  = showAo100El.checked;
+      settings.averages.ao500  = showAo500El.checked;
       settings.averages.ao1000 = showAo1000El.checked;
       settings.averages.ao5000 = showAo5000El.checked;
 
-      settings.list.showAoColumn = showAoColumnEl.checked;
+      settings.list.showAoColumn    = showAoColumnEl.checked;
+      if (showAo12ColumnEl) settings.list.showAo12Column = showAo12ColumnEl.checked;
       settings.list.inverseTimeList = inverseTimeListEl.checked;
       settings.list.showSessionSummary = showSessionSummaryEl.checked;
       settings.list.showDelta = showDeltaEl.checked;
@@ -8002,24 +8063,26 @@
       settings.scramble.scale = Number(scrambleScaleEl.value);
       settings.scramble.align = scrambleAlignEl.value;
 
-      settings.tools.trend.enabled = showTrendToolEl.checked;
-      settings.tools.distribution.enabled = showDistributionToolEl.checked;
-      settings.tools.drawScramble.enabled = showDrawScrambleToolEl.checked;
-      if (showScrambleGenToolEl) settings.tools.scrambleGen.enabled = showScrambleGenToolEl.checked;
-      settings.tools.bluetooth.enabled = showBluetoothToolToolsEl.checked;
-      settings.tools.recent.enabled = showRecentToolEl.checked;
-      if (trendToolSlotEl) settings.tools.trend.slot = trendToolSlotEl.value;
-      if (distributionToolSlotEl) settings.tools.distribution.slot = distributionToolSlotEl.value;
-      if (drawScrambleToolSlotEl) settings.tools.drawScramble.slot = drawScrambleToolSlotEl.value;
-      if (scrambleGenToolSlotEl) settings.tools.scrambleGen.slot = scrambleGenToolSlotEl.value;
-      if (bluetoothToolSlotToolsEl) settings.tools.bluetooth.slot = bluetoothToolSlotToolsEl.value;
-      if (recentToolSlotEl) settings.tools.recent.slot = recentToolSlotEl.value;
-      if (trendToolAreaEl) settings.tools.trend.area = trendToolAreaEl.value;
-      if (distributionToolAreaEl) settings.tools.distribution.area = distributionToolAreaEl.value;
-      if (drawScrambleToolAreaEl) settings.tools.drawScramble.area = drawScrambleToolAreaEl.value;
-      if (scrambleGenToolAreaEl) settings.tools.scrambleGen.area = scrambleGenToolAreaEl.value;
-      if (bluetoothToolAreaEl) settings.tools.bluetooth.area = bluetoothToolAreaEl.value;
-      if (recentToolAreaEl) settings.tools.recent.area = recentToolAreaEl.value;
+      function pullToolPair(tool, bottomEl, bottomSlotEl, sideEl, sideSlotEl) {
+        if (!tool) return;
+        const inSide   = sideEl?.checked   ?? false;
+        const inBottom = bottomEl?.checked ?? false;
+        if (inSide) {
+          tool.enabled = true; tool.area = "side";
+          if (sideSlotEl) tool.slot = sideSlotEl.value;
+        } else if (inBottom) {
+          tool.enabled = true; tool.area = "bottom";
+          if (bottomSlotEl) tool.slot = bottomSlotEl.value;
+        } else {
+          tool.enabled = false;
+        }
+      }
+      pullToolPair(settings.tools.trend,        showTrendBottomEl,        trendBottomSlotEl,        showTrendSideEl,        trendSideSlotEl);
+      pullToolPair(settings.tools.distribution, showDistributionBottomEl, distributionBottomSlotEl, showDistributionSideEl, distributionSideSlotEl);
+      pullToolPair(settings.tools.drawScramble, showDrawScrambleBottomEl, drawScrambleBottomSlotEl, showDrawScrambleSideEl, drawScrambleSideSlotEl);
+      pullToolPair(settings.tools.scrambleGen,  showScrambleGenBottomEl,  scrambleGenBottomSlotEl,  showScrambleGenSideEl,  scrambleGenSideSlotEl);
+      pullToolPair(settings.tools.bluetooth,    showBluetoothBottomEl,    bluetoothBottomSlotEl,    showBluetoothSideEl,    bluetoothSideSlotEl);
+      pullToolPair(settings.tools.recent,       showRecentBottomEl,       recentBottomSlotEl,       showRecentSideEl,       recentSideSlotEl);
 
       settings.theme.lightMode = lightModeEl.checked;
       settings.theme.accentColor = accentColorEl.value;
@@ -8357,12 +8420,11 @@
 
     function renderStats() {
       statsEl.innerHTML = "";
-      const cards = [
-        ["Mo3", meanOf3()],
-        ["Ao5", averageOfN(5)],
-        ["Ao12", averageOfN(12)]
-      ];
-      if (settings.averages.ao50) cards.push(["Ao50", averageOfN(50)]);
+      const cards = [];
+      if (settings.averages.mo3  !== false) cards.push(["Mo3",  meanOf3()]);
+      if (settings.averages.ao5  !== false) cards.push(["Ao5",  averageOfN(5)]);
+      if (settings.averages.ao12 !== false) cards.push(["Ao12", averageOfN(12)]);
+      if (settings.averages.ao50)  cards.push(["Ao50",  averageOfN(50)]);
       if (settings.averages.ao100) cards.push(["Ao100", averageOfN(100)]);
       if (settings.averages.ao500) cards.push(["Ao500", averageOfN(500)]);
       if (settings.averages.ao1000) cards.push(["Ao1000", averageOfN(1000)]);
@@ -8430,6 +8492,7 @@
     function buildSolveRow(solve, originalIndex, ao5Values, pbIds, pbAo5Indexes, totalSolves) {
       const displayIndex = totalSolves - originalIndex;
       const showAo = settings.list.showAoColumn;
+      solveListEl.classList.toggle("has-ao12", !!settings.list.showAo12Column);
       const row = document.createElement("div");
       row.className = "solve-row";
 
@@ -8459,6 +8522,22 @@
         });
       }
 
+      const showAo12Col = settings.list.showAo12Column;
+      const ao12Col = document.createElement("div");
+      ao12Col.className = "ao-col";
+      if (showAo12Col) {
+        const rollingAo12 = averageOfN(12, originalIndex + 1);
+        ao12Col.textContent = averageDisplay(rollingAo12);
+        if (Number.isFinite(rollingAo12)) {
+          ao12Col.style.cursor = "pointer";
+          ao12Col.title = "Click to view included solves";
+          ao12Col.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openAverageDetail(12, originalIndex);
+          });
+        }
+      }
+
       const plus2 = document.createElement("button");
       plus2.className = "pill-btn" + (solve.penalty === "+2" ? " active" : "");
       plus2.textContent = "+2";
@@ -8477,6 +8556,7 @@
 
       row.appendChild(left);
       row.appendChild(aoCol);
+      if (showAo12Col) row.appendChild(ao12Col);
       row.appendChild(plus2);
       row.appendChild(dnf);
       return row;
@@ -12172,6 +12252,19 @@
         accentColorEl.value = btn.dataset.color;
         scheduleSettingsApply();
       });
+    });
+
+    // Mutual exclusion: checking bottom unchecks side and vice versa
+    [
+      [showTrendBottomEl,        showTrendSideEl],
+      [showDistributionBottomEl, showDistributionSideEl],
+      [showDrawScrambleBottomEl, showDrawScrambleSideEl],
+      [showScrambleGenBottomEl,  showScrambleGenSideEl],
+      [showBluetoothBottomEl,    showBluetoothSideEl],
+      [showRecentBottomEl,       showRecentSideEl],
+    ].forEach(([bEl, sEl]) => {
+      bEl?.addEventListener("change", () => { if (bEl.checked && sEl) sEl.checked = false; });
+      sEl?.addEventListener("change", () => { if (sEl.checked && bEl) bEl.checked = false; });
     });
 
     timerScaleEl.addEventListener("input", () => {
