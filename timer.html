@@ -304,6 +304,7 @@
       padding:9px 4px;
       border-radius:8px;
     }
+    .has-ao12 .solve-row { grid-template-columns: minmax(0,1fr) 44px 44px 46px 52px; }
 
     .solve-main{
       min-width:0;
@@ -3622,71 +3623,88 @@
 
       <div class="tab-panel" id="toolsTab">
         <fieldset>
-          <legend>Tools</legend>
+          <legend>Bottom Tools</legend>
           <div class="tool-manage-list">
-            <div class="tool-manage-header"><span>Tool</span><span>Show</span><span>Area</span><span>Pos</span></div>
+            <div class="tool-manage-header"><span>Tool</span><span>Show</span><span>Pos</span></div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">📈</span>Time Trend</span>
               <label class="tool-manage-check"><input type="checkbox" id="showTrendTool" /></label>
-              <select class="select tool-manage-area" id="trendToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
               <select class="select tool-manage-slot" id="trendToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">📊</span>Distribution</span>
               <label class="tool-manage-check"><input type="checkbox" id="showDistributionTool" /></label>
-              <select class="select tool-manage-area" id="distributionToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
               <select class="select tool-manage-slot" id="distributionToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">🎲</span>Draw Scramble</span>
               <label class="tool-manage-check"><input type="checkbox" id="showDrawScrambleTool" /></label>
-              <select class="select tool-manage-area" id="drawScrambleToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
               <select class="select tool-manage-slot" id="drawScrambleToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">🔀</span>Scramble Gen</span>
               <label class="tool-manage-check"><input type="checkbox" id="showScrambleGenTool" /></label>
-              <select class="select tool-manage-area" id="scrambleGenToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
               <select class="select tool-manage-slot" id="scrambleGenToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">📡</span>Bluetooth Timer</span>
               <label class="tool-manage-check"><input type="checkbox" id="showBluetoothToolTools" /></label>
-              <select class="select tool-manage-area" id="bluetoothToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
               <select class="select tool-manage-slot" id="bluetoothToolSlotTools"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
             <div class="tool-manage-row">
               <span class="tool-manage-label"><span class="tool-manage-icon">🕐</span>Recent Solves</span>
               <label class="tool-manage-check"><input type="checkbox" id="showRecentTool" /></label>
-              <select class="select tool-manage-area" id="recentToolArea"><option value="bottom">Bottom</option><option value="middle">Middle</option><option value="side">Side</option></select>
               <select class="select tool-manage-slot" id="recentToolSlot"><option value="slot1">1st</option><option value="slot2">2nd</option><option value="slot3">3rd</option><option value="slot4">4th</option><option value="slot5">5th</option><option value="slot6">6th</option></select>
             </div>
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Side Tools</legend>
+          <legend>Sidebar Options</legend>
           <p style="margin:0 0 10px;font-size:13px;color:var(--muted);">Cards shown in the sidebar above your times list.</p>
           <div class="row">
             <label for="showSessionSummary">Show session summary cards</label>
             <input type="checkbox" id="showSessionSummary" />
+          </div>
+          <div id="sessionSummaryCardToggles">
+            <div class="row" style="padding-left:16px;">
+              <label for="showStatBestSingle">Best Single</label>
+              <input type="checkbox" id="showStatBestSingle" />
+            </div>
+            <div class="row" style="padding-left:16px;">
+              <label for="showStatMean">Session Mean</label>
+              <input type="checkbox" id="showStatMean" />
+            </div>
+            <div class="row" style="padding-left:16px;">
+              <label for="showStatBestMo3">Best Mo3</label>
+              <input type="checkbox" id="showStatBestMo3" />
+            </div>
+            <div class="row" style="padding-left:16px;">
+              <label for="showStatBestAo5">Best Ao5</label>
+              <input type="checkbox" id="showStatBestAo5" />
+            </div>
+            <div class="row" style="padding-left:16px;">
+              <label for="showStatBestAo12">Best Ao12</label>
+              <input type="checkbox" id="showStatBestAo12" />
+            </div>
           </div>
           <div class="row">
             <label for="showAoColumn">Show Ao5 column in list</label>
             <input type="checkbox" id="showAoColumn" />
           </div>
           <div class="row">
-            <label for="inverseTimeList">Newest solves at bottom</label>
-            <input type="checkbox" id="inverseTimeList" />
+            <label for="showAo12Column">Show Ao12 column in list</label>
+            <input type="checkbox" id="showAo12Column" />
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Bottom Tools</legend>
-          <p style="margin:0 0 10px;font-size:13px;color:var(--muted);">Stat cards shown below the timer. Ao5 and Ao12 are always shown.</p>
+          <legend>Stats Cards</legend>
+          <p style="margin:0 0 10px;font-size:13px;color:var(--muted);">Stat cards shown below the timer.</p>
           <div class="avg-grid">
-            <label><input type="checkbox" checked disabled /> Ao5</label>
-            <label><input type="checkbox" checked disabled /> Ao12</label>
+            <label><input type="checkbox" id="showMo3" /> Mo3</label>
+            <label><input type="checkbox" id="showAo5" /> Ao5</label>
+            <label><input type="checkbox" id="showAo12" /> Ao12</label>
             <label><input type="checkbox" id="showAo50" /> Ao50</label>
             <label><input type="checkbox" id="showAo100" /> Ao100</label>
             <label><input type="checkbox" id="showAo500" /> Ao500</label>
@@ -4098,12 +4116,18 @@
       manualEntry: false,
       inputMode: 'spacebar',
       averages: {
+        mo3: true, ao5: true, ao12: true,
         ao50: false, ao100: false, ao500: false, ao1000: false, ao5000: false
       },
       list: {
         showAoColumn: true,
-        inverseTimeList: false,
+        showAo12Column: false,
         showSessionSummary: true,
+        statBestSingle: true,
+        statMean: true,
+        statBestMo3: true,
+        statBestAo5: true,
+        statBestAo12: true,
         showDelta: true
       },
       scramble: {
@@ -4486,8 +4510,17 @@
     const showAo1000El = document.getElementById("showAo1000");
     const showAo5000El = document.getElementById("showAo5000");
     const showAoColumnEl = document.getElementById("showAoColumn");
-    const inverseTimeListEl = document.getElementById("inverseTimeList");
+    const showAo12ColumnEl = document.getElementById("showAo12Column");
     const showSessionSummaryEl = document.getElementById("showSessionSummary");
+    const sessionSummaryCardTogglesEl = document.getElementById("sessionSummaryCardToggles");
+    const showStatBestSingleEl = document.getElementById("showStatBestSingle");
+    const showStatMeanEl = document.getElementById("showStatMean");
+    const showStatBestMo3El = document.getElementById("showStatBestMo3");
+    const showStatBestAo5El = document.getElementById("showStatBestAo5");
+    const showStatBestAo12El = document.getElementById("showStatBestAo12");
+    const showMo3El = document.getElementById("showMo3");
+    const showAo5El = document.getElementById("showAo5");
+    const showAo12El = document.getElementById("showAo12");
     const showDeltaEl = document.getElementById("showDelta");
 
     const scrambleMonospaceEl = document.getElementById("scrambleMonospace");
@@ -4507,12 +4540,12 @@
     const scrambleGenToolSlotEl = document.getElementById("scrambleGenToolSlot");
     const bluetoothToolSlotToolsEl = document.getElementById("bluetoothToolSlotTools");
     const recentToolSlotEl = document.getElementById("recentToolSlot");
-    const trendToolAreaEl = document.getElementById("trendToolArea");
-    const distributionToolAreaEl = document.getElementById("distributionToolArea");
-    const drawScrambleToolAreaEl = document.getElementById("drawScrambleToolArea");
-    const scrambleGenToolAreaEl = document.getElementById("scrambleGenToolArea");
-    const bluetoothToolAreaEl = document.getElementById("bluetoothToolArea");
-    const recentToolAreaEl = document.getElementById("recentToolArea");
+    const trendToolAreaEl = null;
+    const distributionToolAreaEl = null;
+    const drawScrambleToolAreaEl = null;
+    const scrambleGenToolAreaEl = null;
+    const bluetoothToolAreaEl = null;
+    const recentToolAreaEl = null;
     const sideToolZoneEl = document.getElementById("sideToolZone");
     const sideToolSlotsEl = document.getElementById("sideToolSlots");
     const middleToolZoneEl = document.getElementById("middleToolZone");
@@ -7921,14 +7954,23 @@
       if (inputModeEl) inputModeEl.value = settings.manualEntry ? 'typing' : (settings.inputMode || 'spacebar');
       applyManualEntryMode();
 
+      if (showMo3El) showMo3El.checked = (settings.averages.mo3 !== false);
+      if (showAo5El) showAo5El.checked = (settings.averages.ao5 !== false);
+      if (showAo12El) showAo12El.checked = (settings.averages.ao12 !== false);
       showAo50El.checked = settings.averages.ao50;
       showAo100El.checked = settings.averages.ao100;
       showAo500El.checked = settings.averages.ao500;
       showAo1000El.checked = settings.averages.ao1000;
       showAo5000El.checked = settings.averages.ao5000;
       showAoColumnEl.checked = settings.list.showAoColumn;
-      inverseTimeListEl.checked = settings.list.inverseTimeList;
+      if (showAo12ColumnEl) showAo12ColumnEl.checked = (settings.list.showAo12Column === true);
       showSessionSummaryEl.checked = settings.list.showSessionSummary;
+      if (sessionSummaryCardTogglesEl) sessionSummaryCardTogglesEl.style.display = settings.list.showSessionSummary ? '' : 'none';
+      if (showStatBestSingleEl) showStatBestSingleEl.checked = (settings.list.statBestSingle !== false);
+      if (showStatMeanEl) showStatMeanEl.checked = (settings.list.statMean !== false);
+      if (showStatBestMo3El) showStatBestMo3El.checked = (settings.list.statBestMo3 !== false);
+      if (showStatBestAo5El) showStatBestAo5El.checked = (settings.list.statBestAo5 !== false);
+      if (showStatBestAo12El) showStatBestAo12El.checked = (settings.list.statBestAo12 !== false);
       showDeltaEl.checked = settings.list.showDelta;
 
       scrambleMonospaceEl.checked = settings.scramble.monospace;
@@ -7987,6 +8029,9 @@
       settings.manualEntry = im === 'typing';
       applyManualEntryMode();
 
+      settings.averages.mo3 = showMo3El?.checked ?? true;
+      settings.averages.ao5 = showAo5El?.checked ?? true;
+      settings.averages.ao12 = showAo12El?.checked ?? true;
       settings.averages.ao50 = showAo50El.checked;
       settings.averages.ao100 = showAo100El.checked;
       settings.averages.ao500 = showAo500El.checked;
@@ -7994,8 +8039,14 @@
       settings.averages.ao5000 = showAo5000El.checked;
 
       settings.list.showAoColumn = showAoColumnEl.checked;
-      settings.list.inverseTimeList = inverseTimeListEl.checked;
+      settings.list.showAo12Column = showAo12ColumnEl?.checked ?? false;
       settings.list.showSessionSummary = showSessionSummaryEl.checked;
+      if (sessionSummaryCardTogglesEl) sessionSummaryCardTogglesEl.style.display = showSessionSummaryEl.checked ? '' : 'none';
+      settings.list.statBestSingle = showStatBestSingleEl?.checked ?? true;
+      settings.list.statMean = showStatMeanEl?.checked ?? true;
+      settings.list.statBestMo3 = showStatBestMo3El?.checked ?? true;
+      settings.list.statBestAo5 = showStatBestAo5El?.checked ?? true;
+      settings.list.statBestAo12 = showStatBestAo12El?.checked ?? true;
       settings.list.showDelta = showDeltaEl.checked;
 
       settings.scramble.monospace = scrambleMonospaceEl.checked;
@@ -8014,12 +8065,12 @@
       if (scrambleGenToolSlotEl) settings.tools.scrambleGen.slot = scrambleGenToolSlotEl.value;
       if (bluetoothToolSlotToolsEl) settings.tools.bluetooth.slot = bluetoothToolSlotToolsEl.value;
       if (recentToolSlotEl) settings.tools.recent.slot = recentToolSlotEl.value;
-      if (trendToolAreaEl) settings.tools.trend.area = trendToolAreaEl.value;
-      if (distributionToolAreaEl) settings.tools.distribution.area = distributionToolAreaEl.value;
-      if (drawScrambleToolAreaEl) settings.tools.drawScramble.area = drawScrambleToolAreaEl.value;
-      if (scrambleGenToolAreaEl) settings.tools.scrambleGen.area = scrambleGenToolAreaEl.value;
-      if (bluetoothToolAreaEl) settings.tools.bluetooth.area = bluetoothToolAreaEl.value;
-      if (recentToolAreaEl) settings.tools.recent.area = recentToolAreaEl.value;
+      settings.tools.trend.area = "bottom";
+      settings.tools.distribution.area = "bottom";
+      settings.tools.drawScramble.area = "bottom";
+      settings.tools.scrambleGen.area = "bottom";
+      settings.tools.bluetooth.area = "bottom";
+      settings.tools.recent.area = "bottom";
 
       settings.theme.lightMode = lightModeEl.checked;
       settings.theme.accentColor = accentColorEl.value;
@@ -8357,11 +8408,10 @@
 
     function renderStats() {
       statsEl.innerHTML = "";
-      const cards = [
-        ["Mo3", meanOf3()],
-        ["Ao5", averageOfN(5)],
-        ["Ao12", averageOfN(12)]
-      ];
+      const cards = [];
+      if (settings.averages.mo3 !== false) cards.push(["Mo3", meanOf3()]);
+      if (settings.averages.ao5 !== false) cards.push(["Ao5", averageOfN(5)]);
+      if (settings.averages.ao12 !== false) cards.push(["Ao12", averageOfN(12)]);
       if (settings.averages.ao50) cards.push(["Ao50", averageOfN(50)]);
       if (settings.averages.ao100) cards.push(["Ao100", averageOfN(100)]);
       if (settings.averages.ao500) cards.push(["Ao500", averageOfN(500)]);
@@ -8370,9 +8420,8 @@
 
       for (const [label, value] of cards) {
         const div = document.createElement("div");
-        const isMo = label.startsWith("Mo");
-        const n = isMo ? null : Number(label.replace(/\D/g, ""));
-        const clickable = !isMo && Number.isFinite(n) && Number.isFinite(value);
+        const n = Number(label.replace(/\D/g, ""));
+        const clickable = Number.isFinite(n) && n > 0 && Number.isFinite(value);
         div.className = "stat" + (clickable ? " clickable" : "");
         div.innerHTML = `
           <div class="stat-label">${label}</div>
@@ -8399,13 +8448,14 @@
       const ao5 = bestAoNWithIdx(5);
       const ao12 = bestAoNWithIdx(12);
 
-      const stats = [
-        { label: "Best Single",  value: bestSingle(),    n: null, idx: -1 },
-        { label: "Session Mean", value: meanOfSession(), n: null, idx: -1 },
-        { label: "Best Mo3",     value: bestMeanOf3(),   n: null, idx: -1 },
-        { label: "Best Ao5",     value: ao5.val,         n: 5,    idx: ao5.idx },
-        { label: "Best Ao12",    value: ao12.val,        n: 12,   idx: ao12.idx }
+      const allStats = [
+        { label: "Best Single",  value: bestSingle(),    n: null, idx: -1, key: "statBestSingle" },
+        { label: "Session Mean", value: meanOfSession(), n: null, idx: -1, key: "statMean" },
+        { label: "Best Mo3",     value: bestMeanOf3(),   n: null, idx: -1, key: "statBestMo3" },
+        { label: "Best Ao5",     value: ao5.val,         n: 5,    idx: ao5.idx, key: "statBestAo5" },
+        { label: "Best Ao12",    value: ao12.val,        n: 12,   idx: ao12.idx, key: "statBestAo12" }
       ];
+      const stats = allStats.filter(s => settings.list[s.key] !== false);
 
       sessionStatsEl.innerHTML = stats.map(s => `
         <div class="session-stat" data-label="${s.label}">
@@ -8427,9 +8477,10 @@
     const SOLVE_LOAD_STEP  = 100;
     let   _solveObserver   = null;
 
-    function buildSolveRow(solve, originalIndex, ao5Values, pbIds, pbAo5Indexes, totalSolves) {
-      const displayIndex = totalSolves - originalIndex;
+    function buildSolveRow(solve, originalIndex, ao5Values, pbIds, pbAo5Indexes, totalSolves, ao12Values = []) {
+      const displayIndex = originalIndex + 1;
       const showAo = settings.list.showAoColumn;
+      const showAo12Col = settings.list.showAo12Column === true;
       const row = document.createElement("div");
       row.className = "solve-row";
 
@@ -8475,8 +8526,22 @@
         await toggleDNF(solve.id);
       });
 
+      const rollingAo12 = ao12Values[originalIndex];
+      const ao12Col = document.createElement("div");
+      ao12Col.className = "ao-col";
+      ao12Col.textContent = showAo12Col ? averageDisplay(rollingAo12) : "";
+      if (showAo12Col && Number.isFinite(rollingAo12)) {
+        ao12Col.style.cursor = "pointer";
+        ao12Col.title = "Click to view included solves";
+        ao12Col.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openAverageDetail(12, originalIndex);
+        });
+      }
+
       row.appendChild(left);
       row.appendChild(aoCol);
+      row.appendChild(ao12Col);
       row.appendChild(plus2);
       row.appendChild(dnf);
       return row;
@@ -8495,16 +8560,14 @@
 
       const idToIndex = new Map(solves.map((s, i) => [s.id, i]));
       const showAo = settings.list.showAoColumn;
+      const showAo12Col = settings.list.showAo12Column === true;
+      solveListEl.classList.toggle("has-ao12", showAo12Col);
       const pbIds = getPbSolveIds();
       const pbAo5Indexes = getPbAo5Indexes();
-      const inverse = settings.list.inverseTimeList;
-      const source = inverse ? solves : [...solves].reverse();
+      const source = [...solves].reverse();
       const hasMore = source.length > _solveDisplayCount;
 
-      // Inverse: show newest N (tail); normal: show newest N (head)
-      const visible = hasMore
-        ? (inverse ? source.slice(-_solveDisplayCount) : source.slice(0, _solveDisplayCount))
-        : source;
+      const visible = hasMore ? source.slice(0, _solveDisplayCount) : source;
 
       // Compute ao5 only for visible rows
       const ao5Values = new Array(solves.length).fill(null);
@@ -8515,24 +8578,27 @@
         });
       }
 
-      const frag = document.createDocumentFragment();
-
-      // Inverse: sentinel at top so scrolling up loads older solves
-      if (hasMore && inverse) {
-        const s = document.createElement('div'); s.className = 'solve-sentinel'; frag.appendChild(s);
+      // Compute ao12 only for visible rows
+      const ao12Values = new Array(solves.length).fill(null);
+      if (showAo12Col) {
+        visible.forEach(solve => {
+          const i = idToIndex.get(solve.id);
+          if (i >= 11) ao12Values[i] = averageFromWindow(solves.slice(i - 11, i + 1));
+        });
       }
 
+      const frag = document.createDocumentFragment();
+
       visible.forEach((solve) => {
-        frag.appendChild(buildSolveRow(solve, idToIndex.get(solve.id), ao5Values, pbIds, pbAo5Indexes, solves.length));
+        frag.appendChild(buildSolveRow(solve, idToIndex.get(solve.id), ao5Values, pbIds, pbAo5Indexes, solves.length, ao12Values));
       });
 
-      // Normal: sentinel at bottom so scrolling down loads older solves
-      if (hasMore && !inverse) {
+      // Sentinel at bottom so scrolling down loads older solves
+      if (hasMore) {
         const s = document.createElement('div'); s.className = 'solve-sentinel'; frag.appendChild(s);
       }
 
       solveListEl.appendChild(frag);
-      if (inverse) solveListEl.scrollTop = solveListEl.scrollHeight;
 
       if (hasMore) {
         const sentinel = solveListEl.querySelector('.solve-sentinel');
@@ -10314,7 +10380,7 @@
       }
       const frag = document.createDocumentFragment();
       timesAllEntries.slice(0, showing).forEach((entry, i) => {
-        frag.appendChild(buildTimesRow(entry, i + 1));
+        frag.appendChild(buildTimesRow(entry, total - i));
       });
       if (showing < total) {
         const loadMore = document.createElement('button');
@@ -12738,4 +12804,4 @@
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
