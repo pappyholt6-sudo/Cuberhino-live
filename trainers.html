@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <title>Trainers — CubeRhino</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #06080f;
+      --panel-2: #0a0d1a;
+      --text: #ffffff;
+      --muted: #7b8fb8;
+      --line: #1a2870;
+      --accent: #2547d0;
+      --accent-light: #4a6ff5;
+      --font: Arial, Helvetica, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; width: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: var(--font); cursor: pointer; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    }
+    .nav-logo {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
+      color: #fff; display: flex; align-items: center;
+    }
+    .nav-logo span { color: #2547d0; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-link {
+      font-size: 14px; font-weight: 600; color: var(--muted);
+      padding: 8px 14px; border-radius: 999px; transition: color 0.15s;
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active { color: var(--text); }
+    .nav-timer {
+      font-size: 14px; font-weight: 600; color: var(--text);
+      padding: 8px 14px; border-radius: 999px;
+      border: 1px solid var(--line); transition: border-color 0.15s;
+    }
+    .nav-timer:hover { border-color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #fff; font-weight: 700;
+      font-size: 14px; padding: 8px 20px; border-radius: 999px; transition: opacity 0.15s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 110px 24px 52px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-glow {
+      position: absolute; top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 420px;
+      background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 11%, transparent) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    }
+    .page-title {
+      font-size: clamp(34px, 5.5vw, 60px); font-weight: 800;
+      letter-spacing: -1.4px; line-height: 1.05; margin-bottom: 16px;
+    }
+    .page-title span {
+      background: linear-gradient(135deg, #4a6ff5 0%, #ffffff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-sub {
+      font-size: 16px; color: var(--muted);
+      max-width: 460px; margin: 0 auto; line-height: 1.65;
+    }
+
+    /* ── TAB BAR ── */
+    .tab-bar-wrap {
+      display: flex; justify-content: center;
+      padding: 36px 24px 44px; position: relative; z-index: 1;
+    }
+    .tab-bar {
+      display: flex; gap: 5px;
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 999px; padding: 5px; flex-wrap: wrap; justify-content: center;
+    }
+    .tab-btn {
+      font-size: 14px; font-weight: 700; color: var(--muted);
+      background: none; border: none; cursor: pointer;
+      padding: 9px 22px; border-radius: 999px;
+      transition: color 0.15s, background 0.15s; letter-spacing: 0.3px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { background: var(--accent); color: #fff; }
+
+    /* ── MAIN LAYOUT ── */
+    .trainer-wrap {
+      max-width: 960px; margin: 0 auto; padding: 0 24px 100px;
+    }
+    .trainer-panel { display: none; }
+    .trainer-panel.active { display: block; }
+
+    /* ── TWO-COL LAYOUT (scramble left, info right) ── */
+    .trainer-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 780px) {
+      .trainer-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── MAIN SCRAMBLE CARD ── */
+    .scramble-card {
+      background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 36px 36px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .scramble-card::before {
+      content: '';
+      position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 180px;
+      background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
+      pointer-events: none;
+    }
+    .card-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+    }
+    .card-title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 28px;
+    }
+
+    /* move selector inside card */
+    .move-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .move-row-label { font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .move-pills { display: flex; gap: 5px; flex-wrap: wrap; }
+    .move-pill {
+      font-size: 13px; font-weight: 700; color: var(--muted);
+      background: var(--bg); border: 1px solid var(--line);
+      border-radius: 999px; padding: 5px 13px;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .move-pill:hover { color: var(--text); border-color: var(--accent-light); }
+    .move-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* scramble display */
+    .scramble-box {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 26px 24px;
+      margin-bottom: 22px;
+      min-height: 86px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .scramble-text {
+      font-size: clamp(15px, 2.6vw, 21px);
+      font-weight: 700; letter-spacing: 1.8px;
+      color: var(--text); text-align: center;
+      line-height: 1.8; font-family: 'Courier New', monospace;
+      word-break: break-word;
+    }
+    .scramble-placeholder {
+      font-size: 14px; color: var(--muted); font-weight: 400;
+      font-family: var(--font); text-align: center; letter-spacing: 0;
+    }
+
+    /* controls row */
+    .controls {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      font-weight: 800; font-size: 14px;
+      padding: 11px 28px; border-radius: 999px; border: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: transparent; color: var(--muted);
+      font-weight: 600; font-size: 13px;
+      padding: 11px 20px; border-radius: 999px;
+      border: 1px solid var(--line);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .btn-secondary:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ── INFO SIDEBAR CARD ── */
+    .info-card {
+      background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .info-card-head {
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .info-card-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+    }
+    .info-card-title {
+      font-size: 15px; font-weight: 800; color: var(--text);
+    }
+
+    /* diagram placeholder */
+    .diagram-area {
+      margin: 16px 22px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      height: 130px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .diagram-area canvas {
+      display: block;
+    }
+    .diagram-placeholder-text {
+      font-size: 12px; color: var(--muted); text-align: center;
+      padding: 0 16px; line-height: 1.6;
+    }
+
+    /* case name / info */
+    .case-info-body { padding: 0 22px 20px; }
+    .case-info-row {
+      display: flex; align-items: baseline;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    }
+    .case-info-row:last-child { border-bottom: none; }
+    .case-info-key {
+      font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.3px;
+    }
+    .case-info-val {
+      font-size: 13px; font-weight: 700; color: var(--text); text-align: right;
+    }
+    .case-info-val.accent { color: var(--accent-light); }
+    .case-info-val.empty { color: var(--muted); font-weight: 400; font-style: italic; }
+
+    /* slot selector (F2L) */
+    .slot-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; padding: 16px 22px 20px;
+    }
+    .slot-btn {
+      background: var(--bg); border: 1px solid var(--line);
+      border-radius: 12px; padding: 10px 8px;
+      text-align: center; transition: border-color 0.15s, background 0.15s;
+      display: flex; flex-direction: column; gap: 3px; align-items: center;
+    }
+    .slot-btn:hover { border-color: var(--accent-light); }
+    .slot-btn.active { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: var(--accent); }
+    .slot-btn-name { font-size: 13px; font-weight: 800; color: var(--text); }
+    .slot-btn-sub { font-size: 10px; color: var(--muted); font-weight: 500; }
+    .slot-random {
+      grid-column: span 2;
+      background: var(--bg); border: 1px solid var(--line);
+      border-radius: 12px; padding: 10px 8px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .slot-random:hover { border-color: var(--accent-light); }
+    .slot-random.active { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: var(--accent); }
+    .slot-random-name { font-size: 13px; font-weight: 800; color: var(--text); }
+
+    /* tips block */
+    .tips-block {
+      margin: 0 22px 20px;
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-radius: 12px;
+      padding: 13px 16px;
+    }
+    .tips-block-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--accent-light); margin-bottom: 6px;
+    }
+    .tips-block p {
+      font-size: 12px; color: var(--muted); line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-logo { display: flex; align-items: center; font-size: 15px; font-weight: 800; color: var(--text); }
+    .footer-logo span { color: #2547d0; }
+    .footer-copy { font-size: 13px; color: var(--muted); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      .nav-timer { display: none; }
+      .nav-link { padding: 8px 10px; font-size: 13px; }
+      .nav-cta { padding: 8px 14px; font-size: 13px; }
+      .scramble-card { padding: 24px 20px 22px; }
+      .page-header { padding: 92px 20px 40px; }
+      footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<img id="backdropRhino" src="favicon.ico" aria-hidden="true" alt=""
+  style="position:fixed;top:50%;left:57%;transform:translate(-50%,-50%);width:92vmin;height:92vmin;object-fit:contain;opacity:0.07;filter:brightness(1.9);pointer-events:none;z-index:0;user-select:none;">
+
+<!-- NAV -->
+<nav>
+  <a href="https://cuberhino.com" class="nav-logo" style="text-decoration:none;">
+    <img src="images/logo-icon.png" alt="CubeRhino" style="width:38px;height:38px;object-fit:contain;border-radius:8px;margin-right:8px;vertical-align:middle;">
+    Cube<span>Rhino</span>
+  </a>
+  <div class="nav-right">
+    <a href="https://cuberhino.com/timer" class="nav-timer">Launch Timer</a>
+    <a href="trainers.html" class="nav-link active">Trainers</a>
+    <a href="timer.html" class="nav-link">Sign in</a>
+    <a href="timer.html" class="nav-cta">Sign up free</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-glow"></div>
+  <p class="page-eyebrow">CubeRhino Trainers</p>
+  <h1 class="page-title">Train smarter.<br><span>Solve faster.</span></h1>
+  <p class="page-sub">Targeted scrambles for every stage of the solve — OLL, PLL, F2L, White Cross, and X-Cross.</p>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar-wrap">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('oll', this)">OLL</button>
+    <button class="tab-btn" onclick="switchTab('pll', this)">PLL</button>
+    <button class="tab-btn" onclick="switchTab('f2l', this)">F2L</button>
+    <button class="tab-btn" onclick="switchTab('cross', this)">White Cross</button>
+    <button class="tab-btn" onclick="switchTab('xcross', this)">X-Cross</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     TRAINER PANELS
+════════════════════════════════════════════════════════ -->
+<div class="trainer-wrap">
+
+  <!-- ── OLL ── -->
+  <div class="trainer-panel active" id="panel-oll">
+    <div class="trainer-layout">
+
+      <div class="scramble-card">
+        <p class="card-eyebrow">Last Layer — Step 1</p>
+        <h2 class="card-title">OLL Trainer</h2>
+        <p class="card-desc">Each scramble leaves you with exactly one OLL case to solve. F2L is complete and the cross is done.</p>
+
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="oll-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+
+        <div class="controls">
+          <button class="btn-primary" onclick="genOLL()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('oll')">Copy</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-head">
+          <p class="info-card-label">Current Case</p>
+          <p class="info-card-title" id="oll-case-title">—</p>
+        </div>
+        <div class="diagram-area">
+          <canvas id="oll-diagram" width="110" height="110"></canvas>
+        </div>
+        <div class="case-info-body">
+          <div class="case-info-row">
+            <span class="case-info-key">Case #</span>
+            <span class="case-info-val accent" id="oll-case-num"><span class="empty">—</span></span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">Recognition</span>
+            <span class="case-info-val" id="oll-recognition"><span class="empty">—</span></span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">Category</span>
+            <span class="case-info-val" id="oll-category"><span class="empty">—</span></span>
+          </div>
+        </div>
+        <div class="tips-block">
+          <p class="tips-block-title">Tip</p>
+          <p>Look at the top face first, then check the front-facing stickers to identify the case faster.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── PLL ── -->
+  <div class="trainer-panel" id="panel-pll">
+    <div class="trainer-layout">
+
+      <div class="scramble-card">
+        <p class="card-eyebrow">Last Layer — Step 2</p>
+        <h2 class="card-title">PLL Trainer</h2>
+        <p class="card-desc">Each scramble leaves you with exactly one PLL case to solve. The top face is already fully oriented.</p>
+
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="pll-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+
+        <div class="controls">
+          <button class="btn-primary" onclick="genPLL()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('pll')">Copy</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-head">
+          <p class="info-card-label">Current Case</p>
+          <p class="info-card-title" id="pll-case-title">—</p>
+        </div>
+        <div class="diagram-area">
+          <canvas id="pll-diagram" width="110" height="110"></canvas>
+        </div>
+        <div class="case-info-body">
+          <div class="case-info-row">
+            <span class="case-info-key">Case</span>
+            <span class="case-info-val accent" id="pll-case-name"><span class="empty">—</span></span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">Type</span>
+            <span class="case-info-val" id="pll-type"><span class="empty">—</span></span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">Pieces Moved</span>
+            <span class="case-info-val" id="pll-pieces"><span class="empty">—</span></span>
+          </div>
+        </div>
+        <div class="tips-block">
+          <p class="tips-block-title">Tip</p>
+          <p>Find the headlights first — two identical corner stickers on the same face is your anchor for recognition.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── F2L ── -->
+  <div class="trainer-panel" id="panel-f2l">
+    <div class="trainer-layout">
+
+      <div class="scramble-card">
+        <p class="card-eyebrow">First Two Layers</p>
+        <h2 class="card-title">F2L Trainer</h2>
+        <p class="card-desc">Each scramble breaks exactly one F2L pair. The rest of the cube is solved — just fix the broken slot.</p>
+
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="f2l-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+
+        <div class="controls">
+          <button class="btn-primary" onclick="genF2L()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('f2l')">Copy</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-head">
+          <p class="info-card-label">Slot Target</p>
+          <p class="info-card-title" id="f2l-slot-title">Choose a slot below</p>
+        </div>
+
+        <div class="slot-grid">
+          <button class="slot-btn" id="slot-btn-fr" onclick="selectSlot('FR')">
+            <span class="slot-btn-name">FR</span>
+            <span class="slot-btn-sub">Front-Right</span>
+          </button>
+          <button class="slot-btn" id="slot-btn-fl" onclick="selectSlot('FL')">
+            <span class="slot-btn-name">FL</span>
+            <span class="slot-btn-sub">Front-Left</span>
+          </button>
+          <button class="slot-btn" id="slot-btn-br" onclick="selectSlot('BR')">
+            <span class="slot-btn-name">BR</span>
+            <span class="slot-btn-sub">Back-Right</span>
+          </button>
+          <button class="slot-btn" id="slot-btn-bl" onclick="selectSlot('BL')">
+            <span class="slot-btn-name">BL</span>
+            <span class="slot-btn-sub">Back-Left</span>
+          </button>
+          <button class="slot-random active" id="slot-btn-random" onclick="selectSlot('RANDOM')">
+            <span class="slot-random-name">🎲 Random Slot</span>
+          </button>
+        </div>
+
+        <div class="tips-block">
+          <p class="tips-block-title">Tip</p>
+          <p>Drill each slot individually first, then switch to Random to build full F2L recognition across all positions.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── WHITE CROSS ── -->
+  <div class="trainer-panel" id="panel-cross">
+    <div class="trainer-layout">
+
+      <div class="scramble-card">
+        <p class="card-eyebrow">White Cross</p>
+        <h2 class="card-title">White Cross Trainer</h2>
+        <p class="card-desc">Build your cross planning speed. Pick how many moves away the cross solution is, then plan it before you touch the cube.</p>
+
+        <div class="move-row">
+          <span class="move-row-label">Solve in</span>
+          <div class="move-pills" id="cross-pills">
+            <button class="move-pill" onclick="selectMoves('cross', 1, this)">1</button>
+            <button class="move-pill" onclick="selectMoves('cross', 2, this)">2</button>
+            <button class="move-pill" onclick="selectMoves('cross', 3, this)">3</button>
+            <button class="move-pill active" onclick="selectMoves('cross', 4, this)">4</button>
+            <button class="move-pill" onclick="selectMoves('cross', 5, this)">5</button>
+            <button class="move-pill" onclick="selectMoves('cross', 6, this)">6</button>
+            <button class="move-pill" onclick="selectMoves('cross', 7, this)">7</button>
+            <button class="move-pill" onclick="selectMoves('cross', 8, this)">8</button>
+          </div>
+          <span class="move-row-label">moves</span>
+        </div>
+
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="cross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+
+        <div class="controls">
+          <button class="btn-primary" onclick="genCross()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('cross')">Copy</button>
+          <button class="btn-secondary" id="cross-reveal-btn" onclick="revealSolution('cross')" style="display:none;">Reveal Solution</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-head">
+          <p class="info-card-label">White Cross</p>
+          <p class="info-card-title">Goal</p>
+        </div>
+        <div class="diagram-area" style="height:150px;">
+          <!-- Static cross goal diagram drawn by canvas -->
+          <canvas id="cross-diagram" width="120" height="120"></canvas>
+        </div>
+        <div class="case-info-body">
+          <div class="case-info-row">
+            <span class="case-info-key">Target moves</span>
+            <span class="case-info-val accent" id="cross-target-display">4</span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">Solution</span>
+            <span class="case-info-val" id="cross-solution-display"><span class="empty">—</span></span>
+          </div>
+        </div>
+        <div class="tips-block">
+          <p class="tips-block-title">Tip</p>
+          <p>Start at 4 moves. When you can plan it in inspection consistently, drop to 3 — then aim for 2.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── X-CROSS ── -->
+  <div class="trainer-panel" id="panel-xcross">
+    <div class="trainer-layout">
+
+      <div class="scramble-card">
+        <p class="card-eyebrow">White Cross + First F2L Pair</p>
+        <h2 class="card-title">X-Cross Trainer</h2>
+        <p class="card-desc">Plan the white cross and first F2L pair in one look. Saves a full slot during solves and separates fast solvers from the rest.</p>
+
+        <div class="move-row">
+          <span class="move-row-label">Solve in</span>
+          <div class="move-pills" id="xcross-pills">
+            <button class="move-pill" onclick="selectMoves('xcross', 4, this)">4</button>
+            <button class="move-pill" onclick="selectMoves('xcross', 5, this)">5</button>
+            <button class="move-pill active" onclick="selectMoves('xcross', 6, this)">6</button>
+            <button class="move-pill" onclick="selectMoves('xcross', 7, this)">7</button>
+            <button class="move-pill" onclick="selectMoves('xcross', 8, this)">8</button>
+            <button class="move-pill" onclick="selectMoves('xcross', 9, this)">9</button>
+            <button class="move-pill" onclick="selectMoves('xcross', 10, this)">10</button>
+          </div>
+          <span class="move-row-label">moves</span>
+        </div>
+
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="xcross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+
+        <div class="controls">
+          <button class="btn-primary" onclick="genXCross()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('xcross')">Copy</button>
+          <button class="btn-secondary" id="xcross-reveal-btn" onclick="revealSolution('xcross')" style="display:none;">Reveal Solution</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-head">
+          <p class="info-card-label">X-Cross</p>
+          <p class="info-card-title">Goal</p>
+        </div>
+        <div class="diagram-area" style="height:150px;">
+          <canvas id="xcross-diagram" width="120" height="120"></canvas>
+        </div>
+        <div class="case-info-body">
+          <div class="case-info-row">
+            <span class="case-info-key">Target moves</span>
+            <span class="case-info-val accent" id="xcross-target-display">6</span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">F2L pair</span>
+            <span class="case-info-val" id="xcross-pair-display"><span class="empty">—</span></span>
+          </div>
+          <div class="case-info-row">
+            <span class="case-info-key">Solution</span>
+            <span class="case-info-val" id="xcross-solution-display"><span class="empty">—</span></span>
+          </div>
+        </div>
+        <div class="tips-block">
+          <p class="tips-block-title">Tip</p>
+          <p>Always look for the FR slot pair first — it's the most natural extension of an efficient cross.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /trainer-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="images/logo-icon.png" alt="" style="width:26px;height:26px;border-radius:6px;margin-right:8px;">
+    Cube<span>Rhino</span>
+  </div>
+  <p class="footer-copy">© 2025 CubeRhino. All rights reserved.</p>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+const state = {
+  cross:  { moves: 4, scramble: '', solution: '' },
+  xcross: { moves: 6, scramble: '', solution: '', pair: '' },
+  oll:    { scramble: '', caseNum: '', caseName: '', recognition: '', category: '' },
+  pll:    { scramble: '', caseName: '', type: '', pieces: '' },
+  f2l:    { scramble: '', slot: 'RANDOM' }
+};
+
+const scrambleStore = { oll: '', pll: '', f2l: '', cross: '', xcross: '' };
+
+// ══════════════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ══════════════════════════════════════════════════════════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.trainer-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MOVE COUNT PILLS
+// ══════════════════════════════════════════════════════════════
+function selectMoves(trainer, n, btn) {
+  state[trainer].moves = n;
+  btn.closest('.move-pills').querySelectorAll('.move-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(trainer + '-target-display').textContent = n;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  F2L SLOT SELECTOR
+// ══════════════════════════════════════════════════════════════
+function selectSlot(slot) {
+  state.f2l.slot = slot;
+  ['FR','FL','BR','BL','RANDOM'].forEach(s => {
+    const el = document.getElementById('slot-btn-' + s.toLowerCase());
+    if (el) el.classList.toggle('active', s === slot);
+  });
+  const titles = { FR: 'Front-Right', FL: 'Front-Left', BR: 'Back-Right', BL: 'Back-Left', RANDOM: 'Random Slot' };
+  document.getElementById('f2l-slot-title').textContent = titles[slot] || slot;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  COPY
+// ══════════════════════════════════════════════════════════════
+function copyScramble(trainer) {
+  const s = scrambleStore[trainer];
+  if (!s) return;
+  navigator.clipboard.writeText(s).catch(() => {});
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DISPLAY HELPERS
+// ══════════════════════════════════════════════════════════════
+function showScramble(trainer, text) {
+  scrambleStore[trainer] = text;
+  const el = document.getElementById(trainer + '-scramble-display');
+  el.className = 'scramble-text';
+  el.innerHTML = text;
+}
+
+function setInfo(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val) {
+    el.innerHTML = val;
+  } else {
+    el.innerHTML = '<span class="empty">—</span>';
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  REVEAL SOLUTION
+// ══════════════════════════════════════════════════════════════
+function revealSolution(trainer) {
+  const sol = state[trainer].solution;
+  if (!sol) return;
+  document.getElementById(trainer + '-solution-display').textContent = sol;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PLACEHOLDER GENERATORS  (scramble logic — step 3)
+// ══════════════════════════════════════════════════════════════
+
+function genOLL() {
+  // TODO step 3: real OLL engine
+  showScramble('oll', 'Scramble engine coming in step 3');
+  setInfo('oll-case-title', '—');
+  setInfo('oll-case-num', null);
+  setInfo('oll-recognition', null);
+  setInfo('oll-category', null);
+  drawDiagramPlaceholder('oll-diagram');
+}
+
+function genPLL() {
+  // TODO step 3: real PLL engine
+  showScramble('pll', 'Scramble engine coming in step 3');
+  setInfo('pll-case-title', '—');
+  setInfo('pll-case-name', null);
+  setInfo('pll-type', null);
+  setInfo('pll-pieces', null);
+  drawDiagramPlaceholder('pll-diagram');
+}
+
+function genF2L() {
+  // TODO step 3: real F2L engine
+  showScramble('f2l', 'Scramble engine coming in step 3');
+}
+
+function genCross() {
+  // TODO step 3: real cross engine
+  showScramble('cross', 'Scramble engine coming in step 3');
+  state.cross.solution = '';
+  setInfo('cross-solution-display', null);
+  document.getElementById('cross-reveal-btn').style.display = 'none';
+}
+
+function genXCross() {
+  // TODO step 3: real x-cross engine
+  showScramble('xcross', 'Scramble engine coming in step 3');
+  state.xcross.solution = '';
+  setInfo('xcross-solution-display', null);
+  setInfo('xcross-pair-display', null);
+  document.getElementById('xcross-reveal-btn').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CANVAS DIAGRAM HELPERS
+// ══════════════════════════════════════════════════════════════
+
+// Draw a top-face grid placeholder (3×3 squares)
+function drawDiagramPlaceholder(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const S = 26, GAP = 3, OFF = 8;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      const x = OFF + c * (S + GAP);
+      const y = OFF + r * (S + GAP);
+      ctx.fillStyle = '#1a2870';
+      ctx.beginPath();
+      ctx.roundRect(x, y, S, S, 4);
+      ctx.fill();
+    }
+  }
+}
+
+// Draw white cross goal diagram on canvas
+function drawCrossGoal(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const S = 26, GAP = 3, OFF = 9;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Cross = center + 4 edges white, corners grey
+  const crossCells = [[0,1],[1,0],[1,1],[1,2],[2,1]];
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      const isCross = crossCells.some(([cr,cc]) => cr===r && cc===c);
+      ctx.fillStyle = isCross ? '#ffffff' : '#1a2870';
+      ctx.beginPath();
+      ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
+      ctx.fill();
+    }
+  }
+}
+
+// Draw x-cross goal (cross + one corner/edge filled)
+function drawXCrossGoal(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const S = 26, GAP = 3, OFF = 9;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const crossCells  = [[0,1],[1,0],[1,1],[1,2],[2,1]];
+  const xcrossCells = [[0,1],[1,0],[1,1],[1,2],[2,1],[2,2]]; // + FR corner
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      const isX = xcrossCells.some(([cr,cc]) => cr===r && cc===c);
+      const isCross = crossCells.some(([cr,cc]) => cr===r && cc===c);
+      ctx.fillStyle = isCross ? '#ffffff' : isX ? '#4a6ff5' : '#1a2870';
+      ctx.beginPath();
+      ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
+      ctx.fill();
+    }
+  }
+}
+
+// Init diagrams on load
+window.addEventListener('DOMContentLoaded', () => {
+  drawDiagramPlaceholder('oll-diagram');
+  drawDiagramPlaceholder('pll-diagram');
+  drawCrossGoal('cross-diagram');
+  drawXCrossGoal('xcross-diagram');
+});
+</script>
+</body>
+</html>
