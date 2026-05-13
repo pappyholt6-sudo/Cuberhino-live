@@ -115,6 +115,38 @@
     .time-chip { font-size:11px;font-weight:600;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 7px;font-family:'Courier New',monospace;color:var(--muted); }
     .time-chip.best { color:#22c55e;border-color:rgba(34,197,94,.3); }
     .stats-empty { font-size:12px;color:var(--muted);font-style:italic;text-align:center;padding:4px 0 6px; }
+    .all-times-btn { font-size:10px;font-weight:700;color:var(--accent-light);background:none;border:none;cursor:pointer;letter-spacing:.5px;transition:opacity .15s; }
+    .all-times-btn:hover { opacity:.7; }
+
+    /* ── ALL TIMES MODAL ── */
+    .modal-overlay { position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;padding:0 0 0; }
+    .modal-overlay.open { display:flex; }
+    .modal-sheet { background:var(--panel);border:1px solid var(--line);border-radius:24px 24px 0 0;width:100%;max-width:960px;max-height:82vh;overflow-y:auto;animation:slideUp .2s ease; }
+    @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal-head { position:sticky;top:0;z-index:1;background:var(--panel);border-bottom:1px solid var(--line);padding:18px 28px;display:flex;align-items:center;justify-content:space-between; }
+    .modal-head-title { font-size:16px;font-weight:800;letter-spacing:-.3px; }
+    .modal-head-sub { font-size:12px;color:var(--muted);margin-top:2px; }
+    .modal-close { background:none;border:none;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:8px;transition:color .15s; }
+    .modal-close:hover { color:var(--text); }
+    .modal-body { padding:20px 28px 32px; }
+    .att-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px; }
+    .att-summary-chip { background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:center; }
+    .att-summary-val { font-size:22px;font-weight:800;font-family:'Courier New',monospace; }
+    .att-summary-val.green { color:#22c55e; }
+    .att-summary-key { font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px; }
+    .att-section-label { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin:0 0 10px; }
+    .att-table { width:100%;border-collapse:collapse; }
+    .att-table th { font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:0 10px 8px;text-align:left;border-bottom:1px solid var(--line); }
+    .att-table th:not(:first-child) { text-align:right; }
+    .att-table td { font-size:13px;padding:9px 10px;border-bottom:1px solid color-mix(in srgb,var(--line) 50%,transparent);font-family:'Courier New',monospace;font-weight:600; }
+    .att-table td:first-child { font-family:var(--font);font-weight:700;color:var(--text);font-size:13px; }
+    .att-table td:not(:first-child) { text-align:right;color:var(--muted); }
+    .att-table td.best-val { color:#22c55e; }
+    .att-table tr:last-child td { border-bottom:none; }
+    .att-table tr:hover td { background:color-mix(in srgb,var(--accent) 5%,transparent); }
+    .att-no-data { font-size:14px;color:var(--muted);font-style:italic;text-align:center;padding:40px 0; }
+    .modal-clear-all { background:none;border:1px solid color-mix(in srgb,var(--line) 80%,transparent);color:var(--muted);font-size:12px;font-weight:600;padding:7px 16px;border-radius:999px;cursor:pointer;transition:color .15s,border-color .15s; }
+    .modal-clear-all:hover { color:#f87171;border-color:rgba(248,113,113,.4); }
 
     /* ── SLOT GRID (F2L) ── */
     .slot-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 22px 20px; }
@@ -192,7 +224,7 @@
           <p class="timer-hint" id="oll-timer-hint">Hold Space to start</p>
         </div>
         <div class="controls">
-          <button class="btn-primary" onclick="genOLL()">New Scramble</button>
+          <button class="btn-primary" onclick="genOLL();this.blur()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('oll')">Copy</button>
           <button class="btn-danger" id="oll-delete-btn" onclick="deleteLastTime('oll')" style="display:none">Delete Last</button>
         </div>
@@ -218,7 +250,10 @@
         <div class="stats-section">
           <div class="stats-section-head">
             <p class="stats-section-title">Case Stats</p>
-            <button class="stats-clear-btn" onclick="clearCaseStats('oll')">Clear</button>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="all-times-btn" onclick="openAllTimes('oll')">All Times</button>
+              <button class="stats-clear-btn" onclick="clearCaseStats('oll')">Clear</button>
+            </div>
           </div>
           <div id="oll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
         </div>
@@ -241,7 +276,7 @@
           <p class="timer-hint" id="pll-timer-hint">Hold Space to start</p>
         </div>
         <div class="controls">
-          <button class="btn-primary" onclick="genPLL()">New Scramble</button>
+          <button class="btn-primary" onclick="genPLL();this.blur()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('pll')">Copy</button>
           <button class="btn-danger" id="pll-delete-btn" onclick="deleteLastTime('pll')" style="display:none">Delete Last</button>
         </div>
@@ -271,7 +306,10 @@
         <div class="stats-section">
           <div class="stats-section-head">
             <p class="stats-section-title">Case Stats</p>
-            <button class="stats-clear-btn" onclick="clearCaseStats('pll')">Clear</button>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="all-times-btn" onclick="openAllTimes('pll')">All Times</button>
+              <button class="stats-clear-btn" onclick="clearCaseStats('pll')">Clear</button>
+            </div>
           </div>
           <div id="pll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
         </div>
@@ -294,7 +332,7 @@
           <p class="timer-hint" id="f2l-timer-hint">Hold Space to start</p>
         </div>
         <div class="controls">
-          <button class="btn-primary" onclick="genF2L()">New Scramble</button>
+          <button class="btn-primary" onclick="genF2L();this.blur()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('f2l')">Copy</button>
           <button class="btn-danger" id="f2l-delete-btn" onclick="deleteLastTime('f2l')" style="display:none">Delete Last</button>
         </div>
@@ -314,7 +352,10 @@
         <div class="stats-section">
           <div class="stats-section-head">
             <p class="stats-section-title">Case Stats</p>
-            <button class="stats-clear-btn" onclick="clearCaseStats('f2l')">Clear</button>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="all-times-btn" onclick="openAllTimes('f2l')">All Times</button>
+              <button class="stats-clear-btn" onclick="clearCaseStats('f2l')">Clear</button>
+            </div>
           </div>
           <div id="f2l-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
         </div>
@@ -404,6 +445,22 @@
     </div>
   </div>
 
+</div>
+
+<div class="modal-overlay" id="all-times-modal" onclick="closeAllTimes(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div>
+        <p class="modal-head-title" id="att-modal-title">All Times</p>
+        <p class="modal-head-sub" id="att-modal-sub"></p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="modal-clear-all" onclick="clearAllTrainerStats()">Clear All</button>
+        <button class="modal-close" onclick="closeAllTimes()">&#215;</button>
+      </div>
+    </div>
+    <div class="modal-body" id="att-modal-body"></div>
+  </div>
 </div>
 
 <footer>
@@ -654,25 +711,32 @@ function tickTimer(t){
 }
 
 let _spaceDown=false;
+const MOD_KEYS=['Shift','Control','Alt','Meta','Tab'];
 document.addEventListener('keydown',e=>{
-  if(e.code!=='Space'||e.repeat||_spaceDown)return;
   const tag=document.activeElement?.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA')return;
-  e.preventDefault();_spaceDown=true;
   const t=activeTab;if(!TIMED.includes(t))return;
   const ts=TS[t];
-  if(ts.status==='running'){
+  // Any non-modifier key stops the running timer
+  if(ts.status==='running'&&!e.repeat&&!MOD_KEYS.includes(e.key)){
+    e.preventDefault();
     clearInterval(ts.iv);ts.iv=null;
     ts.elapsed=Date.now()-ts.start;ts.status='done';
     setTimerEl(t,fmtMs(ts.elapsed),'done');
     setTimerHint(t,'Hold Space for next · New Scramble to retry');
     if(ts.caseId!==null)recordTime(t,ts.caseId,ts.elapsed);
     const d=document.getElementById(t+'-delete-btn');if(d)d.style.display='';
-  } else if(ts.status==='idle'||ts.status==='done'){
-    const fromDone=ts.status==='done';
-    ts.status='holding';
-    setTimerEl(t,'0.00','ready');setTimerHint(t,'Release to start');
-    if(fromDone){if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);}
+    return;
+  }
+  // Space (held) starts the ready sequence
+  if(e.code==='Space'&&!e.repeat&&!_spaceDown){
+    if(ts.status==='idle'||ts.status==='done'){
+      e.preventDefault();_spaceDown=true;
+      const fromDone=ts.status==='done';
+      ts.status='holding';
+      setTimerEl(t,'0.00','ready');setTimerHint(t,'Release to start');
+      if(fromDone){if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);}
+    }
   }
 });
 document.addEventListener('keyup',e=>{
@@ -681,7 +745,7 @@ document.addEventListener('keyup',e=>{
   const ts=TS[t];
   if(ts.status==='holding'){
     ts.status='running';ts.start=Date.now();
-    setTimerEl(t,'0.00','running');setTimerHint(t,'Press Space to stop');
+    setTimerEl(t,'0.00','running');setTimerHint(t,'Press any key to stop');
     ts.iv=setInterval(()=>tickTimer(t),30);
   }
 });
@@ -702,11 +766,84 @@ function refreshStats(t,id){
 }
 
 // ══════════════════════════════════════════════════════════════
+//  ALL TIMES MODAL
+// ══════════════════════════════════════════════════════════════
+let _attTrainer=null;
+function openAllTimes(t){
+  _attTrainer=t;
+  const labels={oll:'OLL Trainer',pll:'PLL Trainer',f2l:'F2L Trainer'};
+  document.getElementById('att-modal-title').textContent=labels[t]||t.toUpperCase()+' Trainer';
+  renderAllTimes(t);
+  document.getElementById('all-times-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeAllTimes(e){
+  if(e&&e.target!==document.getElementById('all-times-modal'))return;
+  document.getElementById('all-times-modal').classList.remove('open');
+  document.body.style.overflow='';
+  _attTrainer=null;
+}
+function clearAllTrainerStats(){
+  if(!_attTrainer)return;
+  if(!confirm('Clear ALL '+_attTrainer.toUpperCase()+' times? This cannot be undone.'))return;
+  const d=loadTimes();delete d[_attTrainer];saveTimes(d);
+  renderAllTimes(_attTrainer);
+  const ts=TS[_attTrainer];if(ts&&ts.caseId!==null)refreshStats(_attTrainer,ts.caseId);
+}
+function renderAllTimes(t){
+  const body=document.getElementById('att-modal-body');
+  const d=loadTimes();
+  const trainerData=d[t]||{};
+  const allTimes=Object.values(trainerData).flat();
+  const totalSolves=allTimes.length;
+  const overallBest=totalSolves?Math.min(...allTimes):null;
+  const overallAvg=totalSolves?allTimes.reduce((a,b)=>a+b,0)/allTimes.length:null;
+  document.getElementById('att-modal-sub').textContent=totalSolves?`${totalSolves} total solve${totalSolves===1?'':'s'}`:'No times recorded yet';
+  if(!totalSolves){body.innerHTML='<p class="att-no-data">No times recorded yet for this trainer.</p>';return;}
+  let caseList=[];
+  if(t==='oll')caseList=OLL_CASES.map(c=>({key:String(c.num),name:'OLL '+c.num,cat:c.cat}));
+  else if(t==='pll')caseList=PLL_CASES.map(c=>({key:c.name,name:c.name+' Perm',cat:c.type}));
+  else if(t==='f2l')caseList=F2L_CASES.map(c=>({key:String(c.num),name:'F2L '+c.num,cat:c.name}));
+  const casesWithData=caseList.filter(c=>trainerData[c.key]&&trainerData[c.key].length>0);
+  const rows=casesWithData.map(c=>{
+    const times=trainerData[c.key];
+    const best=Math.min(...times);
+    const last5=times.slice(-5);
+    const avg5=last5.reduce((a,b)=>a+b,0)/last5.length;
+    return `<tr>
+      <td>${c.name}<br><span style="font-size:10px;color:var(--muted);font-family:var(--font);font-weight:400">${c.cat}</span></td>
+      <td>${times.length}</td>
+      <td class="best-val">${fmtMs(best)}</td>
+      <td>${fmtMs(avg5)}</td>
+    </tr>`;
+  }).join('');
+  body.innerHTML=`<div class="att-grid">
+    <div class="att-summary-chip"><div class="att-summary-val">${totalSolves}</div><div class="att-summary-key">Total Solves</div></div>
+    <div class="att-summary-chip"><div class="att-summary-val green">${fmtMs(overallBest)}</div><div class="att-summary-key">Best Overall</div></div>
+    <div class="att-summary-chip"><div class="att-summary-val">${fmtMs(overallAvg)}</div><div class="att-summary-key">Avg All</div></div>
+  </div>
+  <p class="att-section-label">Cases Practiced</p>
+  <table class="att-table">
+    <thead><tr><th>Case</th><th>Solves</th><th>Best</th><th>Avg(5)</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ══════════════════════════════════════════════════════════════
 //  GENERATORS
 // ══════════════════════════════════════════════════════════════
+function hasWideOrSlice(s){
+  return s.split(/\s+/).some(tok=>{
+    const base=tok.replace(/[2'′`]+$/,'');
+    return /^[rludfbMSE]$/.test(base);
+  });
+}
+function cleanSetups(list){return list.filter(s=>!hasWideOrSlice(s));}
+
 function genOLL(keepTimer=false){
-  const c=rand(OLL_CASES);
-  const setup=rand(c.setups);
+  const cleanCases=OLL_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const c=rand(cleanCases);
+  const setup=rand(cleanSetups(c.setups));
   const scramble=[rand(AUF),setup].filter(Boolean).join(' ');
   showScramble('oll',scramble);
   TS.oll.caseId=c.num;
@@ -719,8 +856,9 @@ function genOLL(keepTimer=false){
 }
 
 function genPLL(keepTimer=false){
-  const c=rand(PLL_CASES);
-  const setup=rand(c.setups);
+  const cleanCases=PLL_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const c=rand(cleanCases);
+  const setup=rand(cleanSetups(c.setups));
   const scramble=[rand(AUF),setup,rand(AUF)].filter(Boolean).join(' ');
   showScramble('pll',scramble);
   TS.pll.caseId=c.name;
@@ -732,9 +870,11 @@ function genPLL(keepTimer=false){
 }
 
 function genF2L(keepTimer=false){
-  const f=rand(F2L_CASES),o=rand(OLL_CASES),auf=rand(AUF);
+  const cleanF2L=F2L_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const cleanOLL=OLL_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const f=rand(cleanF2L),o=rand(cleanOLL),auf=rand(AUF);
   const slot=currentF2LSlot==='RANDOM'?rand(['FR','FL','BR','BL']):currentF2LSlot;
-  const scramble=[SLOT_PREFIX[slot],rand(f.setups),auf,rand(o.setups)].filter(Boolean).join(' ');
+  const scramble=[SLOT_PREFIX[slot],rand(cleanSetups(f.setups)),auf,rand(cleanSetups(o.setups))].filter(Boolean).join(' ');
   showScramble('f2l',scramble);
   TS.f2l.caseId=f.num;
   document.getElementById('f2l-slot-title').textContent={FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left'}[slot]||slot;
