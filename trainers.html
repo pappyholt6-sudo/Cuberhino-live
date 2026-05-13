@@ -9,354 +9,144 @@
   <title>Trainers — CubeRhino</title>
   <style>
     :root {
-      --bg: #000000;
-      --panel: #06080f;
-      --panel-2: #0a0d1a;
-      --text: #ffffff;
-      --muted: #7b8fb8;
-      --line: #1a2870;
-      --accent: #2547d0;
-      --accent-light: #4a6ff5;
+      --bg: #000000; --panel: #06080f; --panel-2: #0a0d1a;
+      --text: #ffffff; --muted: #7b8fb8; --line: #1a2870;
+      --accent: #2547d0; --accent-light: #4a6ff5;
       --font: Arial, Helvetica, sans-serif;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { overflow-x: hidden; width: 100%; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5; -webkit-font-smoothing: antialiased; }
     a { color: inherit; text-decoration: none; }
     button { font-family: var(--font); cursor: pointer; }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      height: 60px;
-      background: color-mix(in srgb, var(--bg) 80%, transparent);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
-    }
-    .nav-logo {
-      font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
-      color: #fff; display: flex; align-items: center;
-    }
-    .nav-logo span { color: #2547d0; }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
-    .nav-link {
-      font-size: 14px; font-weight: 600; color: var(--muted);
-      padding: 8px 14px; border-radius: 999px; transition: color 0.15s;
-    }
-    .nav-link:hover { color: var(--text); }
-    .nav-link.active { color: var(--text); }
-    .nav-timer {
-      font-size: 14px; font-weight: 600; color: var(--text);
-      padding: 8px 14px; border-radius: 999px;
-      border: 1px solid var(--line); transition: border-color 0.15s;
-    }
-    .nav-timer:hover { border-color: var(--accent); }
-    .nav-cta {
-      background: var(--accent); color: #fff; font-weight: 700;
-      font-size: 14px; padding: 8px 20px; border-radius: 999px; transition: opacity 0.15s;
-    }
-    .nav-cta:hover { opacity: 0.85; }
+    nav { position: fixed; top:0;left:0;right:0;z-index:100; display:flex;align-items:center;justify-content:space-between; padding:0 40px;height:60px; background:color-mix(in srgb,var(--bg) 80%,transparent); backdrop-filter:blur(12px); border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent); }
+    .nav-logo { font-size:20px;font-weight:800;letter-spacing:-0.3px;color:#fff;display:flex;align-items:center; }
+    .nav-logo span { color:#2547d0; }
+    .nav-right { display:flex;align-items:center;gap:10px; }
+    .nav-link { font-size:14px;font-weight:600;color:var(--muted);padding:8px 14px;border-radius:999px;transition:color .15s; }
+    .nav-link:hover,.nav-link.active { color:var(--text); }
+    .nav-timer { font-size:14px;font-weight:600;color:var(--text);padding:8px 14px;border-radius:999px;border:1px solid var(--line);transition:border-color .15s; }
+    .nav-timer:hover { border-color:var(--accent); }
+    .nav-cta { background:var(--accent);color:#fff;font-weight:700;font-size:14px;padding:8px 20px;border-radius:999px;transition:opacity .15s; }
+    .nav-cta:hover { opacity:.85; }
 
-    /* ── PAGE HEADER ── */
-    .page-header {
-      padding: 110px 24px 52px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .page-glow {
-      position: absolute; top: -80px; left: 50%;
-      transform: translateX(-50%);
-      width: 700px; height: 420px;
-      background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 11%, transparent) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .page-eyebrow {
-      font-size: 11px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
-    }
-    .page-title {
-      font-size: clamp(34px, 5.5vw, 60px); font-weight: 800;
-      letter-spacing: -1.4px; line-height: 1.05; margin-bottom: 16px;
-    }
-    .page-title span {
-      background: linear-gradient(135deg, #4a6ff5 0%, #ffffff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .page-sub {
-      font-size: 16px; color: var(--muted);
-      max-width: 460px; margin: 0 auto; line-height: 1.65;
-    }
+    .page-header { padding:110px 24px 52px;text-align:center;position:relative;overflow:hidden; }
+    .page-glow { position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:700px;height:420px;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--accent) 11%,transparent) 0%,transparent 70%);pointer-events:none; }
+    .page-eyebrow { font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px; }
+    .page-title { font-size:clamp(34px,5.5vw,60px);font-weight:800;letter-spacing:-1.4px;line-height:1.05;margin-bottom:16px; }
+    .page-title span { background:linear-gradient(135deg,#4a6ff5 0%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .page-sub { font-size:16px;color:var(--muted);max-width:460px;margin:0 auto;line-height:1.65; }
 
-    /* ── TAB BAR ── */
-    .tab-bar-wrap {
-      display: flex; justify-content: center;
-      padding: 36px 24px 44px; position: relative; z-index: 1;
-    }
-    .tab-bar {
-      display: flex; gap: 5px;
-      background: var(--panel); border: 1px solid var(--line);
-      border-radius: 999px; padding: 5px; flex-wrap: wrap; justify-content: center;
-    }
-    .tab-btn {
-      font-size: 14px; font-weight: 700; color: var(--muted);
-      background: none; border: none; cursor: pointer;
-      padding: 9px 22px; border-radius: 999px;
-      transition: color 0.15s, background 0.15s; letter-spacing: 0.3px;
-    }
-    .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { background: var(--accent); color: #fff; }
+    .tab-bar-wrap { display:flex;justify-content:center;padding:36px 24px 44px;position:relative;z-index:1; }
+    .tab-bar { display:flex;gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px;flex-wrap:wrap;justify-content:center; }
+    .tab-btn { font-size:14px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;padding:9px 22px;border-radius:999px;transition:color .15s,background .15s;letter-spacing:.3px; }
+    .tab-btn:hover { color:var(--text); }
+    .tab-btn.active { background:var(--accent);color:#fff; }
 
-    /* ── MAIN LAYOUT ── */
-    .trainer-wrap {
-      max-width: 960px; margin: 0 auto; padding: 0 24px 100px;
-    }
-    .trainer-panel { display: none; }
-    .trainer-panel.active { display: block; }
+    .trainer-wrap { max-width:960px;margin:0 auto;padding:0 24px 100px; }
+    .trainer-panel { display:none; }
+    .trainer-panel.active { display:block; }
 
-    /* ── TWO-COL LAYOUT (scramble left, info right) ── */
-    .trainer-layout {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 20px;
-      align-items: start;
-    }
-    @media (max-width: 780px) {
-      .trainer-layout { grid-template-columns: 1fr; }
-    }
+    .trainer-layout { display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start; }
+    @media(max-width:780px){ .trainer-layout { grid-template-columns:1fr; } }
 
-    /* ── MAIN SCRAMBLE CARD ── */
-    .scramble-card {
-      background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 36px 36px 32px;
-      position: relative;
-      overflow: hidden;
-    }
-    .scramble-card::before {
-      content: '';
-      position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-      width: 500px; height: 180px;
-      background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
-      pointer-events: none;
-    }
-    .card-eyebrow {
-      font-size: 10px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
-    }
-    .card-title {
-      font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
-      margin-bottom: 4px;
-    }
-    .card-desc {
-      font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 28px;
-    }
+    .scramble-card { background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:1px solid var(--line);border-radius:24px;padding:36px 36px 32px;position:relative;overflow:hidden; }
+    .scramble-card::before { content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:500px;height:180px;background:radial-gradient(ellipse,color-mix(in srgb,var(--accent) 7%,transparent),transparent 70%);pointer-events:none; }
+    .card-eyebrow { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px; }
+    .card-title { font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px; }
+    .card-desc { font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:28px; }
 
-    /* move selector inside card */
-    .move-row {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 24px; flex-wrap: wrap;
-    }
-    .move-row-label { font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; }
-    .move-pills { display: flex; gap: 5px; flex-wrap: wrap; }
-    .move-pill {
-      font-size: 13px; font-weight: 700; color: var(--muted);
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: 999px; padding: 5px 13px;
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
-    }
-    .move-pill:hover { color: var(--text); border-color: var(--accent-light); }
-    .move-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .move-row { display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap; }
+    .move-row-label { font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap; }
+    .move-pills { display:flex;gap:5px;flex-wrap:wrap; }
+    .move-pill { font-size:13px;font-weight:700;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:color .15s,border-color .15s,background .15s; }
+    .move-pill:hover { color:var(--text);border-color:var(--accent-light); }
+    .move-pill.active { background:var(--accent);border-color:var(--accent);color:#fff; }
 
-    /* scramble display */
-    .scramble-box {
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 26px 24px;
-      margin-bottom: 22px;
-      min-height: 86px;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-    }
-    .scramble-text {
-      font-size: clamp(15px, 2.6vw, 21px);
-      font-weight: 700; letter-spacing: 1.8px;
-      color: var(--text); text-align: center;
-      line-height: 1.8; font-family: 'Courier New', monospace;
-      word-break: break-word;
-    }
-    .scramble-placeholder {
-      font-size: 14px; color: var(--muted); font-weight: 400;
-      font-family: var(--font); text-align: center; letter-spacing: 0;
-    }
+    .scramble-box { background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:26px 24px;min-height:86px;display:flex;align-items:center;justify-content:center; }
+    .scramble-text { font-size:clamp(15px,2.6vw,21px);font-weight:700;letter-spacing:1.8px;color:var(--text);text-align:center;line-height:1.8;font-family:'Courier New',monospace;word-break:break-word; }
+    .scramble-placeholder { font-size:14px;color:var(--muted);font-weight:400;font-family:var(--font);text-align:center;letter-spacing:0; }
 
-    /* controls row */
-    .controls {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: var(--accent); color: #fff;
-      font-weight: 800; font-size: 14px;
-      padding: 11px 28px; border-radius: 999px; border: none;
-      transition: opacity 0.15s, transform 0.15s;
-    }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); }
-    .btn-secondary {
-      background: transparent; color: var(--muted);
-      font-weight: 600; font-size: 13px;
-      padding: 11px 20px; border-radius: 999px;
-      border: 1px solid var(--line);
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .btn-secondary:hover { color: var(--text); border-color: var(--accent); }
+    /* ── TIMER ── */
+    .timer-display { text-align:center;padding:22px 0 18px; }
+    .timer-digits { font-size:56px;font-weight:800;letter-spacing:-1px;font-family:'Courier New',monospace;color:var(--muted);line-height:1;user-select:none;transition:color .1s; }
+    .timer-digits.state-ready  { color:#22c55e; }
+    .timer-digits.state-running { color:var(--text); }
+    .timer-digits.state-done   { color:var(--accent-light); }
+    .timer-hint { font-size:12px;color:var(--muted);margin-top:9px;font-weight:500;letter-spacing:.3px; }
 
-    /* ── INFO SIDEBAR CARD ── */
-    .info-card {
-      background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-    .info-card-head {
-      padding: 20px 22px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-    .info-card-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
-    }
-    .info-card-title {
-      font-size: 15px; font-weight: 800; color: var(--text);
-    }
+    .controls { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .btn-primary { background:var(--accent);color:#fff;font-weight:800;font-size:14px;padding:11px 28px;border-radius:999px;border:none;transition:opacity .15s,transform .15s; }
+    .btn-primary:hover { opacity:.88;transform:translateY(-1px); }
+    .btn-primary:active { transform:translateY(0); }
+    .btn-secondary { background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:11px 20px;border-radius:999px;border:1px solid var(--line);transition:color .15s,border-color .15s; }
+    .btn-secondary:hover { color:var(--text);border-color:var(--accent); }
+    .btn-danger { background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:11px 20px;border-radius:999px;border:1px solid var(--line);transition:color .15s,border-color .15s; }
+    .btn-danger:hover { color:#f87171;border-color:rgba(248,113,113,.4); }
 
-    /* diagram placeholder */
-    .diagram-area {
-      margin: 16px 22px;
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      height: 130px;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .diagram-area canvas {
-      display: block;
-    }
-    .diagram-placeholder-text {
-      font-size: 12px; color: var(--muted); text-align: center;
-      padding: 0 16px; line-height: 1.6;
-    }
+    /* ── INFO CARD ── */
+    .info-card { background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:1px solid var(--line);border-radius:20px;overflow:hidden; }
+    .info-card-head { padding:20px 22px 16px;border-bottom:1px solid var(--line); }
+    .info-card-label { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px; }
+    .info-card-title { font-size:15px;font-weight:800;color:var(--text); }
+    .diagram-area { margin:16px 22px;background:var(--bg);border:1px solid var(--line);border-radius:12px;height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden; }
+    .diagram-area canvas { display:block; }
+    .case-info-body { padding:0 22px 20px; }
+    .case-info-row { display:flex;align-items:baseline;justify-content:space-between;padding:9px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent); }
+    .case-info-row:last-child { border-bottom:none; }
+    .case-info-key { font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.3px; }
+    .case-info-val { font-size:13px;font-weight:700;color:var(--text);text-align:right; }
+    .case-info-val.accent { color:var(--accent-light); }
+    .case-info-val .empty { color:var(--muted);font-weight:400;font-style:italic; }
 
-    /* case name / info */
-    .case-info-body { padding: 0 22px 20px; }
-    .case-info-row {
-      display: flex; align-items: baseline;
-      justify-content: space-between;
-      padding: 9px 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
-    }
-    .case-info-row:last-child { border-bottom: none; }
-    .case-info-key {
-      font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.3px;
-    }
-    .case-info-val {
-      font-size: 13px; font-weight: 700; color: var(--text); text-align: right;
-    }
-    .case-info-val.accent { color: var(--accent-light); }
-    .case-info-val.empty { color: var(--muted); font-weight: 400; font-style: italic; }
+    /* ── STATS ── */
+    .stats-section { border-top:1px solid var(--line);padding:14px 22px 16px; }
+    .stats-section-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:10px; }
+    .stats-section-title { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent); }
+    .stats-clear-btn { font-size:10px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .15s; }
+    .stats-clear-btn:hover { color:#f87171; }
+    .stats-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px; }
+    .stat-chip { background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 4px;text-align:center; }
+    .stat-chip-val { font-size:14px;font-weight:800;color:var(--text);font-family:'Courier New',monospace;letter-spacing:-.5px;line-height:1.2; }
+    .stat-chip-val.green { color:#22c55e; }
+    .stat-chip-key { font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px; }
+    .times-list { display:flex;flex-wrap:wrap;gap:5px; }
+    .time-chip { font-size:11px;font-weight:600;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 7px;font-family:'Courier New',monospace;color:var(--muted); }
+    .time-chip.best { color:#22c55e;border-color:rgba(34,197,94,.3); }
+    .stats-empty { font-size:12px;color:var(--muted);font-style:italic;text-align:center;padding:4px 0 6px; }
 
-    /* slot selector (F2L) */
-    .slot-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 8px; padding: 16px 22px 20px;
-    }
-    .slot-btn {
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: 12px; padding: 10px 8px;
-      text-align: center; transition: border-color 0.15s, background 0.15s;
-      display: flex; flex-direction: column; gap: 3px; align-items: center;
-    }
-    .slot-btn:hover { border-color: var(--accent-light); }
-    .slot-btn.active { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: var(--accent); }
-    .slot-btn-name { font-size: 13px; font-weight: 800; color: var(--text); }
-    .slot-btn-sub { font-size: 10px; color: var(--muted); font-weight: 500; }
-    .slot-random {
-      grid-column: span 2;
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: 12px; padding: 10px 8px;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .slot-random:hover { border-color: var(--accent-light); }
-    .slot-random.active { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: var(--accent); }
-    .slot-random-name { font-size: 13px; font-weight: 800; color: var(--text); }
+    /* ── SLOT GRID (F2L) ── */
+    .slot-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 22px 20px; }
+    .slot-btn { background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:3px;align-items:center; }
+    .slot-btn:hover { border-color:var(--accent-light); }
+    .slot-btn.active { background:color-mix(in srgb,var(--accent) 15%,transparent);border-color:var(--accent); }
+    .slot-btn-name { font-size:13px;font-weight:800;color:var(--text); }
+    .slot-btn-sub { font-size:10px;color:var(--muted);font-weight:500; }
+    .slot-random { grid-column:span 2;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:6px;transition:border-color .15s,background .15s; }
+    .slot-random:hover { border-color:var(--accent-light); }
+    .slot-random.active { background:color-mix(in srgb,var(--accent) 15%,transparent);border-color:var(--accent); }
+    .slot-random-name { font-size:13px;font-weight:800;color:var(--text); }
 
-    /* tips block */
-    .tips-block {
-      margin: 0 22px 20px;
-      background: color-mix(in srgb, var(--accent) 8%, transparent);
-      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-      border-radius: 12px;
-      padding: 13px 16px;
-    }
-    .tips-block-title {
-      font-size: 11px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--accent-light); margin-bottom: 6px;
-    }
-    .tips-block p {
-      font-size: 12px; color: var(--muted); line-height: 1.65;
-    }
+    footer { border-top:1px solid var(--line);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px; }
+    .footer-logo { display:flex;align-items:center;font-size:15px;font-weight:800;color:var(--text); }
+    .footer-logo span { color:#2547d0; }
+    .footer-copy { font-size:13px;color:var(--muted); }
 
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 32px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px;
-    }
-    .footer-logo { display: flex; align-items: center; font-size: 15px; font-weight: 800; color: var(--text); }
-    .footer-logo span { color: #2547d0; }
-    .footer-copy { font-size: 13px; color: var(--muted); }
-
-    /* ── MOBILE ── */
-    @media (max-width: 640px) {
-      nav { padding: 0 16px; }
-      .nav-timer { display: none; }
-      .nav-link { padding: 8px 10px; font-size: 13px; }
-      .nav-cta { padding: 8px 14px; font-size: 13px; }
-      .scramble-card { padding: 24px 20px 22px; }
-      .page-header { padding: 92px 20px 40px; }
-      footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+    @media(max-width:640px){
+      nav{padding:0 16px;} .nav-timer{display:none;} .nav-link{padding:8px 10px;font-size:13px;} .nav-cta{padding:8px 14px;font-size:13px;}
+      .scramble-card{padding:24px 20px 22px;} .page-header{padding:92px 20px 40px;}
+      footer{padding:24px 20px;flex-direction:column;align-items:flex-start;}
+      .timer-digits{font-size:44px;}
     }
   </style>
 </head>
 <body>
 
-<img id="backdropRhino" src="favicon.ico" aria-hidden="true" alt=""
-  style="position:fixed;top:50%;left:57%;transform:translate(-50%,-50%);width:92vmin;height:92vmin;object-fit:contain;opacity:0.07;filter:brightness(1.9);pointer-events:none;z-index:0;user-select:none;">
+<img src="favicon.ico" aria-hidden="true" alt="" style="position:fixed;top:50%;left:57%;transform:translate(-50%,-50%);width:92vmin;height:92vmin;object-fit:contain;opacity:.07;filter:brightness(1.9);pointer-events:none;z-index:0;user-select:none;">
 
-<!-- NAV -->
 <nav>
-  <a href="https://cuberhino.com" class="nav-logo" style="text-decoration:none;">
+  <a href="https://cuberhino.com" class="nav-logo">
     <img src="images/logo-icon.png" alt="CubeRhino" style="width:38px;height:38px;object-fit:contain;border-radius:8px;margin-right:8px;vertical-align:middle;">
     Cube<span>Rhino</span>
   </a>
@@ -368,7 +158,6 @@
   </div>
 </nav>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-glow"></div>
   <p class="page-eyebrow">CubeRhino Trainers</p>
@@ -376,41 +165,38 @@
   <p class="page-sub">Targeted scrambles for every stage of the solve — OLL, PLL, F2L, White Cross, and X-Cross.</p>
 </div>
 
-<!-- TAB BAR -->
 <div class="tab-bar-wrap">
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('oll', this)">OLL</button>
-    <button class="tab-btn" onclick="switchTab('pll', this)">PLL</button>
-    <button class="tab-btn" onclick="switchTab('f2l', this)">F2L</button>
-    <button class="tab-btn" onclick="switchTab('cross', this)">White Cross</button>
-    <button class="tab-btn" onclick="switchTab('xcross', this)">X-Cross</button>
+    <button class="tab-btn active" onclick="switchTab('oll',this)">OLL</button>
+    <button class="tab-btn" onclick="switchTab('pll',this)">PLL</button>
+    <button class="tab-btn" onclick="switchTab('f2l',this)">F2L</button>
+    <button class="tab-btn" onclick="switchTab('cross',this)">White Cross</button>
+    <button class="tab-btn" onclick="switchTab('xcross',this)">X-Cross</button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     TRAINER PANELS
-════════════════════════════════════════════════════════ -->
 <div class="trainer-wrap">
 
-  <!-- ── OLL ── -->
+  <!-- OLL -->
   <div class="trainer-panel active" id="panel-oll">
     <div class="trainer-layout">
-
       <div class="scramble-card">
         <p class="card-eyebrow">Last Layer — Step 1</p>
         <h2 class="card-title">OLL Trainer</h2>
         <p class="card-desc">Each scramble leaves you with exactly one OLL case to solve. F2L is complete and the cross is done.</p>
-
         <div class="scramble-box">
           <p class="scramble-placeholder" id="oll-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-
+        <div class="timer-display">
+          <div class="timer-digits" id="oll-timer-digits">0.00</div>
+          <p class="timer-hint" id="oll-timer-hint">Hold Space to start</p>
+        </div>
         <div class="controls">
           <button class="btn-primary" onclick="genOLL()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('oll')">Copy</button>
+          <button class="btn-danger" id="oll-delete-btn" onclick="deleteLastTime('oll')" style="display:none">Delete Last</button>
         </div>
       </div>
-
       <div class="info-card">
         <div class="info-card-head">
           <p class="info-card-label">Current Case</p>
@@ -425,42 +211,41 @@
             <span class="case-info-val accent" id="oll-case-num"><span class="empty">—</span></span>
           </div>
           <div class="case-info-row">
-            <span class="case-info-key">Recognition</span>
-            <span class="case-info-val" id="oll-recognition"><span class="empty">—</span></span>
-          </div>
-          <div class="case-info-row">
             <span class="case-info-key">Category</span>
             <span class="case-info-val" id="oll-category"><span class="empty">—</span></span>
           </div>
         </div>
-        <div class="tips-block">
-          <p class="tips-block-title">Tip</p>
-          <p>Look at the top face first, then check the front-facing stickers to identify the case faster.</p>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Case Stats</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('oll')">Clear</button>
+          </div>
+          <div id="oll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── PLL ── -->
+  <!-- PLL -->
   <div class="trainer-panel" id="panel-pll">
     <div class="trainer-layout">
-
       <div class="scramble-card">
         <p class="card-eyebrow">Last Layer — Step 2</p>
         <h2 class="card-title">PLL Trainer</h2>
         <p class="card-desc">Each scramble leaves you with exactly one PLL case to solve. The top face is already fully oriented.</p>
-
         <div class="scramble-box">
           <p class="scramble-placeholder" id="pll-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-
+        <div class="timer-display">
+          <div class="timer-digits" id="pll-timer-digits">0.00</div>
+          <p class="timer-hint" id="pll-timer-hint">Hold Space to start</p>
+        </div>
         <div class="controls">
           <button class="btn-primary" onclick="genPLL()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('pll')">Copy</button>
+          <button class="btn-danger" id="pll-delete-btn" onclick="deleteLastTime('pll')" style="display:none">Delete Last</button>
         </div>
       </div>
-
       <div class="info-card">
         <div class="info-card-head">
           <p class="info-card-label">Current Case</p>
@@ -483,202 +268,144 @@
             <span class="case-info-val" id="pll-pieces"><span class="empty">—</span></span>
           </div>
         </div>
-        <div class="tips-block">
-          <p class="tips-block-title">Tip</p>
-          <p>Find the headlights first — two identical corner stickers on the same face is your anchor for recognition.</p>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Case Stats</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('pll')">Clear</button>
+          </div>
+          <div id="pll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── F2L ── -->
+  <!-- F2L -->
   <div class="trainer-panel" id="panel-f2l">
     <div class="trainer-layout">
-
       <div class="scramble-card">
         <p class="card-eyebrow">First Two Layers</p>
         <h2 class="card-title">F2L Trainer</h2>
         <p class="card-desc">Each scramble breaks exactly one F2L pair. The rest of the cube is solved — just fix the broken slot.</p>
-
         <div class="scramble-box">
           <p class="scramble-placeholder" id="f2l-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-
+        <div class="timer-display">
+          <div class="timer-digits" id="f2l-timer-digits">0.00</div>
+          <p class="timer-hint" id="f2l-timer-hint">Hold Space to start</p>
+        </div>
         <div class="controls">
           <button class="btn-primary" onclick="genF2L()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('f2l')">Copy</button>
+          <button class="btn-danger" id="f2l-delete-btn" onclick="deleteLastTime('f2l')" style="display:none">Delete Last</button>
         </div>
       </div>
-
       <div class="info-card">
         <div class="info-card-head">
           <p class="info-card-label">Slot Target</p>
           <p class="info-card-title" id="f2l-slot-title">Choose a slot below</p>
         </div>
-
         <div class="slot-grid">
-          <button class="slot-btn" id="slot-btn-fr" onclick="selectSlot('FR')">
-            <span class="slot-btn-name">FR</span>
-            <span class="slot-btn-sub">Front-Right</span>
-          </button>
-          <button class="slot-btn" id="slot-btn-fl" onclick="selectSlot('FL')">
-            <span class="slot-btn-name">FL</span>
-            <span class="slot-btn-sub">Front-Left</span>
-          </button>
-          <button class="slot-btn" id="slot-btn-br" onclick="selectSlot('BR')">
-            <span class="slot-btn-name">BR</span>
-            <span class="slot-btn-sub">Back-Right</span>
-          </button>
-          <button class="slot-btn" id="slot-btn-bl" onclick="selectSlot('BL')">
-            <span class="slot-btn-name">BL</span>
-            <span class="slot-btn-sub">Back-Left</span>
-          </button>
-          <button class="slot-random active" id="slot-btn-random" onclick="selectSlot('RANDOM')">
-            <span class="slot-random-name">🎲 Random Slot</span>
-          </button>
+          <button class="slot-btn" id="slot-btn-fr" onclick="selectSlot('FR')"><span class="slot-btn-name">FR</span><span class="slot-btn-sub">Front-Right</span></button>
+          <button class="slot-btn" id="slot-btn-fl" onclick="selectSlot('FL')"><span class="slot-btn-name">FL</span><span class="slot-btn-sub">Front-Left</span></button>
+          <button class="slot-btn" id="slot-btn-br" onclick="selectSlot('BR')"><span class="slot-btn-name">BR</span><span class="slot-btn-sub">Back-Right</span></button>
+          <button class="slot-btn" id="slot-btn-bl" onclick="selectSlot('BL')"><span class="slot-btn-name">BL</span><span class="slot-btn-sub">Back-Left</span></button>
+          <button class="slot-random active" id="slot-btn-random" onclick="selectSlot('RANDOM')"><span class="slot-random-name">🎲 Random Slot</span></button>
         </div>
-
-        <div class="tips-block">
-          <p class="tips-block-title">Tip</p>
-          <p>Drill each slot individually first, then switch to Random to build full F2L recognition across all positions.</p>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Case Stats</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('f2l')">Clear</button>
+          </div>
+          <div id="f2l-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── WHITE CROSS ── -->
+  <!-- WHITE CROSS -->
   <div class="trainer-panel" id="panel-cross">
     <div class="trainer-layout">
-
       <div class="scramble-card">
         <p class="card-eyebrow">White Cross</p>
         <h2 class="card-title">White Cross Trainer</h2>
         <p class="card-desc">Build your cross planning speed. Pick how many moves away the cross solution is, then plan it before you touch the cube.</p>
-
         <div class="move-row">
           <span class="move-row-label">Solve in</span>
           <div class="move-pills" id="cross-pills">
-            <button class="move-pill" onclick="selectMoves('cross', 1, this)">1</button>
-            <button class="move-pill" onclick="selectMoves('cross', 2, this)">2</button>
-            <button class="move-pill" onclick="selectMoves('cross', 3, this)">3</button>
-            <button class="move-pill active" onclick="selectMoves('cross', 4, this)">4</button>
-            <button class="move-pill" onclick="selectMoves('cross', 5, this)">5</button>
-            <button class="move-pill" onclick="selectMoves('cross', 6, this)">6</button>
-            <button class="move-pill" onclick="selectMoves('cross', 7, this)">7</button>
-            <button class="move-pill" onclick="selectMoves('cross', 8, this)">8</button>
+            <button class="move-pill" onclick="selectMoves('cross',1,this)">1</button>
+            <button class="move-pill" onclick="selectMoves('cross',2,this)">2</button>
+            <button class="move-pill" onclick="selectMoves('cross',3,this)">3</button>
+            <button class="move-pill active" onclick="selectMoves('cross',4,this)">4</button>
+            <button class="move-pill" onclick="selectMoves('cross',5,this)">5</button>
+            <button class="move-pill" onclick="selectMoves('cross',6,this)">6</button>
+            <button class="move-pill" onclick="selectMoves('cross',7,this)">7</button>
+            <button class="move-pill" onclick="selectMoves('cross',8,this)">8</button>
           </div>
           <span class="move-row-label">moves</span>
         </div>
-
         <div class="scramble-box">
           <p class="scramble-placeholder" id="cross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-
-        <div class="controls">
+        <div class="controls" style="margin-top:22px">
           <button class="btn-primary" onclick="genCross()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('cross')">Copy</button>
-          <button class="btn-secondary" id="cross-reveal-btn" onclick="revealSolution('cross')" style="display:none;">Reveal Solution</button>
+          <button class="btn-secondary" id="cross-reveal-btn" onclick="revealSolution('cross')" style="display:none">Reveal Solution</button>
         </div>
       </div>
-
       <div class="info-card">
-        <div class="info-card-head">
-          <p class="info-card-label">White Cross</p>
-          <p class="info-card-title">Goal</p>
-        </div>
-        <div class="diagram-area" style="height:150px;">
-          <!-- Static cross goal diagram drawn by canvas -->
-          <canvas id="cross-diagram" width="120" height="120"></canvas>
-        </div>
+        <div class="info-card-head"><p class="info-card-label">White Cross</p><p class="info-card-title">Goal</p></div>
+        <div class="diagram-area" style="height:150px"><canvas id="cross-diagram" width="120" height="120"></canvas></div>
         <div class="case-info-body">
-          <div class="case-info-row">
-            <span class="case-info-key">Target moves</span>
-            <span class="case-info-val accent" id="cross-target-display">4</span>
-          </div>
-          <div class="case-info-row">
-            <span class="case-info-key">Solution</span>
-            <span class="case-info-val" id="cross-solution-display"><span class="empty">—</span></span>
-          </div>
-        </div>
-        <div class="tips-block">
-          <p class="tips-block-title">Tip</p>
-          <p>Start at 4 moves. When you can plan it in inspection consistently, drop to 3 — then aim for 2.</p>
+          <div class="case-info-row"><span class="case-info-key">Target moves</span><span class="case-info-val accent" id="cross-target-display">4</span></div>
+          <div class="case-info-row"><span class="case-info-key">Solution</span><span class="case-info-val" id="cross-solution-display"><span class="empty">—</span></span></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── X-CROSS ── -->
+  <!-- X-CROSS -->
   <div class="trainer-panel" id="panel-xcross">
     <div class="trainer-layout">
-
       <div class="scramble-card">
         <p class="card-eyebrow">White Cross + First F2L Pair</p>
         <h2 class="card-title">X-Cross Trainer</h2>
         <p class="card-desc">Plan the white cross and first F2L pair in one look. Saves a full slot during solves and separates fast solvers from the rest.</p>
-
         <div class="move-row">
           <span class="move-row-label">Solve in</span>
           <div class="move-pills" id="xcross-pills">
-            <button class="move-pill" onclick="selectMoves('xcross', 4, this)">4</button>
-            <button class="move-pill" onclick="selectMoves('xcross', 5, this)">5</button>
-            <button class="move-pill active" onclick="selectMoves('xcross', 6, this)">6</button>
-            <button class="move-pill" onclick="selectMoves('xcross', 7, this)">7</button>
-            <button class="move-pill" onclick="selectMoves('xcross', 8, this)">8</button>
-            <button class="move-pill" onclick="selectMoves('xcross', 9, this)">9</button>
-            <button class="move-pill" onclick="selectMoves('xcross', 10, this)">10</button>
+            <button class="move-pill" onclick="selectMoves('xcross',4,this)">4</button>
+            <button class="move-pill" onclick="selectMoves('xcross',5,this)">5</button>
+            <button class="move-pill active" onclick="selectMoves('xcross',6,this)">6</button>
+            <button class="move-pill" onclick="selectMoves('xcross',7,this)">7</button>
+            <button class="move-pill" onclick="selectMoves('xcross',8,this)">8</button>
+            <button class="move-pill" onclick="selectMoves('xcross',9,this)">9</button>
+            <button class="move-pill" onclick="selectMoves('xcross',10,this)">10</button>
           </div>
           <span class="move-row-label">moves</span>
         </div>
-
         <div class="scramble-box">
           <p class="scramble-placeholder" id="xcross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-
-        <div class="controls">
+        <div class="controls" style="margin-top:22px">
           <button class="btn-primary" onclick="genXCross()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('xcross')">Copy</button>
-          <button class="btn-secondary" id="xcross-reveal-btn" onclick="revealSolution('xcross')" style="display:none;">Reveal Solution</button>
+          <button class="btn-secondary" id="xcross-reveal-btn" onclick="revealSolution('xcross')" style="display:none">Reveal Solution</button>
         </div>
       </div>
-
       <div class="info-card">
-        <div class="info-card-head">
-          <p class="info-card-label">X-Cross</p>
-          <p class="info-card-title">Goal</p>
-        </div>
-        <div class="diagram-area" style="height:150px;">
-          <canvas id="xcross-diagram" width="120" height="120"></canvas>
-        </div>
+        <div class="info-card-head"><p class="info-card-label">X-Cross</p><p class="info-card-title">Goal</p></div>
+        <div class="diagram-area" style="height:150px"><canvas id="xcross-diagram" width="120" height="120"></canvas></div>
         <div class="case-info-body">
-          <div class="case-info-row">
-            <span class="case-info-key">Target moves</span>
-            <span class="case-info-val accent" id="xcross-target-display">6</span>
-          </div>
-          <div class="case-info-row">
-            <span class="case-info-key">F2L pair</span>
-            <span class="case-info-val" id="xcross-pair-display"><span class="empty">—</span></span>
-          </div>
-          <div class="case-info-row">
-            <span class="case-info-key">Solution</span>
-            <span class="case-info-val" id="xcross-solution-display"><span class="empty">—</span></span>
-          </div>
-        </div>
-        <div class="tips-block">
-          <p class="tips-block-title">Tip</p>
-          <p>Always look for the FR slot pair first — it's the most natural extension of an efficient cross.</p>
+          <div class="case-info-row"><span class="case-info-key">Target moves</span><span class="case-info-val accent" id="xcross-target-display">6</span></div>
+          <div class="case-info-row"><span class="case-info-key">F2L pair</span><span class="case-info-val" id="xcross-pair-display"><span class="empty">—</span></span></div>
+          <div class="case-info-row"><span class="case-info-key">Solution</span><span class="case-info-val" id="xcross-solution-display"><span class="empty">—</span></span></div>
         </div>
       </div>
-
     </div>
   </div>
 
-</div><!-- /trainer-wrap -->
+</div>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">
     <img src="images/logo-icon.png" alt="" style="width:26px;height:26px;border-radius:6px;margin-right:8px;">
@@ -689,364 +416,471 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  ALGORITHM DATABASE  (from speedcubedb.com)
+//  ALGORITHM DATABASE
+//  All setups = inverse of solve alg, no M/S/E/wide-moves.
+//  Cases with only wide-move algs keep ONE for variety —
+//  the extended simulator handles them for the diagram.
 // ══════════════════════════════════════════════════════════════
 const OLL_CASES = [
-  {num:1, cat:"Dot Case", setups:["F R' F' R U2' F R' F' R2' U2' R'", "F R' F' R U2 F R' F' R2 U2 R'", "F' L F L' U2 F' L F L2 U2 L"]},
-  {num:2, cat:"Dot Case", setups:["f U R U' R' f' F U R U' R' F'"]},
-  {num:3, cat:"Dot Case", setups:["R' F2 R2 U2 R' F' R U2 R2 F2 R y'"]},
-  {num:4, cat:"Dot Case", setups:["R' F2 R2 U2 R' F R U2 R2 F2 R y", "F U R U' R' F' U F R U R' U' F' y'"]},
-  {num:5, cat:"Square Shapes", setups:["R' F' L F' L' F2 R y2"]},
-  {num:6, cat:"Square Shapes", setups:["F U' R2 D R' U R D' R2 U F'", "x' D R U' R U R2 D' x y"]},
-  {num:7, cat:"Lightning Shapes", setups:["F' L F L' U2 L' U2 L"]},
-  {num:8, cat:"Lightning Shapes", setups:["F R' F' R U2 R U2 R'"]},
-  {num:9, cat:"Fish Shapes", setups:["F U R U' R2' F' R U R U' R' y'", "F U R U' R2 F' R U R U' R' y'", "L' U2 L F' L F L' U L' U L y"]},
-  {num:10, cat:"Fish Shapes", setups:["R U2' R' F R' F' R U' R U' R'", "R U2 R' F R' F' R U' R U' R'", "R' F R U R' F' R F U' F' y'", "F' U' L' U L2 F L' U' L' U L y2"]},
-  {num:11, cat:"Lightning Shapes", setups:["M U' R U2' R' U' R U' R2' r"]},
-  {num:12, cat:"Lightning Shapes", setups:["F U R U' R' F' U' F U R U' R' F'"]},
-  {num:13, cat:"Knight Move Shapes", setups:["F R U' R' U R U2 R' U' F'", "R U R' U' R' F R2 U R' U' F'"]},
-  {num:14, cat:"Knight Move Shapes", setups:["F U F' R' F R U' R' F' R", "L' U' L U L F' L2 U' L U F"]},
-  {num:15, cat:"Knight Move Shapes", setups:["R' F' R U' L' U L R' F R y2"]},
-  {num:16, cat:"Knight Move Shapes", setups:["R' U2 R U R' F U R U' R' F' R y2"]},
-  {num:17, cat:"Dot Case", setups:["F R' F' R U2' F R' F' R U' R U' R'", "F R' F' R U2 F R' F' R U' R U' R'"]},
-  {num:18, cat:"Dot Case", setups:["r' U2' R U R' U r2' U2' R' U' R U' r'"]},
-  {num:19, cat:"Dot Case", setups:["R' F' U2 F2 U R U' R' F' U2 R"]},
-  {num:20, cat:"Dot Case", setups:["r U R' U' M2' U R U' R' U' M'"]},
-  {num:21, cat:"OCLL", setups:["R U R' U R U' R' U R U2' R' y'", "R U2 R' U' R U R' U' R U' R'", "R U R' U R U' R' U R U2 R' y'", "F U R U' R' U R U' R' U R U' R' F' y'"]},
-  {num:22, cat:"OCLL", setups:["R' U2' R2' U R2' U R2' U2' R'", "R' U2 R2 U R2 U R2 U2 R'", "R U2 R2 U' R2 U' R2 U2 R"]},
-  {num:23, cat:"OCLL", setups:["R U2' R D R' U2' R D' R2'", "R U2 R D R' U2 R D' R2", "R' U2 R' D' R U2 R' D R2 y2", "R' U2 R U R' U R2 U2 R' U' R U' R'"]},
-  {num:24, cat:"OCLL", setups:["x' D R U R' D' R U' R' x y", "R2 D R' U R D' R' U' R' y'"]},
-  {num:25, cat:"OCLL", setups:["R2 D R' U2 R D' R' U2 R'", "x D' R' U R D R' U' R x'"]},
-  {num:26, cat:"OCLL", setups:["R U R' U R U2' R' y'", "R U R' U R U2 R' y'", "R' U2 R U R' U R", "L' U2 L U L' U L y2"]},
-  {num:27, cat:"OCLL", setups:["R U2' R' U' R U' R'", "R U2 R' U' R U' R'", "R' U' R U' R' U2 R y", "L' U' L U' L' U2 L y'"]},
-  {num:28, cat:"All Corners Oriented", setups:["R U R' U' M' U R U' r'"]},
-  {num:29, cat:"Awkward Shapes", setups:["R U' R' F' U F R U R' U R U' R' y'"]},
-  {num:30, cat:"Awkward Shapes", setups:["F U R U2' R' U R U2' R' U' F' y2'", "F U R U2 R' U R U2 R' U' F' y2", "F2 R U' R' U R U R2 F' R F' y2"]},
-  {num:31, cat:"P Shapes", setups:["R' F R U R' U' F' U R", "R U R' U R U' R' U' R' F R F' y"]},
-  {num:32, cat:"P Shapes", setups:["L F' L' U' L U F U' L' y2", "R B' R' U' R U B U' R'"]},
-  {num:33, cat:"T Shapes", setups:["F R' F' R U R U' R'", "F' L F L' U' L' U L y2", "R U R' F' U F R U' R'"]},
-  {num:34, cat:"C Shapes", setups:["F U R' U' R' F' R U R2' U' R' y2'", "F U R' U' R' F' R U R2 U' R' y2", "B' F R' F' R B U R U' R' y2"]},
-  {num:35, cat:"Fish Shapes", setups:["R U2' R' F R' F' R2' U2' R'", "R U2 R' F R' F' R2 U2 R'", "L' U2 L F' L F L2 U2 L y'"]},
-  {num:36, cat:"W Shapes", setups:["F' L F L' U' L' U' L U L' U L y2'", "R U2 R2 U' F' U F R2 U' R' y'", "F' L F L' U' L' U' L U L' U L y2", "F R' F' R U R' F' R U R U' R' F R U' R' y2"]},
-  {num:37, cat:"Fish Shapes", setups:["F R U' R' U R U R' F'", "R U R' U' R' F R F'"]},
-  {num:38, cat:"W Shapes", setups:["F R' F' R U R U R' U' R U' R'", "B L' B' L U L U L' U' L U' L' y2"]},
-  {num:39, cat:"Lightning Shapes", setups:["L U F' U' L' U L F L' y'", "R U2 R' U' F' U F R U' R' y"]},
-  {num:40, cat:"Lightning Shapes", setups:["R' U' F U R U' R' F' R y'", "L' U2 L U F U' F' L' U L y"]},
-  {num:41, cat:"Awkward Shapes", setups:["F U R U' R' F' R U2' R' U' R U' R' y2'", "F U R U' R' F' R U2 R' U' R U' R' y2", "F R2 D R' U R D' R2 U' F' y2"]},
-  {num:42, cat:"Awkward Shapes", setups:["F U R U' R' F' R' U2' R U R' U R", "F U R U' R' F' R' U2 R U R' U R", "R U' R' U R U' R' F R' F' R F R' F' R y'"]},
-  {num:43, cat:"P Shapes", setups:["R' F' U' F U R y'", "F' L' U' L U F y2", "B' R' U' R U B"]},
-  {num:44, cat:"P Shapes", setups:["F R U R' U' F' y2", "R B U B' U' R' y'", "L F U F' U' L' y"]},
-  {num:45, cat:"T Shapes", setups:["F U R U' R' F'", "R' U' F' U F R y'", "F' U' L' U L F y2"]},
-  {num:46, cat:"C Shapes", setups:["R' U' F R' F' R U R", "R' U2 R U R' F' U F R", "R U2 R' U' R U' R' U F U R U' R' F' y'"]},
-  {num:47, cat:"L Shapes", setups:["F' U' L' U L U' L' U L F", "R U2 R' U' R U R' U2 R' F R F' y", "R' U' F R' F' R F R' F' R U R", "R' U' F' U F U' F' U F R y"]},
-  {num:48, cat:"L Shapes", setups:["F U R U' R' U R U' R' F'", "F R' F' R U2 R U' R' U R U2 R'", "R U2 R2 U' R U' R' U2 F R F'"]},
-  {num:49, cat:"L Shapes", setups:["R' F R2 B' R2 F' R2 B R'", "R B' R' B U2 R2 F R F' R y2"]},
-  {num:50, cat:"L Shapes", setups:["R B' R2 F R2 B R2 F' R y2", "F U R U' R' F' R U R' U R U2 R' y"]},
-  {num:51, cat:"Line Shapes", setups:["F R U R' U' R U R' U' F' y2", "R' U2 R U R' F R' F' R U R y"]},
-  {num:52, cat:"Line Shapes", setups:["R' U' R U' R' U F' U F R y2", "R B U B' U R' U' R U' R'", "F R U R' y' U R' U' R U' R'"]},
-  {num:53, cat:"L Shapes", setups:["r' U2' R U R' U' R U R' U r"]},
-  {num:54, cat:"L Shapes", setups:["r U2' R' U' R U R' U' R U' r'"]},
-  {num:55, cat:"Line Shapes", setups:["F R' F' U2' R U R' U R2' U2' R'", "R' U R U' R2 F R2 U R' U' F' R y'", "R U' R' U' R U R2 F R2 U R' U' R' F' R y'", "F R' F' U2 R U R' U R2 U2 R'"]},
-  {num:56, cat:"Line Shapes", setups:["r U r' R U R' U' R U R' U' r U' r'"]},
-  {num:57, cat:"All Corners Oriented", setups:["r U R' U' M U R U' R'"]}
+  {num:1,  cat:"Dot Case",              setups:["F R' F' R U2 F R' F' R2 U2 R'"]},
+  {num:2,  cat:"Dot Case",              setups:["F R U R' U' R U R' U' R U R' U' F'"]},
+  {num:3,  cat:"Dot Case",              setups:["R' F2 R2 U2 R' F' R U2 R2 F2 R y'"]},
+  {num:4,  cat:"Dot Case",              setups:["R' F2 R2 U2 R' F R U2 R2 F2 R y","F U R U' R' F' U F R U R' U' F' y'"]},
+  {num:5,  cat:"Square Shapes",         setups:["R' F' L F' L' F2 R y2"]},
+  {num:6,  cat:"Square Shapes",         setups:["F U' R2 D R' U R D' R2 U F'"]},
+  {num:7,  cat:"Lightning Shapes",      setups:["F' L F L' U2 L' U2 L"]},
+  {num:8,  cat:"Lightning Shapes",      setups:["F R' F' R U2 R U2 R'"]},
+  {num:9,  cat:"Fish Shapes",           setups:["F U R U' R2 F' R U R U' R' y'","L' U2 L F' L F L' U L' U L y"]},
+  {num:10, cat:"Fish Shapes",           setups:["R U2 R' F R' F' R U' R U' R'","R' F R U R' F' R F U' F' y'"]},
+  {num:11, cat:"Lightning Shapes",      setups:["M U' R U2' R' U' R U' R2' r"]},
+  {num:12, cat:"Lightning Shapes",      setups:["F U R U' R' F' U' F U R U' R' F'"]},
+  {num:13, cat:"Knight Move Shapes",    setups:["F R U' R' U R U2 R' U' F'","R U R' U' R' F R2 U R' U' F'"]},
+  {num:14, cat:"Knight Move Shapes",    setups:["F U F' R' F R U' R' F' R","L' U' L U L F' L2 U' L U F"]},
+  {num:15, cat:"Knight Move Shapes",    setups:["R' F' R U' L' U L R' F R y2"]},
+  {num:16, cat:"Knight Move Shapes",    setups:["R' U2 R U R' F U R U' R' F' R y2"]},
+  {num:17, cat:"Dot Case",              setups:["F R' F' R U2 F R' F' R U' R U' R'"]},
+  {num:18, cat:"Dot Case",              setups:["r' U2' R U R' U r2' U2' R' U' R U' r'"]},
+  {num:19, cat:"Dot Case",              setups:["R' F' U2 F2 U R U' R' F' U2 R"]},
+  {num:20, cat:"Dot Case",              setups:["r U R' U' M2' U R U' R' U' M'"]},
+  {num:21, cat:"OCLL",                  setups:["R U2 R' U' R U R' U' R U' R'","F U R U' R' U R U' R' U R U' R' F' y'"]},
+  {num:22, cat:"OCLL",                  setups:["R' U2 R2 U R2 U R2 U2 R'","R U2 R2 U' R2 U' R2 U2 R"]},
+  {num:23, cat:"OCLL",                  setups:["R U2 R D R' U2 R D' R2","R' U2 R U R' U R2 U2 R' U' R U' R'"]},
+  {num:24, cat:"OCLL",                  setups:["R2 D R' U R D' R' U' R' y'"]},
+  {num:25, cat:"OCLL",                  setups:["R2 D R' U2 R D' R' U2 R'"]},
+  {num:26, cat:"OCLL",                  setups:["R U R' U R U2 R' y'","R' U2 R U R' U R","L' U2 L U L' U L y2"]},
+  {num:27, cat:"OCLL",                  setups:["R U2 R' U' R U' R'","R' U' R U' R' U2 R y","L' U' L U' L' U2 L y'"]},
+  {num:28, cat:"All Corners Oriented",  setups:["R U R' U' M' U R U' r'"]},
+  {num:29, cat:"Awkward Shapes",        setups:["R U' R' F' U F R U R' U R U' R' y'"]},
+  {num:30, cat:"Awkward Shapes",        setups:["F U R U2 R' U R U2 R' U' F' y2","F2 R U' R' U R U R2 F' R F' y2"]},
+  {num:31, cat:"P Shapes",              setups:["R' F R U R' U' F' U R","R U R' U R U' R' U' R' F R F' y"]},
+  {num:32, cat:"P Shapes",              setups:["L F' L' U' L U F U' L' y2","R B' R' U' R U B U' R'"]},
+  {num:33, cat:"T Shapes",              setups:["F R' F' R U R U' R'","F' L F L' U' L' U L y2"]},
+  {num:34, cat:"C Shapes",              setups:["F U R' U' R' F' R U R2 U' R' y2","B' F R' F' R B U R U' R' y2"]},
+  {num:35, cat:"Fish Shapes",           setups:["R U2 R' F R' F' R2 U2 R'","L' U2 L F' L F L2 U2 L y'"]},
+  {num:36, cat:"W Shapes",              setups:["R U2 R2 U' F' U F R2 U' R' y'","F R' F' R U R' F' R U R U' R' F R U' R' y2"]},
+  {num:37, cat:"Fish Shapes",           setups:["F R U' R' U R U R' F'","R U R' U' R' F R F'"]},
+  {num:38, cat:"W Shapes",              setups:["F R' F' R U R U R' U' R U' R'","B L' B' L U L U L' U' L U' L' y2"]},
+  {num:39, cat:"Lightning Shapes",      setups:["R U2 R' U' F' U F R U' R' y"]},
+  {num:40, cat:"Lightning Shapes",      setups:["R' U' F U R U' R' F' R y'","L' U2 L U F U' F' L' U L y"]},
+  {num:41, cat:"Awkward Shapes",        setups:["F U R U' R' F' R U2 R' U' R U' R' y2","F R2 D R' U R D' R2 U' F' y2"]},
+  {num:42, cat:"Awkward Shapes",        setups:["F U R U' R' F' R' U2 R U R' U R","R U' R' U R U' R' F R' F' R F R' F' R y'"]},
+  {num:43, cat:"P Shapes",              setups:["R' F' U' F U R y'","B' R' U' R U B"]},
+  {num:44, cat:"P Shapes",              setups:["F R U R' U' F' y2","R B U B' U' R' y'"]},
+  {num:45, cat:"T Shapes",              setups:["F U R U' R' F'","R' U' F' U F R y'","F' U' L' U L F y2"]},
+  {num:46, cat:"C Shapes",              setups:["R' U' F R' F' R U R","R' U2 R U R' F' U F R"]},
+  {num:47, cat:"L Shapes",              setups:["F' U' L' U L U' L' U L F","R' U' F R' F' R F R' F' R U R","R' U' F' U F U' F' U F R y"]},
+  {num:48, cat:"L Shapes",              setups:["F U R U' R' U R U' R' F'","R U2 R2 U' R U' R' U2 F R F'"]},
+  {num:49, cat:"L Shapes",              setups:["R' F R2 B' R2 F' R2 B R'","R B' R' B U2 R2 F R F' R y2"]},
+  {num:50, cat:"L Shapes",              setups:["R B' R2 F R2 B R2 F' R y2"]},
+  {num:51, cat:"Line Shapes",           setups:["F R U R' U' R U R' U' F' y2","R' U2 R U R' F R' F' R U R y"]},
+  {num:52, cat:"Line Shapes",           setups:["R' U' R U' R' U F' U F R y2","R B U B' U R' U' R U' R'"]},
+  {num:53, cat:"L Shapes",              setups:["r' U2' R U R' U' R U R' U r"]},
+  {num:54, cat:"L Shapes",              setups:["r U2' R' U' R U R' U' R U' r'"]},
+  {num:55, cat:"Line Shapes",           setups:["R' U R U' R2 F R2 U R' U' F' R y'","F R' F' U2 R U R' U R2 U2 R'"]},
+  {num:56, cat:"Line Shapes",           setups:["r U r' R U R' U' R U R' U' r U' r'"]},
+  {num:57, cat:"All Corners Oriented",  setups:["r U R' U' M U R U' R'"]}
 ];
 
 const PLL_CASES = [
-  {name:"Aa", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["x R2' D2' R U R' D2' R U' R x'", "y' x L2 D2 L' U' L D2 L' U L' x'"]},
-  {name:"Ab", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["x R' U R' D2' R U' R' D2' R2' x'", "y' x L' U L D2' L' U' L D2 L2 x'"]},
-  {name:"E", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["x' D R U R' D' R U' R' D R U' R' D' R U R' x y'", "y R' U' R' D' R U' R' D R U R' D' R U R' D R2"]},
-  {name:"F", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R' U' R U' R' U R U R2' F' R U R U' R' F U R y'", "R' U R U' R2 F' U' F U R F R' F' R2 y'"]},
-  {name:"Ga", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R' U' R D' U R2' U R' U R U' R U' R2' D", "D' R2 U R' U R' U' R U' R2 U' D R' U R"]},
-  {name:"Gb", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R2' U R' U R' U' R U' R2' D U' R' U R D'", "D R2 U' R U' R U R' U R2 D' U R' U'"]},
-  {name:"Gc", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["D' R U R' U' D R2' U' R U' R' U R' U R2'", "D R2' U' R U' R U R' U R2 D' U R U'"]},
-  {name:"Gd", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R2' U' R U' R U R' U R2' D' U R U' R' D", "D' R U R' U' D R2 U' R U' R' U R' U R2"]},
-  {name:"H", type:"EPLL", pieces:"4 edges", setups:["M2' U' M2' U2' M2' U' M2'", "R2 S2 R2 U' R2 S2 R2"]},
-  {name:"Ja", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["L' R' U2' R U R' U2' L U' R y'", "y2 R' U L' U2 R U' R' U2 R L", "R U' L' U R' U2 L U' L' U2 L y"]},
-  {name:"Jb", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R U R2' F' R U R U' R' F R U' R'", "R U R' F' R U R' U' R' F R2 U' R'", "R U2 R' U' R U2 L' U R' U' L"]},
-  {name:"Na", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["R U R' U2' R U R2' F' R U R U' R' F R U' R' U' R U' R'", "F' R U R' U' R' F R2 F U' R' U' R U F' R'"]},
-  {name:"Nb", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["R' U R U' R' F' U' F R U R' F R' F' R U' R", "R' U L' U2 R U' L R' U L' U2 R U' L"]},
-  {name:"Ra", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R U2' R D R' U R D' R' U' R' U R U R' y'", "y R U R' F' R U2 R' U2 R' F R U R U2 R'", "L U2 L' U2 L F' L' U' L U L F L2 y"]},
-  {name:"Rb", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R' U R U R' U' R' D' R U R' D R U2' R", "R' U2 R U2 R' F R U R' U' R' F' R2", "y R2 F R U R U' R' F' R U2 R' U2 R"]},
-  {name:"T", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["F R U' R' U R U R2' F' R U R U' R'", "R U R' U' R' F R2 U' R' U' R U R' F'", "R2 u R2 u' R2 F2 u' F2 u F2"]},
-  {name:"Ua", type:"EPLL", pieces:"4 edges", setups:["M2' U' M' U2' M U' M2'", "R U R' U R' U' R2 U' R' U R' U R", "R U' R U R U R U' R' U' R2 y2"]},
-  {name:"Ub", type:"EPLL", pieces:"4 edges", setups:["M2' U M' U2' M U M2'", "R' U R' U' R' U' R' U R U R2", "R2 U R U R' U' R' U' R' U R' y2"]},
-  {name:"V", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["D2' R' U R D' R2' U' R' U R' U R' D' R U2' R'", "R' U R' U' y R' F' R2 U' R' U R' F R F y'"]},
-  {name:"Y", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["F R' F' R U R U' R' F R U' R' U R U R' F'", "F R U' R' U' R U R' F' R U R' U' R' F R F'"]},
-  {name:"Z", type:"EPLL", pieces:"4 edges", setups:["M U2' M2' U2' M U' M2' U' M2'", "M' U' M2 U' M2 U' M' U2 M2", "M2 U M2 U M' U2 M2 U2 M'"]}
+  {name:"Aa", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["x R2' D2' R U R' D2' R U' R x'","y' x L2 D2 L' U' L D2 L' U L' x'"]},
+  {name:"Ab", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["x R' U R' D2' R U' R' D2' R2' x'","y' x L' U L D2' L' U' L D2 L2 x'"]},
+  {name:"E",  type:"Opp Swap",  pieces:"2 corners + 2 edges", setups:["y R' U' R' D' R U' R' D R U R' D' R U R' D R2"]},
+  {name:"F",  type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R' U' R U' R' U R U R2' F' R U R U' R' F U R y'","R' U R U' R2 F' U' F U R F R' F' R2 y'"]},
+  {name:"Ga", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R' U' R D' U R2' U R' U R U' R U' R2' D","D' R2 U R' U R' U' R U' R2 U' D R' U R"]},
+  {name:"Gb", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R2' U R' U R' U' R U' R2' D U' R' U R D'","D R2 U' R U' R U R' U R2 D' U R' U'"]},
+  {name:"Gc", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["D' R U R' U' D R2' U' R U' R' U R' U R2'","D R2' U' R U' R U R' U R2 D' U R U'"]},
+  {name:"Gd", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R2' U' R U' R U R' U R2' D' U R U' R' D","D' R U R' U' D R2 U' R U' R' U R' U R2"]},
+  {name:"H",  type:"EPLL",      pieces:"4 edges",              setups:["M2' U' M2' U2' M2' U' M2'","R2 U R2 U2 R2 U R2"]},
+  {name:"Ja", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["L' R' U2' R U R' U2' L U' R y'","y2 R' U L' U2 R U' R' U2 R L"]},
+  {name:"Jb", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R U R2' F' R U R U' R' F R U' R'","R U2 R' U' R U2 L' U R' U' L"]},
+  {name:"Na", type:"Opp Swap",  pieces:"2 corners + 2 edges", setups:["F' R U R' U' R' F R2 F U' R' U' R U F' R'"]},
+  {name:"Nb", type:"Opp Swap",  pieces:"2 corners + 2 edges", setups:["R' U L' U2 R U' L R' U L' U2 R U' L"]},
+  {name:"Ra", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R U2' R D R' U R D' R' U' R' U R U R' y'","L U2 L' U2 L F' L' U' L U L F L2 y"]},
+  {name:"Rb", type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["R' U R U R' U' R' D' R U R' D R U2' R","R' U2 R U2 R' F R U R' U' R' F' R2"]},
+  {name:"T",  type:"Adj Swap",  pieces:"2 corners + 2 edges", setups:["F R U' R' U R U R2' F' R U R U' R'","R U R' U' R' F R2 U' R' U' R U R' F'"]},
+  {name:"Ua", type:"EPLL",      pieces:"4 edges",              setups:["M2' U' M' U2' M U' M2'","R U R' U R' U' R2 U' R' U R' U R"]},
+  {name:"Ub", type:"EPLL",      pieces:"4 edges",              setups:["M2' U M' U2' M U M2'","R' U R' U' R' U' R' U R U R2"]},
+  {name:"V",  type:"Opp Swap",  pieces:"2 corners + 2 edges", setups:["D2' R' U R D' R2' U' R' U R' U R' D' R U2' R'"]},
+  {name:"Y",  type:"Opp Swap",  pieces:"2 corners + 2 edges", setups:["F R' F' R U R U' R' F R U' R' U R U R' F'","F R U' R' U' R U R' F' R U R' U' R' F R F'"]},
+  {name:"Z",  type:"EPLL",      pieces:"4 edges",              setups:["M U2' M2' U2' M U' M2' U' M2'","M' U' M2 U' M2 U' M' U2 M2"]}
 ];
 
-// F2L cases for the FR slot (from speedcubedb.com)
 const F2L_CASES = [
-  {num:1, setups:["F R' F' R", "R U R' U'", "L' U' L2 F' L' F U' y'", "L F' L' F"]},
-  {num:2, setups:["R' F R F'", "R' U' R U y", "F' U' F U", "L' U' L U y'"]},
-  {num:3, setups:["F' U F", "R' U R y", "L' U L y'", "L' U L"]},
-  {num:4, setups:["R U' R'", "F U' F' y'", "L U' L' y2", "F U' F'"]},
-  {num:5, setups:["R U R' U2' R U' R' U", "R U R' U2 R U' R' U", "F2 U' L' U L F2", "R U2 R' U R U' R' U"]},
-  {num:6, setups:["F' U' F U2' F' U F U'", "R' U' R U2 R' U R U' y", "F' U' F U2 F' U F U'", "L' U' L U2 L' U L U'"]},
-  {num:7, setups:["R U R' U2' R U2' R' U", "R U2 R' U R U2 R' U", "R U R' U2 R U2 R' U", "F R' F' R U' R U2 R' U"]},
-  {num:8, setups:["R' U' R U2 R' U2 R U' y", "L' U' L U2 L' U2 L U' y'", "L' U2 L U' L' U2 L U'", "L' U' L U2 R' U' R U' R' U2 R U"]},
-  {num:9, setups:["F' U F U' R U R' U", "R U R' F U R U' R' F'", "L' U L U L' U L U'", "F2 R U R' U' F2"]},
-  {num:10, setups:["R U' R' U' R U' R' U", "R U' R' U R U R' U2", "F U' F' U L' U' L U'", "F U2 R U' R' U F'"]},
-  {num:11, setups:["F' U F U' R U2' R' U", "F' U F U' R U2 R' U", "R U R2 U R2 U2 R' y", "F' U2 L' U2 L U' F"]},
-  {num:12, setups:["R U R' U2' R U R' U' R U R'", "R U R' U2 R U R' U' R U R'", "R' U' R2 U' R2 U2 R", "R U' R' U R U' R' U R U R' U'"]},
-  {num:13, setups:["R' U R U R' U' R U' y", "R U R' F R' F' R U' R U R'", "L' U L U L' U' L U'", "F' U' F U' R U R' U2 R U R' y"]},
-  {num:14, setups:["R U' R' U' R U R' U", "R U R' U2 R U' R' U2 R U2 R'", "R2 D R' U' R D' R2 U", "R2 U2 R' U' R U' R2 U2"]},
-  {num:15, setups:["R U R' U' R U R' U2' R U' R'", "R U R' U' R' D' R U R' D R", "R U R' U' R U R' U2 R U' R'", "R U' R' U2 F' U' F"]},
-  {num:16, setups:["F' U F U2' R U R'", "F' U F U2 R U R'", "R' U R y U2 R U R'", "R U' R' F R U R' U' F' U'"]},
-  {num:17, setups:["R U' R' U R U2' R'", "R U' R' U R U2 R'", "L U' L' U L U2 L' y2", "R U' R' U2 R U2 R' U R U' R'"]},
-  {num:18, setups:["R U R' U' R U R' F R' F' R", "R' U R U' R' U2 R y", "L' U L U' L' U2 L y'", "F' U F U' F' U2 F"]},
-  {num:19, setups:["R U R' U' R U2' R' U'", "R U R' U' R U2 R' U'", "F R' F' R2 U2 R' U'", "R U' R' U' R U R' U' R U R'"]},
-  {num:20, setups:["R U R' F R' F' R2' U R' U", "R' U' R U R' U2 R U y", "R U R' F R' F' R2 U R' U", "L' U' L U L' U2 L U y'"]},
-  {num:21, setups:["R U' R' U2' R U R'", "R U R' U' R U' R' U2", "R U' R' U2 R U R'", "R B U2 B' R'"]},
-  {num:22, setups:["F' L' U2' L F", "F' L' U2 L F", "R' U' R U R' U R U2 y", "L' U' L U L' U L U2 y'"]},
-  {num:23, setups:["R U' R' U R U' R' U2' R U' R'", "R U R' U' R U R' U R U R' U'", "R U' R' U R U' R' U2 R U' R'", "R2 U R' U R U2 R2 U2"]},
-  {num:24, setups:["R U R' F R U R' U' F'", "R' U R U' R' U R U2 R' U R y", "R U R' F R' F' R2 U' R' U", "L' U' L U L' U' L U' L' U' L U y'"]}
+  {num:1,  setups:["F R' F' R","R U R' U'","L F' L' F"]},
+  {num:2,  setups:["R' F R F'","F' U' F U","L' U' L U y'"]},
+  {num:3,  setups:["F' U F","R' U R y","L' U L"]},
+  {num:4,  setups:["R U' R'","F U' F' y'","F U' F'"]},
+  {num:5,  setups:["R U R' U2 R U' R' U","F2 U' L' U L F2","R U2 R' U R U' R' U"]},
+  {num:6,  setups:["F' U' F U2 F' U F U'","R' U' R U2 R' U R U' y","L' U' L U2 L' U L U'"]},
+  {num:7,  setups:["R U R' U2 R U2 R' U","F R' F' R U' R U2 R' U"]},
+  {num:8,  setups:["L' U' L U2 L' U2 L U' y'","L' U2 L U' L' U2 L U'"]},
+  {num:9,  setups:["F' U F U' R U R' U","L' U L U L' U L U'","F2 R U R' U' F2"]},
+  {num:10, setups:["R U' R' U' R U' R' U","F U' F' U L' U' L U'","F U2 R U' R' U F'"]},
+  {num:11, setups:["F' U F U' R U2 R' U","R U R2 U R2 U2 R' y","F' U2 L' U2 L U' F"]},
+  {num:12, setups:["R U R' U2 R U R' U' R U R'","R' U' R2 U' R2 U2 R","R U' R' U R U' R' U R U R' U'"]},
+  {num:13, setups:["R' U R U R' U' R U' y","L' U L U L' U' L U'"]},
+  {num:14, setups:["R U' R' U' R U R' U","R2 D R' U' R D' R2 U","R2 U2 R' U' R U' R2 U2"]},
+  {num:15, setups:["R U R' U' R U R' U2 R U' R'","R U R' U' R' D' R U R' D R","R U' R' U2 F' U' F"]},
+  {num:16, setups:["F' U F U2 R U R'","R' U R y U2 R U R'"]},
+  {num:17, setups:["R U' R' U R U2 R'","L U' L' U L U2 L' y2"]},
+  {num:18, setups:["R U R' U' R U R' F R' F' R","R' U R U' R' U2 R y","F' U F U' F' U2 F"]},
+  {num:19, setups:["R U R' U' R U2 R' U'","F R' F' R2 U2 R' U'","R U' R' U' R U R' U' R U R'"]},
+  {num:20, setups:["R' U' R U R' U2 R U y","L' U' L U L' U2 L U y'"]},
+  {num:21, setups:["R U' R' U2 R U R'","R U R' U' R U' R' U2","R B U2 B' R'"]},
+  {num:22, setups:["R' U' R U R' U R U2 y","L' U' L U L' U L U2 y'"]},
+  {num:23, setups:["R U' R' U R U' R' U2 R U' R'","R U R' U' R U R' U R U R' U'","R2 U R' U R U2 R2 U2"]},
+  {num:24, setups:["R U R' F R U R' U' F'","R' U R U' R' U R U2 R' U R y"]}
 ];
 
 // ══════════════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════════════
-const state = {
-  cross:  { moves: 4 },
-  xcross: { moves: 6 },
-};
-const scrambleStore = { oll: '', pll: '', f2l: '', cross: '', xcross: '' };
+const pageState = { cross:{moves:4}, xcross:{moves:6} };
+const scrambleStore = {oll:'',pll:'',f2l:'',cross:'',xcross:''};
 
 // ══════════════════════════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════════════════════════
-function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-const AUF = ['', 'U', "U'", 'U2'];
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
+const AUF=['','U',"U'","U2"];
 
-function showScramble(trainer, text) {
-  scrambleStore[trainer] = text;
-  const el = document.getElementById(trainer + '-scramble-display');
-  el.className = 'scramble-text';
-  el.textContent = text;
+function showScramble(t,txt){
+  scrambleStore[t]=txt;
+  const el=document.getElementById(t+'-scramble-display');
+  el.className='scramble-text';el.textContent=txt;
 }
-
-function setInfo(id, val) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.innerHTML = val ? val : '<span class="empty">—</span>';
+function setInfo(id,val){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.innerHTML=val?val:'<span class="empty">—</span>';
 }
-
-function copyScramble(trainer) {
-  const s = scrambleStore[trainer];
-  if (!s) return;
-  navigator.clipboard.writeText(s).catch(() => {});
-}
+function copyScramble(t){if(scrambleStore[t])navigator.clipboard.writeText(scrambleStore[t]).catch(()=>{});}
 
 // ══════════════════════════════════════════════════════════════
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════════════
-function switchTab(id, btn) {
-  document.querySelectorAll('.trainer-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
+let activeTab='oll';
+function switchTab(id,btn){
+  document.querySelectorAll('.trainer-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
   btn.classList.add('active');
+  activeTab=id;
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MOVE COUNT PILLS
+//  MOVE PILLS / SLOT
 // ══════════════════════════════════════════════════════════════
-function selectMoves(trainer, n, btn) {
-  state[trainer].moves = n;
-  btn.closest('.move-pills').querySelectorAll('.move-pill').forEach(p => p.classList.remove('active'));
+function selectMoves(t,n,btn){
+  pageState[t].moves=n;
+  btn.closest('.move-pills').querySelectorAll('.move-pill').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById(trainer + '-target-display').textContent = n;
+  document.getElementById(t+'-target-display').textContent=n;
 }
-
-// ══════════════════════════════════════════════════════════════
-//  F2L SLOT SELECTOR
-// ══════════════════════════════════════════════════════════════
-let currentF2LSlot = 'RANDOM';
-function selectSlot(slot) {
-  currentF2LSlot = slot;
-  ['FR','FL','BR','BL','RANDOM'].forEach(s => {
-    const el = document.getElementById('slot-btn-' + s.toLowerCase());
-    if (el) el.classList.toggle('active', s === slot);
+let currentF2LSlot='RANDOM';
+function selectSlot(slot){
+  currentF2LSlot=slot;
+  ['FR','FL','BR','BL','RANDOM'].forEach(s=>{
+    const el=document.getElementById('slot-btn-'+s.toLowerCase());
+    if(el)el.classList.toggle('active',s===slot);
   });
-  const titles = { FR:'Front-Right', FL:'Front-Left', BR:'Back-Right', BL:'Back-Left', RANDOM:'Random Slot' };
-  document.getElementById('f2l-slot-title').textContent = titles[slot] || slot;
+  const T={FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left',RANDOM:'Random Slot'};
+  document.getElementById('f2l-slot-title').textContent=T[slot]||slot;
+}
+const SLOT_PREFIX={FR:'',FL:"y'",BR:'y',BL:'y2'};
+
+// ══════════════════════════════════════════════════════════════
+//  TIMER SYSTEM
+// ══════════════════════════════════════════════════════════════
+const STORAGE_KEY='cuberhino_trainer_times_v1';
+const TIMED=['oll','pll','f2l'];
+
+const TS={
+  oll:{status:'idle',start:0,elapsed:0,caseId:null,iv:null},
+  pll:{status:'idle',start:0,elapsed:0,caseId:null,iv:null},
+  f2l:{status:'idle',start:0,elapsed:0,caseId:null,iv:null}
+};
+
+function loadTimes(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch{return {};}}
+function saveTimes(d){localStorage.setItem(STORAGE_KEY,JSON.stringify(d));}
+
+function recordTime(t,id,ms){
+  const d=loadTimes();
+  if(!d[t])d[t]={};
+  const k=String(id);
+  if(!d[t][k])d[t][k]=[];
+  d[t][k].push(ms);
+  saveTimes(d);
+  refreshStats(t,id);
+}
+function getCaseTimes(t,id){const d=loadTimes();return d[t]?.[String(id)]??[];}
+
+function deleteLastTime(t){
+  const ts=TS[t];if(ts.caseId===null)return;
+  const d=loadTimes();const k=String(ts.caseId);
+  if(d[t]?.[k]?.length){d[t][k].pop();saveTimes(d);refreshStats(t,ts.caseId);}
+}
+function clearCaseStats(t){
+  const ts=TS[t];if(ts.caseId===null)return;
+  const d=loadTimes();const k=String(ts.caseId);
+  if(d[t])delete d[t][k];
+  saveTimes(d);refreshStats(t,ts.caseId);
 }
 
-// F2L slot rotation algs — rotate the cube so the case is always
-// presented at a specific slot (FR is the base slot from speedcubedb)
-const SLOT_PREFIX = { FR: '', FL: "y'", BR: 'y', BL: 'y2' };
+function fmtMs(ms){
+  if(ms<60000)return(ms/1000).toFixed(2);
+  const m=Math.floor(ms/60000),s=((ms%60000)/1000).toFixed(2).padStart(5,'0');
+  return m+':'+s;
+}
 
-// ══════════════════════════════════════════════════════════════
-//  OLL GENERATOR
-// ══════════════════════════════════════════════════════════════
-function genOLL() {
-  const c = rand(OLL_CASES);
-  const setup = rand(c.setups);
-  const auf = rand(AUF);
-  const scramble = [auf, setup].filter(Boolean).join(' ');
+function setTimerEl(t,txt,cls){
+  const el=document.getElementById(t+'-timer-digits');
+  if(!el)return;el.textContent=txt;
+  el.className='timer-digits'+(cls?' state-'+cls:'');
+}
+function setTimerHint(t,txt){const el=document.getElementById(t+'-timer-hint');if(el)el.textContent=txt;}
 
-  showScramble('oll', scramble);
+function resetTimer(t){
+  const ts=TS[t];
+  if(ts.iv){clearInterval(ts.iv);ts.iv=null;}
+  ts.status='idle';ts.start=0;ts.elapsed=0;
+  setTimerEl(t,'0.00','');
+  setTimerHint(t,'Hold Space to start');
+  const d=document.getElementById(t+'-delete-btn');if(d)d.style.display='none';
+}
+function tickTimer(t){
+  if(TS[t].status!=='running')return;
+  setTimerEl(t,fmtMs(Date.now()-TS[t].start),'running');
+}
 
-  document.getElementById('oll-case-title').textContent = 'OLL ' + c.num;
-  setInfo('oll-case-num', c.num);
-  setInfo('oll-recognition', c.num <= 27 ? 'Top + front stickers' : 'Top face');
-  setInfo('oll-category', c.cat);
-  drawOLLDiagram('oll-diagram', c.num);
+let _spaceDown=false;
+document.addEventListener('keydown',e=>{
+  if(e.code!=='Space'||e.repeat||_spaceDown)return;
+  const tag=document.activeElement?.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA')return;
+  e.preventDefault();_spaceDown=true;
+  const t=activeTab;if(!TIMED.includes(t))return;
+  const ts=TS[t];
+  if(ts.status==='running'){
+    clearInterval(ts.iv);ts.iv=null;
+    ts.elapsed=Date.now()-ts.start;ts.status='done';
+    setTimerEl(t,fmtMs(ts.elapsed),'done');
+    setTimerHint(t,'Hold Space for next · New Scramble to retry');
+    if(ts.caseId!==null)recordTime(t,ts.caseId,ts.elapsed);
+    const d=document.getElementById(t+'-delete-btn');if(d)d.style.display='';
+  } else if(ts.status==='idle'||ts.status==='done'){
+    const fromDone=ts.status==='done';
+    ts.status='holding';
+    setTimerEl(t,'0.00','ready');setTimerHint(t,'Release to start');
+    if(fromDone){if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);}
+  }
+});
+document.addEventListener('keyup',e=>{
+  if(e.code!=='Space')return;_spaceDown=false;
+  const t=activeTab;if(!TIMED.includes(t))return;
+  const ts=TS[t];
+  if(ts.status==='holding'){
+    ts.status='running';ts.start=Date.now();
+    setTimerEl(t,'0.00','running');setTimerHint(t,'Press Space to stop');
+    ts.iv=setInterval(()=>tickTimer(t),30);
+  }
+});
+
+function refreshStats(t,id){
+  const el=document.getElementById(t+'-stats-body');if(!el)return;
+  const times=getCaseTimes(t,id);
+  if(!times.length){el.innerHTML='<p class="stats-empty">No times yet for this case.</p>';return;}
+  const best=Math.min(...times);
+  const last5=times.slice(-5);
+  const avg=last5.reduce((a,b)=>a+b,0)/last5.length;
+  const recent=[...times].slice(-5).reverse();
+  el.innerHTML=`<div class="stats-grid">
+    <div class="stat-chip"><div class="stat-chip-val">${times.length}</div><div class="stat-chip-key">Solves</div></div>
+    <div class="stat-chip"><div class="stat-chip-val green">${fmtMs(best)}</div><div class="stat-chip-key">Best</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${fmtMs(avg)}</div><div class="stat-chip-key">Avg(5)</div></div>
+  </div><div class="times-list">${recent.map(t=>`<span class="time-chip${t===best&&times.length>1?' best':''}">${fmtMs(t)}</span>`).join('')}</div>`;
 }
 
 // ══════════════════════════════════════════════════════════════
-//  PLL GENERATOR
+//  GENERATORS
 // ══════════════════════════════════════════════════════════════
-function genPLL() {
-  const c = rand(PLL_CASES);
-  const auf1 = rand(AUF);
-  const auf2 = rand(AUF);
-  const setup = rand(c.setups);
-  const scramble = [auf1, setup, auf2].filter(Boolean).join(' ');
-
-  showScramble('pll', scramble);
-
-  document.getElementById('pll-case-title').textContent = c.name + ' perm';
-  setInfo('pll-case-name', c.name);
-  setInfo('pll-type', c.type);
-  setInfo('pll-pieces', c.pieces);
-  drawPLLDiagram('pll-diagram', c.name);
+function genOLL(keepTimer=false){
+  const c=rand(OLL_CASES);
+  const setup=rand(c.setups);
+  const scramble=[rand(AUF),setup].filter(Boolean).join(' ');
+  showScramble('oll',scramble);
+  TS.oll.caseId=c.num;
+  document.getElementById('oll-case-title').textContent='OLL '+c.num;
+  setInfo('oll-case-num',c.num);
+  setInfo('oll-category',c.cat);
+  drawOLLDiagram('oll-diagram',setup);
+  refreshStats('oll',c.num);
+  if(!keepTimer)resetTimer('oll');
 }
 
-// ══════════════════════════════════════════════════════════════
-//  F2L GENERATOR
-//  Scramble = [slot rotation] + [F2L setup] + [AUF] + [OLL setup]
-//  This leaves: one F2L slot broken, OLL case on top
-// ══════════════════════════════════════════════════════════════
-function genF2L() {
-  const f2lCase = rand(F2L_CASES);
-  const ollCase = rand(OLL_CASES);
-  const auf     = rand(AUF);
-
-  const slot   = currentF2LSlot === 'RANDOM'
-    ? rand(['FR','FL','BR','BL'])
-    : currentF2LSlot;
-  const prefix = SLOT_PREFIX[slot] || '';
-
-  const f2lSetup = rand(f2lCase.setups);
-  const ollSetup = rand(ollCase.setups);
-  const parts = [prefix, f2lSetup, auf, ollSetup].filter(Boolean);
-  const scramble = parts.join(' ');
-
-  showScramble('f2l', scramble);
-
-  document.getElementById('f2l-badge').style.display = 'inline-flex';
-  document.getElementById('f2l-slot-name').textContent = slot;
-  setInfo('f2l-slot-title', slot === 'RANDOM' ? 'Random Slot' : {FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left'}[slot]);
+function genPLL(keepTimer=false){
+  const c=rand(PLL_CASES);
+  const setup=rand(c.setups);
+  const scramble=[rand(AUF),setup,rand(AUF)].filter(Boolean).join(' ');
+  showScramble('pll',scramble);
+  TS.pll.caseId=c.name;
+  document.getElementById('pll-case-title').textContent=c.name+' perm';
+  setInfo('pll-case-name',c.name);setInfo('pll-type',c.type);setInfo('pll-pieces',c.pieces);
+  drawPLLDiagram('pll-diagram');
+  refreshStats('pll',c.name);
+  if(!keepTimer)resetTimer('pll');
 }
 
-// ══════════════════════════════════════════════════════════════
-//  CROSS / X-CROSS  (random + filter — step 3)
-// ══════════════════════════════════════════════════════════════
-function genCross() {
-  // Placeholder — full cross solver in step 3
-  showScramble('cross', '[ Cross scramble engine — coming in step 3 ]');
-  setInfo('cross-solution-display', null);
-  document.getElementById('cross-reveal-btn').style.display = 'none';
+function genF2L(keepTimer=false){
+  const f=rand(F2L_CASES),o=rand(OLL_CASES),auf=rand(AUF);
+  const slot=currentF2LSlot==='RANDOM'?rand(['FR','FL','BR','BL']):currentF2LSlot;
+  const scramble=[SLOT_PREFIX[slot],rand(f.setups),auf,rand(o.setups)].filter(Boolean).join(' ');
+  showScramble('f2l',scramble);
+  TS.f2l.caseId=f.num;
+  document.getElementById('f2l-slot-title').textContent={FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left'}[slot]||slot;
+  refreshStats('f2l',f.num);
+  if(!keepTimer)resetTimer('f2l');
 }
 
-function genXCross() {
-  // Placeholder — full x-cross solver in step 3
-  showScramble('xcross', '[ X-Cross scramble engine — coming in step 3 ]');
-  setInfo('xcross-solution-display', null);
-  setInfo('xcross-pair-display', null);
-  document.getElementById('xcross-reveal-btn').style.display = 'none';
+function genCross(){
+  showScramble('cross','[ Cross scramble engine — coming in step 3 ]');
+  setInfo('cross-solution-display',null);
+  document.getElementById('cross-reveal-btn').style.display='none';
+}
+function genXCross(){
+  showScramble('xcross','[ X-Cross scramble engine — coming in step 3 ]');
+  setInfo('xcross-solution-display',null);setInfo('xcross-pair-display',null);
+  document.getElementById('xcross-reveal-btn').style.display='none';
+}
+function revealSolution(t){}
+
+// ══════════════════════════════════════════════════════════════
+//  CUBE SIMULATOR — full move support (wide, slice, rotation)
+// ══════════════════════════════════════════════════════════════
+function nxnSolved(c,mc){
+  const cbs=[];
+  for(const x of c)for(const y of c)for(const z of c){
+    if(Math.abs(x)!==mc&&Math.abs(y)!==mc&&Math.abs(z)!==mc)continue;
+    const st=[];
+    if(y===mc)st.push({color:'U',normal:[0,1,0]});
+    if(y===-mc)st.push({color:'D',normal:[0,-1,0]});
+    if(z===mc)st.push({color:'F',normal:[0,0,1]});
+    if(z===-mc)st.push({color:'B',normal:[0,0,-1]});
+    if(x===mc)st.push({color:'R',normal:[1,0,0]});
+    if(x===-mc)st.push({color:'L',normal:[-1,0,0]});
+    cbs.push({pos:[x,y,z],stickers:st});
+  }
+  return cbs;
+}
+function rotV(v,ax,qt){
+  let r=v.slice();const t=((qt%4)+4)%4;
+  for(let i=0;i<t;i++){
+    const[x,y,z]=r;
+    if(ax==='x')r=[x,-z,y];
+    else if(ax==='y')r=[z,y,-x];
+    else r=[-y,x,z];
+  }
+  return r;
 }
 
-function revealSolution(trainer) {}
+// Extended parser: handles UDRLFB, wide moves (r/l/u/d/f/b), slices (M/S/E), rotations (x/y/z)
+function nxnParseTok(tok,N,mc){
+  let base=tok,suf='';
+  if(/[2']$/.test(base)){suf=base.slice(-1).replace(/[''′`]/,"'");base=base.slice(0,-1);}
+  // [axis, turn-direction, layers-array]
+  const MV={
+    U:{ax:'y',t:-1,ly:[mc]},    D:{ax:'y',t:1,ly:[-mc]},
+    R:{ax:'x',t:-1,ly:[mc]},    L:{ax:'x',t:1,ly:[-mc]},
+    F:{ax:'z',t:-1,ly:[mc]},    B:{ax:'z',t:1,ly:[-mc]},
+    // wide
+    u:{ax:'y',t:-1,ly:[mc,0]},  d:{ax:'y',t:1,ly:[-mc,0]},
+    r:{ax:'x',t:-1,ly:[mc,0]},  l:{ax:'x',t:1,ly:[-mc,0]},
+    f:{ax:'z',t:-1,ly:[mc,0]},  b:{ax:'z',t:1,ly:[-mc,0]},
+    // slices
+    M:{ax:'x',t:1,ly:[0]},      E:{ax:'y',t:1,ly:[0]},  S:{ax:'z',t:-1,ly:[0]},
+    // whole-cube
+    x:{ax:'x',t:-1,ly:[mc,0,-mc]}, y:{ax:'y',t:-1,ly:[mc,0,-mc]}, z:{ax:'z',t:-1,ly:[mc,0,-mc]}
+  };
+  const fi=MV[base];
+  if(!fi)throw new Error('skip:'+tok);
+  return{ax:fi.ax,turns:fi.t,layers:fi.ly,suf};
+}
+
+function nxnApply(text,c,mc,N){
+  const cube=nxnSolved(c,mc);
+  const toks=text.trim().replace(/[''`′]/g,"'").split(/\s+/).filter(Boolean);
+  for(const tok of toks){
+    try{
+      const info=nxnParseTok(tok,N,mc);
+      const ai={x:0,y:1,z:2}[info.ax];
+      const mult=info.suf==='2'?2:info.suf==="'"?-1:1;
+      const turns=info.turns*mult;
+      for(const cb of cube){
+        if(info.layers.includes(cb.pos[ai])){
+          cb.pos=rotV(cb.pos,info.ax,turns);
+          for(const s of cb.stickers)s.normal=rotV(s.normal,info.ax,turns);
+        }
+      }
+    }catch(e){}
+  }
+  return cube;
+}
+function nxnTopFace(cube,c,mc){
+  const out=[];
+  for(const z of c)for(const x of c){
+    const cb=cube.find(cu=>cu.pos.join(',')===`${x},${mc},${z}`);
+    out.push(cb.stickers.find(s=>s.normal.join(',')===`0,1,0`).color);
+  }
+  return out;
+}
+
+function scrambleToTopFace(scramble){
+  const C3=[-1,0,1],MC=1;
+  const cube=nxnApply(scramble,C3,MC,3);
+  const colors=nxnTopFace(cube,C3,MC);
+  return colors.map(c=>c==='U');
+}
 
 // ══════════════════════════════════════════════════════════════
 //  CANVAS DIAGRAMS
 // ══════════════════════════════════════════════════════════════
-// Colors for OLL top-face sticker states: yellow = oriented, grey = not
-const OLL_MAPS = {
-  // key = OLL num, value = 9-cell array (row-major), 1=yellow 0=not
-  // Top face cells: [0,0][0,1][0,2] / [1,0][1,1][1,2] / [2,0][2,1][2,2]
-  // centre (index 4) is always yellow
-  default: [0,0,0, 0,1,0, 0,0,0]
-};
-
-function drawTopFace(canvasId, cells) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const S = 26, GAP = 3, OFF = (canvas.width - (3*S + 2*GAP)) / 2;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  cells.forEach((on, idx) => {
-    const r = Math.floor(idx / 3), c = idx % 3;
-    ctx.fillStyle = on ? '#f9d900' : '#2a2a4a';
-    ctx.beginPath();
-    ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
-    ctx.fill();
+function drawTopFace(canvasId,cells){
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const S=26,GAP=3,OFF=(canvas.width-(3*S+2*GAP))/2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  cells.forEach((on,idx)=>{
+    const r=Math.floor(idx/3),c=idx%3;
+    ctx.fillStyle=on?'#f9d900':'#1e2040';
+    ctx.beginPath();ctx.roundRect(OFF+c*(S+GAP),OFF+r*(S+GAP),S,S,4);ctx.fill();
+  });
+}
+function drawOLLDiagram(canvasId,setup){
+  try{drawTopFace(canvasId,scrambleToTopFace(setup));}
+  catch(e){drawTopFace(canvasId,Array(9).fill(false).map((_,i)=>i===4));}
+}
+function drawPLLDiagram(canvasId){drawTopFace(canvasId,Array(9).fill(true));}
+function drawCrossGoal(id){drawTopFace(id,[false,true,false,false,true,false,false,true,false]);}
+function drawXCrossGoal(id){
+  const canvas=document.getElementById(id);if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const S=26,GAP=3,OFF=(canvas.width-(3*S+2*GAP))/2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const cells=[0,1,0,0,1,2,0,1,0];
+  const colors=['#1e2040','#f9d900','#4a6ff5'];
+  cells.forEach((v,idx)=>{
+    const r=Math.floor(idx/3),c=idx%3;
+    ctx.fillStyle=colors[v];ctx.beginPath();
+    ctx.roundRect(OFF+c*(S+GAP),OFF+r*(S+GAP),S,S,4);ctx.fill();
   });
 }
 
-// Rough OLL top-face orientation maps for all 57 cases
-// 1=yellow oriented, 0=not. Centre is always 1.
-const OLL_TOP = {
-  1:[0,0,0,0,1,0,0,0,0],2:[0,0,0,0,1,0,0,0,0],3:[0,0,0,0,1,0,0,0,0],4:[0,0,0,0,1,0,0,0,0],
-  5:[0,0,1,0,1,0,0,0,0],6:[1,0,0,0,1,0,0,0,0],7:[0,0,0,0,1,1,0,0,0],8:[0,0,0,1,1,0,0,0,0],
-  9:[0,1,1,0,1,0,0,0,0],10:[0,0,0,0,1,0,1,1,0],11:[0,0,0,1,1,0,0,0,1],12:[1,0,0,0,1,1,0,0,0],
-  13:[0,0,0,0,1,1,0,1,0],14:[0,1,0,0,1,0,0,1,0],15:[0,0,0,0,1,0,0,0,1],16:[1,0,0,0,1,0,0,0,0],
-  17:[0,0,0,0,1,0,0,0,0],18:[0,0,0,0,1,0,0,0,0],19:[0,0,0,0,1,0,0,0,0],20:[0,0,0,0,1,0,0,0,0],
-  21:[1,1,1,1,1,1,1,1,1],22:[1,1,1,1,1,1,1,1,1],23:[1,1,1,1,1,1,1,1,1],24:[1,1,1,1,1,1,1,1,1],
-  25:[1,1,1,1,1,1,1,1,1],26:[1,1,1,1,1,1,1,1,1],27:[1,1,1,1,1,1,1,1,1],
-  28:[0,1,0,1,1,1,0,1,0],
-  29:[0,0,1,0,1,1,1,0,0],30:[1,0,0,1,1,0,0,0,1],31:[1,0,0,1,1,1,0,0,0],32:[0,0,1,0,1,1,0,0,1],
-  33:[0,0,1,0,1,0,1,0,0],34:[1,0,0,0,1,1,0,0,1],35:[0,1,1,0,1,0,0,1,0],36:[1,1,0,0,1,0,0,1,1],
-  37:[1,0,1,0,1,0,1,0,1],38:[0,1,1,0,1,0,0,1,0],39:[0,1,0,0,1,0,1,1,1],40:[1,1,1,0,1,0,0,1,0],
-  41:[0,0,1,0,1,0,1,0,1],42:[1,0,1,0,1,0,1,0,0],43:[0,0,0,1,1,1,0,1,0],44:[0,1,0,1,1,1,0,0,0],
-  45:[0,1,0,0,1,0,0,1,0],46:[0,0,0,1,1,1,0,0,0],47:[1,1,0,0,1,1,1,1,0],48:[0,1,1,1,1,0,0,1,1],
-  49:[0,1,1,1,1,0,1,1,0],50:[1,1,0,0,1,1,0,1,1],51:[0,1,0,1,1,1,0,1,0],52:[0,1,0,0,1,0,0,1,0],
-  53:[1,1,0,1,1,1,0,0,0],54:[0,1,1,0,1,1,0,0,1],55:[1,0,0,0,1,0,0,0,1],56:[0,0,1,0,1,0,1,0,0],
-  57:[0,1,0,1,1,1,0,1,0]
-};
-
-function drawOLLDiagram(canvasId, ollNum) {
-  const cells = OLL_TOP[ollNum] || OLL_TOP[1];
-  drawTopFace(canvasId, cells);
-}
-
-// PLL diagrams: show solved top face (all yellow) since OLL is done before PLL
-function drawPLLDiagram(canvasId) {
-  drawTopFace(canvasId, [1,1,1,1,1,1,1,1,1]);
-}
-
-function drawCrossGoal(canvasId) {
-  drawTopFace(canvasId, [0,1,0, 0,1,0, 0,1,0]);
-}
-
-function drawXCrossGoal(canvasId) {
-  // Cross + FR pair highlighted blue
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const S = 26, GAP = 3, OFF = (canvas.width - (3*S + 2*GAP)) / 2;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // 0=grey,1=yellow(cross),2=blue(xcross pair)
-  const cells = [0,1,0, 0,1,2, 0,1,0];
-  const colors = ['#2a2a4a', '#f9d900', '#4a6ff5'];
-  cells.forEach((v, idx) => {
-    const r = Math.floor(idx / 3), c = idx % 3;
-    ctx.fillStyle = colors[v];
-    ctx.beginPath();
-    ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
-    ctx.fill();
-  });
-}
-
-// ── Init ──────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  drawOLLDiagram('oll-diagram', 1);
+window.addEventListener('DOMContentLoaded',()=>{
+  drawOLLDiagram('oll-diagram',"R U2 R' U' R U' R'"); // OLL 27 default
   drawPLLDiagram('pll-diagram');
   drawCrossGoal('cross-diagram');
   drawXCrossGoal('xcross-diagram');
 });
-
 </script>
 </body>
 </html>
