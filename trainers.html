@@ -689,17 +689,153 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════
+//  ALGORITHM DATABASE  (from speedcubedb.com)
+// ══════════════════════════════════════════════════════════════
+const OLL_CASES = [
+  {num:1, cat:"Dot Case", setups:["F R' F' R U2' F R' F' R2' U2' R'", "F R' F' R U2 F R' F' R2 U2 R'", "F' L F L' U2 F' L F L2 U2 L"]},
+  {num:2, cat:"Dot Case", setups:["f U R U' R' f' F U R U' R' F'"]},
+  {num:3, cat:"Dot Case", setups:["R' F2 R2 U2 R' F' R U2 R2 F2 R y'"]},
+  {num:4, cat:"Dot Case", setups:["R' F2 R2 U2 R' F R U2 R2 F2 R y", "F U R U' R' F' U F R U R' U' F' y'"]},
+  {num:5, cat:"Square Shapes", setups:["R' F' L F' L' F2 R y2"]},
+  {num:6, cat:"Square Shapes", setups:["F U' R2 D R' U R D' R2 U F'", "x' D R U' R U R2 D' x y"]},
+  {num:7, cat:"Lightning Shapes", setups:["F' L F L' U2 L' U2 L"]},
+  {num:8, cat:"Lightning Shapes", setups:["F R' F' R U2 R U2 R'"]},
+  {num:9, cat:"Fish Shapes", setups:["F U R U' R2' F' R U R U' R' y'", "F U R U' R2 F' R U R U' R' y'", "L' U2 L F' L F L' U L' U L y"]},
+  {num:10, cat:"Fish Shapes", setups:["R U2' R' F R' F' R U' R U' R'", "R U2 R' F R' F' R U' R U' R'", "R' F R U R' F' R F U' F' y'", "F' U' L' U L2 F L' U' L' U L y2"]},
+  {num:11, cat:"Lightning Shapes", setups:["M U' R U2' R' U' R U' R2' r"]},
+  {num:12, cat:"Lightning Shapes", setups:["F U R U' R' F' U' F U R U' R' F'"]},
+  {num:13, cat:"Knight Move Shapes", setups:["F R U' R' U R U2 R' U' F'", "R U R' U' R' F R2 U R' U' F'"]},
+  {num:14, cat:"Knight Move Shapes", setups:["F U F' R' F R U' R' F' R", "L' U' L U L F' L2 U' L U F"]},
+  {num:15, cat:"Knight Move Shapes", setups:["R' F' R U' L' U L R' F R y2"]},
+  {num:16, cat:"Knight Move Shapes", setups:["R' U2 R U R' F U R U' R' F' R y2"]},
+  {num:17, cat:"Dot Case", setups:["F R' F' R U2' F R' F' R U' R U' R'", "F R' F' R U2 F R' F' R U' R U' R'"]},
+  {num:18, cat:"Dot Case", setups:["r' U2' R U R' U r2' U2' R' U' R U' r'"]},
+  {num:19, cat:"Dot Case", setups:["R' F' U2 F2 U R U' R' F' U2 R"]},
+  {num:20, cat:"Dot Case", setups:["r U R' U' M2' U R U' R' U' M'"]},
+  {num:21, cat:"OCLL", setups:["R U R' U R U' R' U R U2' R' y'", "R U2 R' U' R U R' U' R U' R'", "R U R' U R U' R' U R U2 R' y'", "F U R U' R' U R U' R' U R U' R' F' y'"]},
+  {num:22, cat:"OCLL", setups:["R' U2' R2' U R2' U R2' U2' R'", "R' U2 R2 U R2 U R2 U2 R'", "R U2 R2 U' R2 U' R2 U2 R"]},
+  {num:23, cat:"OCLL", setups:["R U2' R D R' U2' R D' R2'", "R U2 R D R' U2 R D' R2", "R' U2 R' D' R U2 R' D R2 y2", "R' U2 R U R' U R2 U2 R' U' R U' R'"]},
+  {num:24, cat:"OCLL", setups:["x' D R U R' D' R U' R' x y", "R2 D R' U R D' R' U' R' y'"]},
+  {num:25, cat:"OCLL", setups:["R2 D R' U2 R D' R' U2 R'", "x D' R' U R D R' U' R x'"]},
+  {num:26, cat:"OCLL", setups:["R U R' U R U2' R' y'", "R U R' U R U2 R' y'", "R' U2 R U R' U R", "L' U2 L U L' U L y2"]},
+  {num:27, cat:"OCLL", setups:["R U2' R' U' R U' R'", "R U2 R' U' R U' R'", "R' U' R U' R' U2 R y", "L' U' L U' L' U2 L y'"]},
+  {num:28, cat:"All Corners Oriented", setups:["R U R' U' M' U R U' r'"]},
+  {num:29, cat:"Awkward Shapes", setups:["R U' R' F' U F R U R' U R U' R' y'"]},
+  {num:30, cat:"Awkward Shapes", setups:["F U R U2' R' U R U2' R' U' F' y2'", "F U R U2 R' U R U2 R' U' F' y2", "F2 R U' R' U R U R2 F' R F' y2"]},
+  {num:31, cat:"P Shapes", setups:["R' F R U R' U' F' U R", "R U R' U R U' R' U' R' F R F' y"]},
+  {num:32, cat:"P Shapes", setups:["L F' L' U' L U F U' L' y2", "R B' R' U' R U B U' R'"]},
+  {num:33, cat:"T Shapes", setups:["F R' F' R U R U' R'", "F' L F L' U' L' U L y2", "R U R' F' U F R U' R'"]},
+  {num:34, cat:"C Shapes", setups:["F U R' U' R' F' R U R2' U' R' y2'", "F U R' U' R' F' R U R2 U' R' y2", "B' F R' F' R B U R U' R' y2"]},
+  {num:35, cat:"Fish Shapes", setups:["R U2' R' F R' F' R2' U2' R'", "R U2 R' F R' F' R2 U2 R'", "L' U2 L F' L F L2 U2 L y'"]},
+  {num:36, cat:"W Shapes", setups:["F' L F L' U' L' U' L U L' U L y2'", "R U2 R2 U' F' U F R2 U' R' y'", "F' L F L' U' L' U' L U L' U L y2", "F R' F' R U R' F' R U R U' R' F R U' R' y2"]},
+  {num:37, cat:"Fish Shapes", setups:["F R U' R' U R U R' F'", "R U R' U' R' F R F'"]},
+  {num:38, cat:"W Shapes", setups:["F R' F' R U R U R' U' R U' R'", "B L' B' L U L U L' U' L U' L' y2"]},
+  {num:39, cat:"Lightning Shapes", setups:["L U F' U' L' U L F L' y'", "R U2 R' U' F' U F R U' R' y"]},
+  {num:40, cat:"Lightning Shapes", setups:["R' U' F U R U' R' F' R y'", "L' U2 L U F U' F' L' U L y"]},
+  {num:41, cat:"Awkward Shapes", setups:["F U R U' R' F' R U2' R' U' R U' R' y2'", "F U R U' R' F' R U2 R' U' R U' R' y2", "F R2 D R' U R D' R2 U' F' y2"]},
+  {num:42, cat:"Awkward Shapes", setups:["F U R U' R' F' R' U2' R U R' U R", "F U R U' R' F' R' U2 R U R' U R", "R U' R' U R U' R' F R' F' R F R' F' R y'"]},
+  {num:43, cat:"P Shapes", setups:["R' F' U' F U R y'", "F' L' U' L U F y2", "B' R' U' R U B"]},
+  {num:44, cat:"P Shapes", setups:["F R U R' U' F' y2", "R B U B' U' R' y'", "L F U F' U' L' y"]},
+  {num:45, cat:"T Shapes", setups:["F U R U' R' F'", "R' U' F' U F R y'", "F' U' L' U L F y2"]},
+  {num:46, cat:"C Shapes", setups:["R' U' F R' F' R U R", "R' U2 R U R' F' U F R", "R U2 R' U' R U' R' U F U R U' R' F' y'"]},
+  {num:47, cat:"L Shapes", setups:["F' U' L' U L U' L' U L F", "R U2 R' U' R U R' U2 R' F R F' y", "R' U' F R' F' R F R' F' R U R", "R' U' F' U F U' F' U F R y"]},
+  {num:48, cat:"L Shapes", setups:["F U R U' R' U R U' R' F'", "F R' F' R U2 R U' R' U R U2 R'", "R U2 R2 U' R U' R' U2 F R F'"]},
+  {num:49, cat:"L Shapes", setups:["R' F R2 B' R2 F' R2 B R'", "R B' R' B U2 R2 F R F' R y2"]},
+  {num:50, cat:"L Shapes", setups:["R B' R2 F R2 B R2 F' R y2", "F U R U' R' F' R U R' U R U2 R' y"]},
+  {num:51, cat:"Line Shapes", setups:["F R U R' U' R U R' U' F' y2", "R' U2 R U R' F R' F' R U R y"]},
+  {num:52, cat:"Line Shapes", setups:["R' U' R U' R' U F' U F R y2", "R B U B' U R' U' R U' R'", "F R U R' y' U R' U' R U' R'"]},
+  {num:53, cat:"L Shapes", setups:["r' U2' R U R' U' R U R' U r"]},
+  {num:54, cat:"L Shapes", setups:["r U2' R' U' R U R' U' R U' r'"]},
+  {num:55, cat:"Line Shapes", setups:["F R' F' U2' R U R' U R2' U2' R'", "R' U R U' R2 F R2 U R' U' F' R y'", "R U' R' U' R U R2 F R2 U R' U' R' F' R y'", "F R' F' U2 R U R' U R2 U2 R'"]},
+  {num:56, cat:"Line Shapes", setups:["r U r' R U R' U' R U R' U' r U' r'"]},
+  {num:57, cat:"All Corners Oriented", setups:["r U R' U' M U R U' R'"]}
+];
+
+const PLL_CASES = [
+  {name:"Aa", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["x R2' D2' R U R' D2' R U' R x'", "y' x L2 D2 L' U' L D2 L' U L' x'"]},
+  {name:"Ab", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["x R' U R' D2' R U' R' D2' R2' x'", "y' x L' U L D2' L' U' L D2 L2 x'"]},
+  {name:"E", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["x' D R U R' D' R U' R' D R U' R' D' R U R' x y'", "y R' U' R' D' R U' R' D R U R' D' R U R' D R2"]},
+  {name:"F", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R' U' R U' R' U R U R2' F' R U R U' R' F U R y'", "R' U R U' R2 F' U' F U R F R' F' R2 y'"]},
+  {name:"Ga", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R' U' R D' U R2' U R' U R U' R U' R2' D", "D' R2 U R' U R' U' R U' R2 U' D R' U R"]},
+  {name:"Gb", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R2' U R' U R' U' R U' R2' D U' R' U R D'", "D R2 U' R U' R U R' U R2 D' U R' U'"]},
+  {name:"Gc", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["D' R U R' U' D R2' U' R U' R' U R' U R2'", "D R2' U' R U' R U R' U R2 D' U R U'"]},
+  {name:"Gd", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R2' U' R U' R U R' U R2' D' U R U' R' D", "D' R U R' U' D R2 U' R U' R' U R' U R2"]},
+  {name:"H", type:"EPLL", pieces:"4 edges", setups:["M2' U' M2' U2' M2' U' M2'", "R2 S2 R2 U' R2 S2 R2"]},
+  {name:"Ja", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["L' R' U2' R U R' U2' L U' R y'", "y2 R' U L' U2 R U' R' U2 R L", "R U' L' U R' U2 L U' L' U2 L y"]},
+  {name:"Jb", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R U R2' F' R U R U' R' F R U' R'", "R U R' F' R U R' U' R' F R2 U' R'", "R U2 R' U' R U2 L' U R' U' L"]},
+  {name:"Na", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["R U R' U2' R U R2' F' R U R U' R' F R U' R' U' R U' R'", "F' R U R' U' R' F R2 F U' R' U' R U F' R'"]},
+  {name:"Nb", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["R' U R U' R' F' U' F R U R' F R' F' R U' R", "R' U L' U2 R U' L R' U L' U2 R U' L"]},
+  {name:"Ra", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R U2' R D R' U R D' R' U' R' U R U R' y'", "y R U R' F' R U2 R' U2 R' F R U R U2 R'", "L U2 L' U2 L F' L' U' L U L F L2 y"]},
+  {name:"Rb", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["R' U R U R' U' R' D' R U R' D R U2' R", "R' U2 R U2 R' F R U R' U' R' F' R2", "y R2 F R U R U' R' F' R U2 R' U2 R"]},
+  {name:"T", type:"Adj Swap", pieces:"2 corners + 2 edges", setups:["F R U' R' U R U R2' F' R U R U' R'", "R U R' U' R' F R2 U' R' U' R U R' F'", "R2 u R2 u' R2 F2 u' F2 u F2"]},
+  {name:"Ua", type:"EPLL", pieces:"4 edges", setups:["M2' U' M' U2' M U' M2'", "R U R' U R' U' R2 U' R' U R' U R", "R U' R U R U R U' R' U' R2 y2"]},
+  {name:"Ub", type:"EPLL", pieces:"4 edges", setups:["M2' U M' U2' M U M2'", "R' U R' U' R' U' R' U R U R2", "R2 U R U R' U' R' U' R' U R' y2"]},
+  {name:"V", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["D2' R' U R D' R2' U' R' U R' U R' D' R U2' R'", "R' U R' U' y R' F' R2 U' R' U R' F R F y'"]},
+  {name:"Y", type:"Opp Swap", pieces:"2 corners + 2 edges", setups:["F R' F' R U R U' R' F R U' R' U R U R' F'", "F R U' R' U' R U R' F' R U R' U' R' F R F'"]},
+  {name:"Z", type:"EPLL", pieces:"4 edges", setups:["M U2' M2' U2' M U' M2' U' M2'", "M' U' M2 U' M2 U' M' U2 M2", "M2 U M2 U M' U2 M2 U2 M'"]}
+];
+
+// F2L cases for the FR slot (from speedcubedb.com)
+const F2L_CASES = [
+  {num:1, setups:["F R' F' R", "R U R' U'", "L' U' L2 F' L' F U' y'", "L F' L' F"]},
+  {num:2, setups:["R' F R F'", "R' U' R U y", "F' U' F U", "L' U' L U y'"]},
+  {num:3, setups:["F' U F", "R' U R y", "L' U L y'", "L' U L"]},
+  {num:4, setups:["R U' R'", "F U' F' y'", "L U' L' y2", "F U' F'"]},
+  {num:5, setups:["R U R' U2' R U' R' U", "R U R' U2 R U' R' U", "F2 U' L' U L F2", "R U2 R' U R U' R' U"]},
+  {num:6, setups:["F' U' F U2' F' U F U'", "R' U' R U2 R' U R U' y", "F' U' F U2 F' U F U'", "L' U' L U2 L' U L U'"]},
+  {num:7, setups:["R U R' U2' R U2' R' U", "R U2 R' U R U2 R' U", "R U R' U2 R U2 R' U", "F R' F' R U' R U2 R' U"]},
+  {num:8, setups:["R' U' R U2 R' U2 R U' y", "L' U' L U2 L' U2 L U' y'", "L' U2 L U' L' U2 L U'", "L' U' L U2 R' U' R U' R' U2 R U"]},
+  {num:9, setups:["F' U F U' R U R' U", "R U R' F U R U' R' F'", "L' U L U L' U L U'", "F2 R U R' U' F2"]},
+  {num:10, setups:["R U' R' U' R U' R' U", "R U' R' U R U R' U2", "F U' F' U L' U' L U'", "F U2 R U' R' U F'"]},
+  {num:11, setups:["F' U F U' R U2' R' U", "F' U F U' R U2 R' U", "R U R2 U R2 U2 R' y", "F' U2 L' U2 L U' F"]},
+  {num:12, setups:["R U R' U2' R U R' U' R U R'", "R U R' U2 R U R' U' R U R'", "R' U' R2 U' R2 U2 R", "R U' R' U R U' R' U R U R' U'"]},
+  {num:13, setups:["R' U R U R' U' R U' y", "R U R' F R' F' R U' R U R'", "L' U L U L' U' L U'", "F' U' F U' R U R' U2 R U R' y"]},
+  {num:14, setups:["R U' R' U' R U R' U", "R U R' U2 R U' R' U2 R U2 R'", "R2 D R' U' R D' R2 U", "R2 U2 R' U' R U' R2 U2"]},
+  {num:15, setups:["R U R' U' R U R' U2' R U' R'", "R U R' U' R' D' R U R' D R", "R U R' U' R U R' U2 R U' R'", "R U' R' U2 F' U' F"]},
+  {num:16, setups:["F' U F U2' R U R'", "F' U F U2 R U R'", "R' U R y U2 R U R'", "R U' R' F R U R' U' F' U'"]},
+  {num:17, setups:["R U' R' U R U2' R'", "R U' R' U R U2 R'", "L U' L' U L U2 L' y2", "R U' R' U2 R U2 R' U R U' R'"]},
+  {num:18, setups:["R U R' U' R U R' F R' F' R", "R' U R U' R' U2 R y", "L' U L U' L' U2 L y'", "F' U F U' F' U2 F"]},
+  {num:19, setups:["R U R' U' R U2' R' U'", "R U R' U' R U2 R' U'", "F R' F' R2 U2 R' U'", "R U' R' U' R U R' U' R U R'"]},
+  {num:20, setups:["R U R' F R' F' R2' U R' U", "R' U' R U R' U2 R U y", "R U R' F R' F' R2 U R' U", "L' U' L U L' U2 L U y'"]},
+  {num:21, setups:["R U' R' U2' R U R'", "R U R' U' R U' R' U2", "R U' R' U2 R U R'", "R B U2 B' R'"]},
+  {num:22, setups:["F' L' U2' L F", "F' L' U2 L F", "R' U' R U R' U R U2 y", "L' U' L U L' U L U2 y'"]},
+  {num:23, setups:["R U' R' U R U' R' U2' R U' R'", "R U R' U' R U R' U R U R' U'", "R U' R' U R U' R' U2 R U' R'", "R2 U R' U R U2 R2 U2"]},
+  {num:24, setups:["R U R' F R U R' U' F'", "R' U R U' R' U R U2 R' U R y", "R U R' F R' F' R2 U' R' U", "L' U' L U L' U' L U' L' U' L U y'"]}
+];
+
+// ══════════════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════════════
 const state = {
-  cross:  { moves: 4, scramble: '', solution: '' },
-  xcross: { moves: 6, scramble: '', solution: '', pair: '' },
-  oll:    { scramble: '', caseNum: '', caseName: '', recognition: '', category: '' },
-  pll:    { scramble: '', caseName: '', type: '', pieces: '' },
-  f2l:    { scramble: '', slot: 'RANDOM' }
+  cross:  { moves: 4 },
+  xcross: { moves: 6 },
 };
-
 const scrambleStore = { oll: '', pll: '', f2l: '', cross: '', xcross: '' };
+
+// ══════════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════════
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+const AUF = ['', 'U', "U'", 'U2'];
+
+function showScramble(trainer, text) {
+  scrambleStore[trainer] = text;
+  const el = document.getElementById(trainer + '-scramble-display');
+  el.className = 'scramble-text';
+  el.textContent = text;
+}
+
+function setInfo(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = val ? val : '<span class="empty">—</span>';
+}
+
+function copyScramble(trainer) {
+  const s = scrambleStore[trainer];
+  if (!s) return;
+  navigator.clipboard.writeText(s).catch(() => {});
+}
 
 // ══════════════════════════════════════════════════════════════
 //  TAB SWITCHING
@@ -724,171 +860,193 @@ function selectMoves(trainer, n, btn) {
 // ══════════════════════════════════════════════════════════════
 //  F2L SLOT SELECTOR
 // ══════════════════════════════════════════════════════════════
+let currentF2LSlot = 'RANDOM';
 function selectSlot(slot) {
-  state.f2l.slot = slot;
+  currentF2LSlot = slot;
   ['FR','FL','BR','BL','RANDOM'].forEach(s => {
     const el = document.getElementById('slot-btn-' + s.toLowerCase());
     if (el) el.classList.toggle('active', s === slot);
   });
-  const titles = { FR: 'Front-Right', FL: 'Front-Left', BR: 'Back-Right', BL: 'Back-Left', RANDOM: 'Random Slot' };
+  const titles = { FR:'Front-Right', FL:'Front-Left', BR:'Back-Right', BL:'Back-Left', RANDOM:'Random Slot' };
   document.getElementById('f2l-slot-title').textContent = titles[slot] || slot;
 }
 
-// ══════════════════════════════════════════════════════════════
-//  COPY
-// ══════════════════════════════════════════════════════════════
-function copyScramble(trainer) {
-  const s = scrambleStore[trainer];
-  if (!s) return;
-  navigator.clipboard.writeText(s).catch(() => {});
-}
+// F2L slot rotation algs — rotate the cube so the case is always
+// presented at a specific slot (FR is the base slot from speedcubedb)
+const SLOT_PREFIX = { FR: '', FL: "y'", BR: 'y', BL: 'y2' };
 
 // ══════════════════════════════════════════════════════════════
-//  DISPLAY HELPERS
+//  OLL GENERATOR
 // ══════════════════════════════════════════════════════════════
-function showScramble(trainer, text) {
-  scrambleStore[trainer] = text;
-  const el = document.getElementById(trainer + '-scramble-display');
-  el.className = 'scramble-text';
-  el.innerHTML = text;
-}
-
-function setInfo(id, val) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (val) {
-    el.innerHTML = val;
-  } else {
-    el.innerHTML = '<span class="empty">—</span>';
-  }
-}
-
-// ══════════════════════════════════════════════════════════════
-//  REVEAL SOLUTION
-// ══════════════════════════════════════════════════════════════
-function revealSolution(trainer) {
-  const sol = state[trainer].solution;
-  if (!sol) return;
-  document.getElementById(trainer + '-solution-display').textContent = sol;
-}
-
-// ══════════════════════════════════════════════════════════════
-//  PLACEHOLDER GENERATORS  (scramble logic — step 3)
-// ══════════════════════════════════════════════════════════════
-
 function genOLL() {
-  // TODO step 3: real OLL engine
-  showScramble('oll', 'Scramble engine coming in step 3');
-  setInfo('oll-case-title', '—');
-  setInfo('oll-case-num', null);
-  setInfo('oll-recognition', null);
-  setInfo('oll-category', null);
-  drawDiagramPlaceholder('oll-diagram');
+  const c = rand(OLL_CASES);
+  const setup = rand(c.setups);
+  const auf = rand(AUF);
+  const scramble = [auf, setup].filter(Boolean).join(' ');
+
+  showScramble('oll', scramble);
+
+  document.getElementById('oll-case-title').textContent = 'OLL ' + c.num;
+  setInfo('oll-case-num', c.num);
+  setInfo('oll-recognition', c.num <= 27 ? 'Top + front stickers' : 'Top face');
+  setInfo('oll-category', c.cat);
+  drawOLLDiagram('oll-diagram', c.num);
 }
 
+// ══════════════════════════════════════════════════════════════
+//  PLL GENERATOR
+// ══════════════════════════════════════════════════════════════
 function genPLL() {
-  // TODO step 3: real PLL engine
-  showScramble('pll', 'Scramble engine coming in step 3');
-  setInfo('pll-case-title', '—');
-  setInfo('pll-case-name', null);
-  setInfo('pll-type', null);
-  setInfo('pll-pieces', null);
-  drawDiagramPlaceholder('pll-diagram');
+  const c = rand(PLL_CASES);
+  const auf1 = rand(AUF);
+  const auf2 = rand(AUF);
+  const setup = rand(c.setups);
+  const scramble = [auf1, setup, auf2].filter(Boolean).join(' ');
+
+  showScramble('pll', scramble);
+
+  document.getElementById('pll-case-title').textContent = c.name + ' perm';
+  setInfo('pll-case-name', c.name);
+  setInfo('pll-type', c.type);
+  setInfo('pll-pieces', c.pieces);
+  drawPLLDiagram('pll-diagram', c.name);
 }
 
+// ══════════════════════════════════════════════════════════════
+//  F2L GENERATOR
+//  Scramble = [slot rotation] + [F2L setup] + [AUF] + [OLL setup]
+//  This leaves: one F2L slot broken, OLL case on top
+// ══════════════════════════════════════════════════════════════
 function genF2L() {
-  // TODO step 3: real F2L engine
-  showScramble('f2l', 'Scramble engine coming in step 3');
+  const f2lCase = rand(F2L_CASES);
+  const ollCase = rand(OLL_CASES);
+  const auf     = rand(AUF);
+
+  const slot   = currentF2LSlot === 'RANDOM'
+    ? rand(['FR','FL','BR','BL'])
+    : currentF2LSlot;
+  const prefix = SLOT_PREFIX[slot] || '';
+
+  const f2lSetup = rand(f2lCase.setups);
+  const ollSetup = rand(ollCase.setups);
+  const parts = [prefix, f2lSetup, auf, ollSetup].filter(Boolean);
+  const scramble = parts.join(' ');
+
+  showScramble('f2l', scramble);
+
+  document.getElementById('f2l-badge').style.display = 'inline-flex';
+  document.getElementById('f2l-slot-name').textContent = slot;
+  setInfo('f2l-slot-title', slot === 'RANDOM' ? 'Random Slot' : {FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left'}[slot]);
 }
 
+// ══════════════════════════════════════════════════════════════
+//  CROSS / X-CROSS  (random + filter — step 3)
+// ══════════════════════════════════════════════════════════════
 function genCross() {
-  // TODO step 3: real cross engine
-  showScramble('cross', 'Scramble engine coming in step 3');
-  state.cross.solution = '';
+  // Placeholder — full cross solver in step 3
+  showScramble('cross', '[ Cross scramble engine — coming in step 3 ]');
   setInfo('cross-solution-display', null);
   document.getElementById('cross-reveal-btn').style.display = 'none';
 }
 
 function genXCross() {
-  // TODO step 3: real x-cross engine
-  showScramble('xcross', 'Scramble engine coming in step 3');
-  state.xcross.solution = '';
+  // Placeholder — full x-cross solver in step 3
+  showScramble('xcross', '[ X-Cross scramble engine — coming in step 3 ]');
   setInfo('xcross-solution-display', null);
   setInfo('xcross-pair-display', null);
   document.getElementById('xcross-reveal-btn').style.display = 'none';
 }
 
-// ══════════════════════════════════════════════════════════════
-//  CANVAS DIAGRAM HELPERS
-// ══════════════════════════════════════════════════════════════
+function revealSolution(trainer) {}
 
-// Draw a top-face grid placeholder (3×3 squares)
-function drawDiagramPlaceholder(canvasId) {
+// ══════════════════════════════════════════════════════════════
+//  CANVAS DIAGRAMS
+// ══════════════════════════════════════════════════════════════
+// Colors for OLL top-face sticker states: yellow = oriented, grey = not
+const OLL_MAPS = {
+  // key = OLL num, value = 9-cell array (row-major), 1=yellow 0=not
+  // Top face cells: [0,0][0,1][0,2] / [1,0][1,1][1,2] / [2,0][2,1][2,2]
+  // centre (index 4) is always yellow
+  default: [0,0,0, 0,1,0, 0,0,0]
+};
+
+function drawTopFace(canvasId, cells) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const S = 26, GAP = 3, OFF = 8;
+  const S = 26, GAP = 3, OFF = (canvas.width - (3*S + 2*GAP)) / 2;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      const x = OFF + c * (S + GAP);
-      const y = OFF + r * (S + GAP);
-      ctx.fillStyle = '#1a2870';
-      ctx.beginPath();
-      ctx.roundRect(x, y, S, S, 4);
-      ctx.fill();
-    }
-  }
+  cells.forEach((on, idx) => {
+    const r = Math.floor(idx / 3), c = idx % 3;
+    ctx.fillStyle = on ? '#f9d900' : '#2a2a4a';
+    ctx.beginPath();
+    ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
+    ctx.fill();
+  });
 }
 
-// Draw white cross goal diagram on canvas
+// Rough OLL top-face orientation maps for all 57 cases
+// 1=yellow oriented, 0=not. Centre is always 1.
+const OLL_TOP = {
+  1:[0,0,0,0,1,0,0,0,0],2:[0,0,0,0,1,0,0,0,0],3:[0,0,0,0,1,0,0,0,0],4:[0,0,0,0,1,0,0,0,0],
+  5:[0,0,1,0,1,0,0,0,0],6:[1,0,0,0,1,0,0,0,0],7:[0,0,0,0,1,1,0,0,0],8:[0,0,0,1,1,0,0,0,0],
+  9:[0,1,1,0,1,0,0,0,0],10:[0,0,0,0,1,0,1,1,0],11:[0,0,0,1,1,0,0,0,1],12:[1,0,0,0,1,1,0,0,0],
+  13:[0,0,0,0,1,1,0,1,0],14:[0,1,0,0,1,0,0,1,0],15:[0,0,0,0,1,0,0,0,1],16:[1,0,0,0,1,0,0,0,0],
+  17:[0,0,0,0,1,0,0,0,0],18:[0,0,0,0,1,0,0,0,0],19:[0,0,0,0,1,0,0,0,0],20:[0,0,0,0,1,0,0,0,0],
+  21:[1,1,1,1,1,1,1,1,1],22:[1,1,1,1,1,1,1,1,1],23:[1,1,1,1,1,1,1,1,1],24:[1,1,1,1,1,1,1,1,1],
+  25:[1,1,1,1,1,1,1,1,1],26:[1,1,1,1,1,1,1,1,1],27:[1,1,1,1,1,1,1,1,1],
+  28:[0,1,0,1,1,1,0,1,0],
+  29:[0,0,1,0,1,1,1,0,0],30:[1,0,0,1,1,0,0,0,1],31:[1,0,0,1,1,1,0,0,0],32:[0,0,1,0,1,1,0,0,1],
+  33:[0,0,1,0,1,0,1,0,0],34:[1,0,0,0,1,1,0,0,1],35:[0,1,1,0,1,0,0,1,0],36:[1,1,0,0,1,0,0,1,1],
+  37:[1,0,1,0,1,0,1,0,1],38:[0,1,1,0,1,0,0,1,0],39:[0,1,0,0,1,0,1,1,1],40:[1,1,1,0,1,0,0,1,0],
+  41:[0,0,1,0,1,0,1,0,1],42:[1,0,1,0,1,0,1,0,0],43:[0,0,0,1,1,1,0,1,0],44:[0,1,0,1,1,1,0,0,0],
+  45:[0,1,0,0,1,0,0,1,0],46:[0,0,0,1,1,1,0,0,0],47:[1,1,0,0,1,1,1,1,0],48:[0,1,1,1,1,0,0,1,1],
+  49:[0,1,1,1,1,0,1,1,0],50:[1,1,0,0,1,1,0,1,1],51:[0,1,0,1,1,1,0,1,0],52:[0,1,0,0,1,0,0,1,0],
+  53:[1,1,0,1,1,1,0,0,0],54:[0,1,1,0,1,1,0,0,1],55:[1,0,0,0,1,0,0,0,1],56:[0,0,1,0,1,0,1,0,0],
+  57:[0,1,0,1,1,1,0,1,0]
+};
+
+function drawOLLDiagram(canvasId, ollNum) {
+  const cells = OLL_TOP[ollNum] || OLL_TOP[1];
+  drawTopFace(canvasId, cells);
+}
+
+// PLL diagrams: show solved top face (all yellow) since OLL is done before PLL
+function drawPLLDiagram(canvasId) {
+  drawTopFace(canvasId, [1,1,1,1,1,1,1,1,1]);
+}
+
 function drawCrossGoal(canvasId) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const S = 26, GAP = 3, OFF = 9;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // Cross = center + 4 edges white, corners grey
-  const crossCells = [[0,1],[1,0],[1,1],[1,2],[2,1]];
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      const isCross = crossCells.some(([cr,cc]) => cr===r && cc===c);
-      ctx.fillStyle = isCross ? '#ffffff' : '#1a2870';
-      ctx.beginPath();
-      ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
-      ctx.fill();
-    }
-  }
+  drawTopFace(canvasId, [0,1,0, 0,1,0, 0,1,0]);
 }
 
-// Draw x-cross goal (cross + one corner/edge filled)
 function drawXCrossGoal(canvasId) {
+  // Cross + FR pair highlighted blue
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const S = 26, GAP = 3, OFF = 9;
+  const S = 26, GAP = 3, OFF = (canvas.width - (3*S + 2*GAP)) / 2;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const crossCells  = [[0,1],[1,0],[1,1],[1,2],[2,1]];
-  const xcrossCells = [[0,1],[1,0],[1,1],[1,2],[2,1],[2,2]]; // + FR corner
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      const isX = xcrossCells.some(([cr,cc]) => cr===r && cc===c);
-      const isCross = crossCells.some(([cr,cc]) => cr===r && cc===c);
-      ctx.fillStyle = isCross ? '#ffffff' : isX ? '#4a6ff5' : '#1a2870';
-      ctx.beginPath();
-      ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
-      ctx.fill();
-    }
-  }
+  // 0=grey,1=yellow(cross),2=blue(xcross pair)
+  const cells = [0,1,0, 0,1,2, 0,1,0];
+  const colors = ['#2a2a4a', '#f9d900', '#4a6ff5'];
+  cells.forEach((v, idx) => {
+    const r = Math.floor(idx / 3), c = idx % 3;
+    ctx.fillStyle = colors[v];
+    ctx.beginPath();
+    ctx.roundRect(OFF + c*(S+GAP), OFF + r*(S+GAP), S, S, 4);
+    ctx.fill();
+  });
 }
 
-// Init diagrams on load
+// ── Init ──────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  drawDiagramPlaceholder('oll-diagram');
-  drawDiagramPlaceholder('pll-diagram');
+  drawOLLDiagram('oll-diagram', 1);
+  drawPLLDiagram('pll-diagram');
   drawCrossGoal('cross-diagram');
   drawXCrossGoal('xcross-diagram');
 });
+
 </script>
 </body>
 </html>
