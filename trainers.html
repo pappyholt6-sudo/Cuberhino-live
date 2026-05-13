@@ -723,19 +723,19 @@ document.addEventListener('keydown',e=>{
     clearInterval(ts.iv);ts.iv=null;
     ts.elapsed=Date.now()-ts.start;ts.status='done';
     setTimerEl(t,fmtMs(ts.elapsed),'done');
-    setTimerHint(t,'Hold Space for next · New Scramble to retry');
     if(ts.caseId!==null)recordTime(t,ts.caseId,ts.elapsed);
     const d=document.getElementById(t+'-delete-btn');if(d)d.style.display='';
+    // Auto-generate next scramble immediately so it's ready
+    if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);
+    setTimerHint(t,'Hold Space to start · New Scramble to retry');
     return;
   }
   // Space (held) starts the ready sequence
   if(e.code==='Space'&&!e.repeat&&!_spaceDown){
     if(ts.status==='idle'||ts.status==='done'){
       e.preventDefault();_spaceDown=true;
-      const fromDone=ts.status==='done';
       ts.status='holding';
       setTimerEl(t,'0.00','ready');setTimerHint(t,'Release to start');
-      if(fromDone){if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);}
     }
   }
 });
