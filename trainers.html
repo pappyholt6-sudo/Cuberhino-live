@@ -812,4 +812,196 @@ function renderAllTimes(t){
     const avg5=last5.reduce((a,b)=>a+b,0)/last5.length;
     return `<tr>
       <td>${c.name}<br><span style="font-size:10px;color:var(--muted);font-family:var(--font);font-weight:400">${c.cat}</span></td>
-      <td>${times.length}</td
+      <td>${times.length}</td>
+      <td class="best-val">${fmtMs(best)}</td>
+      <td>${fmtMs(avg5)}</td>
+    </tr>`;
+  }).join('');
+  body.innerHTML=`<div class="att-grid">
+    <div class="att-summary-chip"><div class="att-summary-val">${totalSolves}</div><div class="att-summary-key">Total Solves</div></div>
+    <div class="att-summary-chip"><div class="att-summary-val green">${fmtMs(overallBest)}</div><div class="att-summary-key">Best Overall</div></div>
+    <div class="att-summary-chip"><div class="att-summary-val">${fmtMs(overallAvg)}</div><div class="att-summary-key">Avg All</div></div>
+  </div>
+  <p class="att-section-label">Cases Practiced</p>
+  <table class="att-table">
+    <thead><tr><th>Case</th><th>Solves</th><th>Best</th><th>Avg(5)</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GENERATORS
+// ══════════════════════════════════════════════════════════════
+function hasWideOrSlice(s){
+  return s.split(/\s+/).some(tok=>{
+    const base=tok.replace(/[2'′`]+$/,'');
+    return /^[rludfbMSE]$/.test(base);
+  });
+}
+function cleanSetups(list){return list.filter(s=>!hasWideOrSlice(s));}
+
+function genOLL(keepTimer=false){
+  const cleanCases=OLL_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const c=rand(cleanCases);
+  const setup=rand(cleanSetups(c.setups));
+  const scramble=[rand(AUF),setup].filter(Boolean).join(' ');
+  showScramble('oll',scramble);
+  TS.oll.caseId=c.num;
+  document.getElementById('oll-case-title').textContent='OLL '+c.num;
+  setInfo('oll-case-num',c.num);
+  setInfo('oll-category',c.cat);
+  drawOLLDiagram('oll-diagram',setup);
+  refreshStats('oll',c.num);
+  if(!keepTimer)resetTimer('oll');
+}
+
+function genPLL(keepTimer=false){
+  const cleanCases=PLL_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const c=rand(cleanCases);
+  const setup=rand(cleanSetups(c.setups));
+  const scramble=[rand(AUF),setup,rand(AUF)].filter(Boolean).join(' ');
+  showScramble('pll',scramble);
+  TS.pll.caseId=c.name;
+  document.getElementById('pll-case-title').textContent=c.name+' perm';
+  setInfo('pll-case-name',c.name);setInfo('pll-type',c.type);setInfo('pll-pieces',c.pieces);
+  drawPLLDiagram('pll-diagram');
+  refreshStats('pll',c.name);
+  if(!keepTimer)resetTimer('pll');
+}
+
+function genF2L(keepTimer=false){
+  const cleanF2L=F2L_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const cleanOLL=OLL_CASES.filter(c=>c.setups.some(s=>!hasWideOrSlice(s)));
+  const f=rand(cleanF2L),o=rand(cleanOLL),auf=rand(AUF);
+  const slot=currentF2LSlot==='RANDOM'?rand(['FR','FL','BR','BL']):currentF2LSlot;
+  const scramble=[SLOT_PREFIX[slot],rand(cleanSetups(f.setups)),auf,rand(cleanSetups(o.setups))].filter(Boolean).join(' ');
+  showScramble('f2l',scramble);
+  TS.f2l.caseId=f.num;
+  document.getElementById('f2l-slot-title').textContent={FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left'}[slot]||slot;
+  refreshStats('f2l',f.num);
+  if(!keepTimer)resetTimer('f2l');
+}
+
+function genCross(){
+  showScramble('cross','[ Cross scramble engine — coming soon ]');
+  setInfo('cross-solution-display',null);
+  document.getElementById('cross-reveal-btn').style.display='none';
+}
+function genXCross(){
+  showScramble('xcross','[ X-Cross scramble engine — coming soon ]');
+  setInfo('xcross-solution-display',null);setInfo('xcross-pair-display',null);
+  document.getElementById('xcross-reveal-btn').style.display='none';
+}
+function revealSolution(t){}
+
+// ══════════════════════════════════════════════════════════════
+//  CUBE SIMULATOR — full move support (wide, slice, rotation)
+// ══════════════════════════════════════════════════════════════
+function nxnSolved(c,mc){
+  const cbs=[];
+  for(const x of c)for(const y of c)for(const z of c){
+    if(Math.abs(x)!==mc&&Math.abs(y)!==mc&&Math.abs(z)!==mc)continue;
+    const st=[];
+    if(y===mc)st.push({color:'U',normal:[0,1,0]});
+    if(y===-mc)st.push({color:'D',normal:[0,-1,0]});
+    if(z===mc)st.push({color:'F',normal:[0,0,1]});
+    if(z===-mc)st.push({color:'B',normal:[0,0,-1]});
+    if(x===mc)st.push({color:'R',normal:[1,0,0]});
+    if(x===-mc)st.push({color:'L',normal:[-1,0,0]});
+    cbs.push({pos:[x,y,z],stickers:st});
+  }
+  return cbs;
+}
+function rotV(v,ax,t){
+  const a=t*(Math.PI/2),co=Math.cos(a),si=Math.sin(a);
+  const[x,y,z]=v;
+  if(ax==='x')return[x,Math.round(co*y-si*z),Math.round(si*y+co*z)];
+  if(ax==='y')return[Math.round(co*x+si*z),y,Math.round(-si*x+co*z)];
+  return[Math.round(co*x-si*y),Math.round(si*x+co*y),z];
+}
+function nxnParseTok(tok,N,mc){
+  let base=tok,suf='';
+  if(/[2']$/.test(base)){suf=base.slice(-1).replace(/[''′`]/,"'");base=base.slice(0,-1);}
+  const MV={
+    U:{ax:'y',t:-1,ly:[mc]},   D:{ax:'y',t:1,ly:[-mc]},
+    R:{ax:'x',t:-1,ly:[mc]},   L:{ax:'x',t:1,ly:[-mc]},
+    F:{ax:'z',t:-1,ly:[mc]},   B:{ax:'z',t:1,ly:[-mc]},
+    u:{ax:'y',t:-1,ly:[mc,0]}, d:{ax:'y',t:1,ly:[-mc,0]},
+    r:{ax:'x',t:-1,ly:[mc,0]}, l:{ax:'x',t:1,ly:[-mc,0]},
+    f:{ax:'z',t:-1,ly:[mc,0]}, b:{ax:'z',t:1,ly:[-mc,0]},
+    M:{ax:'x',t:1,ly:[0]},     E:{ax:'y',t:1,ly:[0]},   S:{ax:'z',t:-1,ly:[0]},
+    x:{ax:'x',t:-1,ly:[mc,0,-mc]},y:{ax:'y',t:-1,ly:[mc,0,-mc]},z:{ax:'z',t:-1,ly:[mc,0,-mc]}
+  };
+  const fi=MV[base];
+  if(!fi)throw new Error('skip:'+tok);
+  return{ax:fi.ax,turns:fi.t,layers:fi.ly,suf};
+}
+function nxnApply(text,c,mc,N){
+  const cube=nxnSolved(c,mc);
+  const toks=text.trim().replace(/[''`′]/g,"'").split(/\s+/).filter(Boolean);
+  for(const tok of toks){
+    try{
+      const info=nxnParseTok(tok,N,mc);
+      const ai={x:0,y:1,z:2}[info.ax];
+      const mult=info.suf==='2'?2:info.suf==="'"?-1:1;
+      const turns=info.turns*mult;
+      for(const cb of cube){
+        if(info.layers.includes(cb.pos[ai])){
+          cb.pos=rotV(cb.pos,info.ax,turns);
+          for(const s of cb.stickers)s.normal=rotV(s.normal,info.ax,turns);
+        }
+      }
+    }catch(e){}
+  }
+  return cube;
+}
+function nxnTopFace(cube,c,mc){
+  const out=[];
+  for(const z of c)for(const x of c){
+    const cb=cube.find(cu=>cu.pos.join(',')===`${x},${mc},${z}`);
+    out.push(cb.stickers.find(s=>s.normal.join(',')===`0,1,0`).color);
+  }
+  return out;
+}
+function scrambleToTopFace(scramble){
+  const C3=[-1,0,1],MC=1;
+  const cube=nxnApply(scramble,C3,MC,3);
+  const colors=nxnTopFace(cube,C3,MC);
+  return colors.map(c=>c==='U');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CANVAS DIAGRAMS
+// ══════════════════════════════════════════════════════════════
+function drawTopFace(canvasId,cells){
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const S=26,GAP=3,OFF=(canvas.width-(3*S+2*GAP))/2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  cells.forEach((on,idx)=>{
+    const r=Math.floor(idx/3),cl=idx%3;
+    ctx.fillStyle=on?'#f9d900':'#1e2040';
+    ctx.beginPath();ctx.roundRect(OFF+cl*(S+GAP),OFF+r*(S+GAP),S,S,4);ctx.fill();
+  });
+}
+function drawOLLDiagram(canvasId,setup){
+  try{drawTopFace(canvasId,scrambleToTopFace(setup));}catch(e){drawTopFace(canvasId,new Array(9).fill(false));}
+}
+function drawPLLDiagram(canvasId){
+  drawTopFace(canvasId,new Array(9).fill(true));
+}
+function drawSolvedDiagram(canvasId){
+  drawTopFace(canvasId,new Array(9).fill(true));
+}
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+(function init(){
+  drawSolvedDiagram('cross-diagram');
+  drawSolvedDiagram('xcross-diagram');
+})();
+
+</script>
+</body>
+</html>
