@@ -114,8 +114,8 @@
       border:1px solid var(--line);
       background:linear-gradient(to bottom, var(--panel-2), var(--panel));
       color:var(--text);
-      border-radius:11px;
-      padding:8px 12px;
+      border-radius:999px;
+      padding:8px 16px;
       font-size:14px;
     }
 
@@ -123,7 +123,7 @@
       border:1px solid var(--line);
       background:var(--panel-2);
       color:var(--text);
-      border-radius:11px;
+      border-radius:14px;
       padding:8px 12px;
       font-size:14px;
     }
@@ -169,18 +169,21 @@
       display:grid;
       grid-template-columns:minmax(var(--sidebar-min-width), var(--sidebar-width)) 10px minmax(0,1fr);
       min-height:0;
+      padding:12px 0 12px 12px;
     }
 
     .sidebar{
       grid-column:1;
-      border-right:1px solid var(--line);
-      background:var(--panel);
+      border:1px solid var(--line);
+      background:linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
       display:flex;
       flex-direction:column;
       min-width:0;
       min-height:0;
       height:100%;
       overflow:hidden;
+      border-radius:20px;
+      box-shadow:0 8px 32px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.04);
     }
 
     .sidebar-header{
@@ -247,7 +250,7 @@
 
     .session-stat{
       border:1px solid var(--line);
-      border-radius:10px;
+      border-radius:16px;
       padding:7px 8px;
       background:linear-gradient(160deg, rgba(255,255,255,.035) 0%, rgba(255,255,255,.008) 100%);
       box-shadow:0 2px 8px rgba(0,0,0,.12);
@@ -1374,8 +1377,10 @@
       .sidebar{
         min-height:380px;
         max-height:520px;
-        border-right:none;
+        border-right:1px solid var(--line);
         border-bottom:1px solid var(--line);
+        border-radius:16px;
+        margin:0 12px 0 0;
       }
       .main{ min-height:80vh; }
       .scramble-wrap{
@@ -1428,7 +1433,7 @@
     }
 
     @media (max-width:960px){
-      .view-tab-btn{ padding:6px 8px; font-size:12px; border-radius:8px; }
+      .view-tab-btn{ padding:6px 12px; font-size:12px; border-radius:999px; }
     }
 
 
@@ -1892,8 +1897,8 @@
       border:1px solid var(--line);
       background:linear-gradient(to bottom, var(--panel-2), var(--panel));
       color:var(--muted);
-      border-radius:13px;
-      padding:8px 14px;
+      border-radius:999px;
+      padding:8px 16px;
       font-size:14px;
       font-weight:600;
       cursor:pointer;
@@ -2260,6 +2265,9 @@
       max-height:none;
       border-right:none;
       border-bottom:1px solid var(--line);
+      border-radius:0;
+      margin:0;
+      box-shadow:none;
     }
     body.mobile-ui .main{ min-height:80dvh; }
     body.mobile-ui .tool-slots{
@@ -2280,6 +2288,9 @@
         max-height:none;
         border-right:none;
         border-bottom:1px solid var(--line);
+        border-radius:0;
+        margin:0;
+        box-shadow:none;
       }
       .main{ min-height:80dvh; }
       .topbar{
