@@ -340,14 +340,7 @@
       <div class="info-card">
         <div class="info-card-head">
           <p class="info-card-label">Slot Target</p>
-          <p class="info-card-title" id="f2l-slot-title">Choose a slot below</p>
-        </div>
-        <div class="slot-grid">
-          <button class="slot-btn" id="slot-btn-fr" onclick="selectSlot('FR')"><span class="slot-btn-name">FR</span><span class="slot-btn-sub">Front-Right</span></button>
-          <button class="slot-btn" id="slot-btn-fl" onclick="selectSlot('FL')"><span class="slot-btn-name">FL</span><span class="slot-btn-sub">Front-Left</span></button>
-          <button class="slot-btn" id="slot-btn-br" onclick="selectSlot('BR')"><span class="slot-btn-name">BR</span><span class="slot-btn-sub">Back-Right</span></button>
-          <button class="slot-btn" id="slot-btn-bl" onclick="selectSlot('BL')"><span class="slot-btn-name">BL</span><span class="slot-btn-sub">Back-Left</span></button>
-          <button class="slot-random active" id="slot-btn-random" onclick="selectSlot('RANDOM')"><span class="slot-random-name">🎲 Random Slot</span></button>
+          <p class="info-card-title" id="f2l-slot-title">Random Slot</p>
         </div>
         <div class="stats-section">
           <div class="stats-section-head">
@@ -635,16 +628,23 @@ function selectMoves(t,n,btn){
   document.getElementById(t+'-target-display').textContent=n;
 }
 let currentF2LSlot='RANDOM';
-function selectSlot(slot){
-  currentF2LSlot=slot;
-  ['FR','FL','BR','BL','RANDOM'].forEach(s=>{
-    const el=document.getElementById('slot-btn-'+s.toLowerCase());
-    if(el)el.classList.toggle('active',s===slot);
-  });
-  const T={FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left',RANDOM:'Random Slot'};
-  document.getElementById('f2l-slot-title').textContent=T[slot]||slot;
+// Rotate F2L setup moves to target slot without cube rotation
+function rotateSetup(setup, slot){
+  if(!setup||slot==='FR')return setup;
+  const MAP={
+    FL:{R:'B',B:'L',L:'F',F:'R'},  // y'
+    BR:{R:'F',F:'L',L:'B',B:'R'},  // y
+    BL:{R:'L',L:'R',F:'B',B:'F'}   // y2
+  };
+  const map=MAP[slot];
+  if(!map)return setup;
+  return setup.split(' ').map(m=>{
+    if(!m)return m;
+    const face=m[0];
+    const mod=m.slice(1);
+    return (map[face]||face)+mod;
+  }).join(' ');
 }
-const SLOT_PREFIX={FR:'',FL:"y'",BR:'y',BL:'y2'};
 
 // ══════════════════════════════════════════════════════════════
 //  TIMER SYSTEM
@@ -862,10 +862,9 @@ function genPLL(keepTimer=false){
 function genF2L(keepTimer=false){
   const f=rand(F2L_CASES),o=rand(OLL_CASES),auf=rand(AUF);
   const slot=currentF2LSlot==='RANDOM'?rand(['FR','FL','BR','BL']):currentF2LSlot;
-  const scramble=[SLOT_PREFIX[slot],rand(f.setups),auf,rand(o.setups)].filter(Boolean).join(' ');
+  const scramble=[rotateSetup(rand(f.setups),slot),auf,rand(o.setups)].filter(Boolean).join(' ');
   showScramble('f2l',scramble);
   TS.f2l.caseId=f.num;
-  document.getElementById('f2l-slot-title').textContent={FR:'Front-Right',FL:'Front-Left',BR:'Back-Right',BL:'Back-Left'}[slot]||slot;
   refreshStats('f2l',f.num);
   if(!keepTimer)resetTimer('f2l');
 }
