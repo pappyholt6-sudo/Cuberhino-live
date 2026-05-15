@@ -174,8 +174,10 @@
 
     .sidebar{
       grid-column:1;
-      border:1px solid var(--line);
-      background:linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
+      border:1px solid color-mix(in srgb, var(--line) 70%, transparent);
+      background:linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 78%, transparent) 0%, color-mix(in srgb, var(--panel) 78%, transparent) 100%);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
       display:flex;
       flex-direction:column;
       min-width:0;
@@ -183,7 +185,7 @@
       height:100%;
       overflow:hidden;
       border-radius:20px;
-      box-shadow:0 8px 32px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.04);
+      box-shadow:0 8px 32px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.06);
     }
 
     .sidebar-header{
@@ -452,7 +454,7 @@
       min-height:0;
       overflow:hidden;
       position:relative;
-      padding:18px 22px 10px;
+      padding:18px 22px 0;
     }
 
     .main.hide-while-timing .top-hide{
