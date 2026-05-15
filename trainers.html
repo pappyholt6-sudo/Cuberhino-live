@@ -72,11 +72,11 @@
     .trainer-layout { display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start; }
     @media(max-width:780px){ .trainer-layout { grid-template-columns:1fr; } }
 
-    .scramble-card { background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:36px 36px 32px;position:relative;overflow:hidden; }
+    .scramble-card { background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:28px 30px 24px;position:relative;overflow:hidden;display:flex;flex-direction:column; }
     .scramble-card::before { display:none; }
-    .card-eyebrow { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px; }
-    .card-title { font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px; }
-    .card-desc { font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:28px; }
+    .card-eyebrow { display:none; }
+    .card-title { display:none; }
+    .card-desc { display:none; }
 
     .move-row { display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap; }
     .move-row-label { font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap; }
@@ -85,26 +85,27 @@
     .move-pill:hover { color:var(--text);border-color:var(--accent-light); }
     .move-pill.active { background:var(--accent);border-color:var(--accent);color:#fff; }
 
-    .scramble-box { background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:26px 24px;min-height:86px;display:flex;align-items:center;justify-content:center; }
-    .scramble-text { font-size:clamp(15px,2.6vw,21px);font-weight:700;letter-spacing:1.8px;color:var(--text);text-align:center;line-height:1.8;font-family:'Courier New',monospace;word-break:break-word; }
-    .scramble-placeholder { font-size:14px;color:var(--muted);font-weight:400;font-family:var(--font);text-align:center;letter-spacing:0; }
+    .scramble-box { background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:18px 20px;min-height:72px;display:flex;align-items:center;justify-content:center;margin-bottom:0; }
+    .scramble-text { font-size:clamp(14px,2.2vw,19px);font-weight:700;letter-spacing:1.6px;color:var(--text);text-align:center;line-height:1.8;font-family:'Courier New',monospace;word-break:break-word; }
+    .scramble-placeholder { font-size:13px;color:var(--muted);font-weight:400;font-family:var(--font);text-align:center;letter-spacing:0; }
 
     /* ── TIMER ── */
-    .timer-display { text-align:center;padding:22px 0 18px; }
-    .timer-digits { font-size:56px;font-weight:800;letter-spacing:-1px;font-family:'Courier New',monospace;color:var(--muted);line-height:1;user-select:none;transition:color .1s; }
+    .timer-display { text-align:center;padding:20px 0 8px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center; }
+    .timer-digits { font-size:72px;font-weight:800;letter-spacing:-2px;font-family:'Courier New',monospace;color:var(--muted);line-height:1;user-select:none;transition:color .1s; }
     .timer-digits.state-ready  { color:#22c55e; }
     .timer-digits.state-running { color:var(--text); }
     .timer-digits.state-done   { color:var(--accent-light); }
-    .timer-hint { font-size:12px;color:var(--muted);margin-top:9px;font-weight:500;letter-spacing:.3px; }
+    .timer-footer { display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px;min-height:24px; }
+    .timer-hint { font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.3px; }
+    .delete-time-btn { font-size:11px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:.3px;transition:color .15s;padding:2px 6px;border-radius:6px; }
+    .delete-time-btn:hover { color:#f87171; }
 
-    .controls { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .controls { display:none; /* legacy – no longer rendered */ }
     .btn-primary { background:var(--accent);color:#fff;font-weight:800;font-size:14px;padding:11px 28px;border-radius:999px;border:none;transition:opacity .15s,transform .15s; }
     .btn-primary:hover { opacity:.88;transform:translateY(-1px); }
-    .btn-primary:active { transform:translateY(0); }
     .btn-secondary { background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:11px 20px;border-radius:999px;border:1px solid var(--line);transition:color .15s,border-color .15s; }
     .btn-secondary:hover { color:var(--text);border-color:var(--accent); }
-    .btn-danger { background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:11px 20px;border-radius:999px;border:1px solid var(--line);transition:color .15s,border-color .15s; }
-    .btn-danger:hover { color:#f87171;border-color:rgba(248,113,113,.4); }
+    .btn-danger { display:none; }
 
     /* ── INFO CARD ── */
     .info-card { background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:1px solid var(--line);border-radius:20px;overflow:hidden; }
@@ -236,16 +237,14 @@
         <h2 class="card-title">OLL Trainer</h2>
         <p class="card-desc">Each scramble leaves you with exactly one OLL case to solve. F2L is complete and the cross is done.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="oll-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="oll-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="oll-timer-digits">0.00</div>
-          <p class="timer-hint" id="oll-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genOLL();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('oll')">Copy</button>
-          <button class="btn-danger" id="oll-delete-btn" onclick="deleteLastTime('oll')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="oll-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="oll-delete-btn" onclick="deleteLastTime('oll')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -294,16 +293,14 @@
         <h2 class="card-title">PLL Trainer</h2>
         <p class="card-desc">Each scramble leaves you with exactly one PLL case to solve. The top face is already fully oriented.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="pll-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="pll-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="pll-timer-digits">0.00</div>
-          <p class="timer-hint" id="pll-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genPLL();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('pll')">Copy</button>
-          <button class="btn-danger" id="pll-delete-btn" onclick="deleteLastTime('pll')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="pll-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="pll-delete-btn" onclick="deleteLastTime('pll')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -356,16 +353,14 @@
         <h2 class="card-title">F2L Trainer</h2>
         <p class="card-desc">Each scramble breaks exactly one F2L pair. The rest of the cube is solved — just fix the broken slot.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="f2l-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="f2l-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="f2l-timer-digits">0.00</div>
-          <p class="timer-hint" id="f2l-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genF2L();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('f2l')">Copy</button>
-          <button class="btn-danger" id="f2l-delete-btn" onclick="deleteLastTime('f2l')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="f2l-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="f2l-delete-btn" onclick="deleteLastTime('f2l')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -401,16 +396,14 @@
         <h2 class="card-title">Cross Trainer</h2>
         <p class="card-desc">Practice building your white cross efficiently. Generate a random scramble and plan your cross before touching the cube.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="cross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="cross-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="cross-timer-digits">0.00</div>
-          <p class="timer-hint" id="cross-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genCross();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('cross')">Copy</button>
-          <button class="btn-danger" id="cross-delete-btn" onclick="deleteLastTime('cross')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="cross-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="cross-delete-btn" onclick="deleteLastTime('cross')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -435,16 +428,14 @@
         <h2 class="card-title">X-Cross Trainer</h2>
         <p class="card-desc">Plan the white cross and first F2L pair in one look. Saves a full slot during solves and separates fast solvers from the rest.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="xcross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="xcross-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="xcross-timer-digits">0.00</div>
-          <p class="timer-hint" id="xcross-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genXCross();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('xcross')">Copy</button>
-          <button class="btn-danger" id="xcross-delete-btn" onclick="deleteLastTime('xcross')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="xcross-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="xcross-delete-btn" onclick="deleteLastTime('xcross')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -469,16 +460,14 @@
         <h2 class="card-title">Cross+1 Trainer</h2>
         <p class="card-desc">Build the cross and two F2L pairs efficiently. Practice planning further ahead to build consistency at faster speeds.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="crossplus1-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="crossplus1-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="crossplus1-timer-digits">0.00</div>
-          <p class="timer-hint" id="crossplus1-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genCrossPlus1();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('crossplus1')">Copy</button>
-          <button class="btn-danger" id="crossplus1-delete-btn" onclick="deleteLastTime('crossplus1')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="crossplus1-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="crossplus1-delete-btn" onclick="deleteLastTime('crossplus1')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -503,16 +492,14 @@
         <h2 class="card-title">Cross+2 Trainer</h2>
         <p class="card-desc">Push your lookahead to the limit. Plan the cross and three F2L pairs before touching the cube.</p>
         <div class="scramble-box">
-          <p class="scramble-placeholder" id="crossplus2-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+          <p class="scramble-placeholder" id="crossplus2-scramble-display">Loading scramble…</p>
         </div>
         <div class="timer-display">
           <div class="timer-digits" id="crossplus2-timer-digits">0.00</div>
-          <p class="timer-hint" id="crossplus2-timer-hint">Hold Space to start</p>
-        </div>
-        <div class="controls">
-          <button class="btn-primary" onclick="genCrossPlus2();this.blur()">New Scramble</button>
-          <button class="btn-secondary" onclick="copyScramble('crossplus2')">Copy</button>
-          <button class="btn-danger" id="crossplus2-delete-btn" onclick="deleteLastTime('crossplus2')" style="display:none">Delete Last</button>
+          <div class="timer-footer">
+            <p class="timer-hint" id="crossplus2-timer-hint">Hold Space to start</p>
+            <button class="delete-time-btn" id="crossplus2-delete-btn" onclick="deleteLastTime('crossplus2')" style="display:none">Delete last</button>
+          </div>
         </div>
       </div>
       <div class="info-card">
@@ -685,12 +672,14 @@ function copyScramble(t){if(scrambleStore[t])navigator.clipboard.writeText(scram
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════════════
 let activeTab='oll';
+const GEN_FN = {oll:genOLL,pll:genPLL,f2l:genF2L,cross:genCross,xcross:genXCross,crossplus1:genCrossPlus1,crossplus2:genCrossPlus2};
 function switchTab(id,btn){
   document.querySelectorAll('.trainer-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.trainer-tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
   btn.classList.add('active');
   activeTab=id;
+  if(GEN_FN[id]) GEN_FN[id]();
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -812,7 +801,7 @@ document.addEventListener('keydown',e=>{
     if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);
     else if(t==='cross')genCross(true);else if(t==='xcross')genXCross(true);
     else if(t==='crossplus1')genCrossPlus1(true);else if(t==='crossplus2')genCrossPlus2(true);
-    setTimerHint(t,'Hold Space to start · New Scramble to retry');
+    setTimerHint(t,'Hold Space to start');
     return;
   }
   // Space (held) starts the ready sequence
@@ -1111,6 +1100,8 @@ function drawSolvedDiagram(canvasId){
   drawSolvedDiagram('xcross-diagram');
   drawSolvedDiagram('crossplus1-diagram');
   drawSolvedDiagram('crossplus2-diagram');
+  // Auto-generate scramble for the default active tab (OLL)
+  genOLL();
 })();
 
 </script>
