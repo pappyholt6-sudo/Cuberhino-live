@@ -38,7 +38,24 @@
     .page-title span { background:linear-gradient(135deg,#4a6ff5 0%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
     .page-sub { font-size:16px;color:var(--muted);max-width:460px;margin:0 auto;line-height:1.65; }
 
-    .tab-bar-wrap { display:flex;justify-content:center;padding:36px 24px 44px;position:relative;z-index:1; }
+    .tab-bar-wrap { display:flex;justify-content:center;padding:14px 24px 28px;position:relative;z-index:1; }
+    .sidebar-tabs { display:flex;gap:4px;padding:12px 16px 10px;border-bottom:1px solid var(--line); }
+    .sv-tab { flex:1;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:7px 8px;border-radius:10px;border:none;background:none;color:var(--muted);cursor:pointer;font-family:inherit;transition:color .15s,background .15s; }
+    .sv-tab.active { background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent-light); }
+    .all-cases-pane { padding:12px 16px 16px;max-height:460px;overflow-y:auto; }
+    .ac-table { width:100%;border-collapse:collapse;font-size:12px; }
+    .ac-table th { font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:0 8px 6px;text-align:left;border-bottom:1px solid var(--line); }
+    .ac-table th:not(:first-child) { text-align:right; }
+    .ac-table td { padding:7px 8px;border-bottom:1px solid color-mix(in srgb,var(--line) 40%,transparent);font-family:'Courier New',monospace;font-weight:600;color:var(--muted);font-size:12px; }
+    .ac-table td:first-child { font-family:inherit;font-weight:700;color:var(--text); }
+    .ac-table td:not(:first-child) { text-align:right; }
+    .ac-table td.ac-best { color:#22c55e; }
+    .ac-table tr:last-child td { border-bottom:none; }
+    .ac-empty { font-size:12px;color:var(--muted);font-style:italic;text-align:center;padding:24px 0; }
+    .ac-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:10px; }
+    .ac-label { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent); }
+    .ac-clear-btn { font-size:11px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .15s; }
+    .ac-clear-btn:hover { color:#f87171; }
     .tab-bar { display:flex;gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px;flex-wrap:wrap;justify-content:center; }
     .tab-btn { font-size:14px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;padding:9px 22px;border-radius:999px;transition:color .15s,background .15s;letter-spacing:.3px; }
     .tab-btn:hover { color:var(--text); }
@@ -51,8 +68,8 @@
     .trainer-layout { display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start; }
     @media(max-width:780px){ .trainer-layout { grid-template-columns:1fr; } }
 
-    .scramble-card { background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:1px solid var(--line);border-radius:24px;padding:36px 36px 32px;position:relative;overflow:hidden; }
-    .scramble-card::before { content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:500px;height:180px;background:radial-gradient(ellipse,color-mix(in srgb,var(--accent) 7%,transparent),transparent 70%);pointer-events:none; }
+    .scramble-card { background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:36px 36px 32px;position:relative;overflow:hidden; }
+    .scramble-card::before { display:none; }
     .card-eyebrow { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px; }
     .card-title { font-size:20px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px; }
     .card-desc { font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:28px; }
@@ -190,20 +207,15 @@
   </div>
 </nav>
 
-<div class="page-header">
-  <div class="page-glow"></div>
-  <p class="page-eyebrow">CubeRhino Trainers</p>
-  <h1 class="page-title">Train smarter.<br><span>Solve faster.</span></h1>
-  <p class="page-sub">Targeted scrambles for every stage of the solve — OLL, PLL, F2L, White Cross, and X-Cross.</p>
-</div>
-
 <div class="tab-bar-wrap">
   <div class="tab-bar">
     <button class="tab-btn active" onclick="switchTab('oll',this)">OLL</button>
     <button class="tab-btn" onclick="switchTab('pll',this)">PLL</button>
     <button class="tab-btn" onclick="switchTab('f2l',this)">F2L</button>
-    <button class="tab-btn" onclick="switchTab('cross',this)">White Cross</button>
+    <button class="tab-btn" onclick="switchTab('cross',this)">Cross</button>
     <button class="tab-btn" onclick="switchTab('xcross',this)">X-Cross</button>
+    <button class="tab-btn" onclick="switchTab('crossplus1',this)">Cross+1</button>
+    <button class="tab-btn" onclick="switchTab('crossplus2',this)">Cross+2</button>
   </div>
 </div>
 
@@ -230,32 +242,38 @@
         </div>
       </div>
       <div class="info-card">
-        <div class="info-card-head">
-          <p class="info-card-label">Current Case</p>
-          <p class="info-card-title" id="oll-case-title">—</p>
+        <div class="sidebar-tabs">
+          <button class="sv-tab active" onclick="setSidebarView('oll','case',this)">Case</button>
+          <button class="sv-tab" onclick="setSidebarView('oll','all',this)">All Cases</button>
         </div>
-        <div class="diagram-area">
-          <canvas id="oll-diagram" width="110" height="110"></canvas>
-        </div>
-        <div class="case-info-body">
-          <div class="case-info-row">
-            <span class="case-info-key">Case #</span>
-            <span class="case-info-val accent" id="oll-case-num"><span class="empty">—</span></span>
+        <div id="oll-case-view">
+          <div class="info-card-head">
+            <p class="info-card-label">Current Case</p>
+            <p class="info-card-title" id="oll-case-title">—</p>
           </div>
-          <div class="case-info-row">
-            <span class="case-info-key">Category</span>
-            <span class="case-info-val" id="oll-category"><span class="empty">—</span></span>
+          <div class="diagram-area">
+            <canvas id="oll-diagram" width="110" height="110"></canvas>
           </div>
-        </div>
-        <div class="stats-section">
-          <div class="stats-section-head">
-            <p class="stats-section-title">Case Stats</p>
-            <div style="display:flex;gap:8px;align-items:center">
-              <button class="all-times-btn" onclick="openAllTimes('oll')">All Times</button>
-              <button class="stats-clear-btn" onclick="clearCaseStats('oll')">Clear</button>
+          <div class="case-info-body">
+            <div class="case-info-row">
+              <span class="case-info-key">Case #</span>
+              <span class="case-info-val accent" id="oll-case-num"><span class="empty">—</span></span>
+            </div>
+            <div class="case-info-row">
+              <span class="case-info-key">Category</span>
+              <span class="case-info-val" id="oll-category"><span class="empty">—</span></span>
             </div>
           </div>
-          <div id="oll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
+          <div class="stats-section">
+            <div class="stats-section-head">
+              <p class="stats-section-title">Case Stats</p>
+              <button class="stats-clear-btn" onclick="clearCaseStats('oll')">Clear</button>
+            </div>
+            <div id="oll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
+          </div>
+        </div>
+        <div id="oll-all-view" style="display:none">
+          <div class="all-cases-pane" id="oll-all-pane"></div>
         </div>
       </div>
     </div>
@@ -282,36 +300,42 @@
         </div>
       </div>
       <div class="info-card">
-        <div class="info-card-head">
-          <p class="info-card-label">Current Case</p>
-          <p class="info-card-title" id="pll-case-title">—</p>
+        <div class="sidebar-tabs">
+          <button class="sv-tab active" onclick="setSidebarView('pll','case',this)">Case</button>
+          <button class="sv-tab" onclick="setSidebarView('pll','all',this)">All Cases</button>
         </div>
-        <div class="diagram-area">
-          <canvas id="pll-diagram" width="110" height="110"></canvas>
-        </div>
-        <div class="case-info-body">
-          <div class="case-info-row">
-            <span class="case-info-key">Case</span>
-            <span class="case-info-val accent" id="pll-case-name"><span class="empty">—</span></span>
+        <div id="pll-case-view">
+          <div class="info-card-head">
+            <p class="info-card-label">Current Case</p>
+            <p class="info-card-title" id="pll-case-title">—</p>
           </div>
-          <div class="case-info-row">
-            <span class="case-info-key">Type</span>
-            <span class="case-info-val" id="pll-type"><span class="empty">—</span></span>
+          <div class="diagram-area">
+            <canvas id="pll-diagram" width="110" height="110"></canvas>
           </div>
-          <div class="case-info-row">
-            <span class="case-info-key">Pieces Moved</span>
-            <span class="case-info-val" id="pll-pieces"><span class="empty">—</span></span>
-          </div>
-        </div>
-        <div class="stats-section">
-          <div class="stats-section-head">
-            <p class="stats-section-title">Case Stats</p>
-            <div style="display:flex;gap:8px;align-items:center">
-              <button class="all-times-btn" onclick="openAllTimes('pll')">All Times</button>
-              <button class="stats-clear-btn" onclick="clearCaseStats('pll')">Clear</button>
+          <div class="case-info-body">
+            <div class="case-info-row">
+              <span class="case-info-key">Case</span>
+              <span class="case-info-val accent" id="pll-case-name"><span class="empty">—</span></span>
+            </div>
+            <div class="case-info-row">
+              <span class="case-info-key">Type</span>
+              <span class="case-info-val" id="pll-type"><span class="empty">—</span></span>
+            </div>
+            <div class="case-info-row">
+              <span class="case-info-key">Pieces Moved</span>
+              <span class="case-info-val" id="pll-pieces"><span class="empty">—</span></span>
             </div>
           </div>
-          <div id="pll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
+          <div class="stats-section">
+            <div class="stats-section-head">
+              <p class="stats-section-title">Case Stats</p>
+              <button class="stats-clear-btn" onclick="clearCaseStats('pll')">Clear</button>
+            </div>
+            <div id="pll-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
+          </div>
+        </div>
+        <div id="pll-all-view" style="display:none">
+          <div class="all-cases-pane" id="pll-all-pane"></div>
         </div>
       </div>
     </div>
@@ -338,19 +362,25 @@
         </div>
       </div>
       <div class="info-card">
-        <div class="info-card-head">
-          <p class="info-card-label">Slot Target</p>
-          <p class="info-card-title" id="f2l-slot-title">Random Slot</p>
+        <div class="sidebar-tabs">
+          <button class="sv-tab active" onclick="setSidebarView('f2l','case',this)">Case</button>
+          <button class="sv-tab" onclick="setSidebarView('f2l','all',this)">All Cases</button>
         </div>
-        <div class="stats-section">
-          <div class="stats-section-head">
-            <p class="stats-section-title">Case Stats</p>
-            <div style="display:flex;gap:8px;align-items:center">
-              <button class="all-times-btn" onclick="openAllTimes('f2l')">All Times</button>
+        <div id="f2l-case-view">
+          <div class="info-card-head">
+            <p class="info-card-label">Slot Target</p>
+            <p class="info-card-title" id="f2l-slot-title">Random Slot</p>
+          </div>
+          <div class="stats-section">
+            <div class="stats-section-head">
+              <p class="stats-section-title">Case Stats</p>
               <button class="stats-clear-btn" onclick="clearCaseStats('f2l')">Clear</button>
             </div>
+            <div id="f2l-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
           </div>
-          <div id="f2l-stats-body"><p class="stats-empty">No times yet for this case.</p></div>
+        </div>
+        <div id="f2l-all-view" style="display:none">
+          <div class="all-cases-pane" id="f2l-all-pane"></div>
         </div>
       </div>
     </div>
@@ -361,37 +391,30 @@
     <div class="trainer-layout">
       <div class="scramble-card">
         <p class="card-eyebrow">White Cross</p>
-        <h2 class="card-title">White Cross Trainer</h2>
-        <p class="card-desc">Build your cross planning speed. Pick how many moves away the cross solution is, then plan it before you touch the cube.</p>
-        <div class="move-row">
-          <span class="move-row-label">Solve in</span>
-          <div class="move-pills" id="cross-pills">
-            <button class="move-pill" onclick="selectMoves('cross',1,this)">1</button>
-            <button class="move-pill" onclick="selectMoves('cross',2,this)">2</button>
-            <button class="move-pill" onclick="selectMoves('cross',3,this)">3</button>
-            <button class="move-pill active" onclick="selectMoves('cross',4,this)">4</button>
-            <button class="move-pill" onclick="selectMoves('cross',5,this)">5</button>
-            <button class="move-pill" onclick="selectMoves('cross',6,this)">6</button>
-            <button class="move-pill" onclick="selectMoves('cross',7,this)">7</button>
-            <button class="move-pill" onclick="selectMoves('cross',8,this)">8</button>
-          </div>
-          <span class="move-row-label">moves</span>
-        </div>
+        <h2 class="card-title">Cross Trainer</h2>
+        <p class="card-desc">Practice building your white cross efficiently. Generate a random scramble and plan your cross before touching the cube.</p>
         <div class="scramble-box">
           <p class="scramble-placeholder" id="cross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-        <div class="controls" style="margin-top:22px">
-          <button class="btn-primary" onclick="genCross()">New Scramble</button>
+        <div class="timer-display">
+          <div class="timer-digits" id="cross-timer-digits">0.00</div>
+          <p class="timer-hint" id="cross-timer-hint">Hold Space to start</p>
+        </div>
+        <div class="controls">
+          <button class="btn-primary" onclick="genCross();this.blur()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('cross')">Copy</button>
-          <button class="btn-secondary" id="cross-reveal-btn" onclick="revealSolution('cross')" style="display:none">Reveal Solution</button>
+          <button class="btn-danger" id="cross-delete-btn" onclick="deleteLastTime('cross')" style="display:none">Delete Last</button>
         </div>
       </div>
       <div class="info-card">
         <div class="info-card-head"><p class="info-card-label">White Cross</p><p class="info-card-title">Goal</p></div>
         <div class="diagram-area" style="height:150px"><canvas id="cross-diagram" width="120" height="120"></canvas></div>
-        <div class="case-info-body">
-          <div class="case-info-row"><span class="case-info-key">Target moves</span><span class="case-info-val accent" id="cross-target-display">4</span></div>
-          <div class="case-info-row"><span class="case-info-key">Solution</span><span class="case-info-val" id="cross-solution-display"><span class="empty">—</span></span></div>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Session</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('cross')">Clear</button>
+          </div>
+          <div id="cross-stats-body"><p class="stats-empty">No times yet.</p></div>
         </div>
       </div>
     </div>
@@ -401,59 +424,104 @@
   <div class="trainer-panel" id="panel-xcross">
     <div class="trainer-layout">
       <div class="scramble-card">
-        <p class="card-eyebrow">White Cross + First F2L Pair</p>
+        <p class="card-eyebrow">Cross + First F2L Pair</p>
         <h2 class="card-title">X-Cross Trainer</h2>
         <p class="card-desc">Plan the white cross and first F2L pair in one look. Saves a full slot during solves and separates fast solvers from the rest.</p>
-        <div class="move-row">
-          <span class="move-row-label">Solve in</span>
-          <div class="move-pills" id="xcross-pills">
-            <button class="move-pill" onclick="selectMoves('xcross',4,this)">4</button>
-            <button class="move-pill" onclick="selectMoves('xcross',5,this)">5</button>
-            <button class="move-pill active" onclick="selectMoves('xcross',6,this)">6</button>
-            <button class="move-pill" onclick="selectMoves('xcross',7,this)">7</button>
-            <button class="move-pill" onclick="selectMoves('xcross',8,this)">8</button>
-            <button class="move-pill" onclick="selectMoves('xcross',9,this)">9</button>
-            <button class="move-pill" onclick="selectMoves('xcross',10,this)">10</button>
-          </div>
-          <span class="move-row-label">moves</span>
-        </div>
         <div class="scramble-box">
           <p class="scramble-placeholder" id="xcross-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
         </div>
-        <div class="controls" style="margin-top:22px">
-          <button class="btn-primary" onclick="genXCross()">New Scramble</button>
+        <div class="timer-display">
+          <div class="timer-digits" id="xcross-timer-digits">0.00</div>
+          <p class="timer-hint" id="xcross-timer-hint">Hold Space to start</p>
+        </div>
+        <div class="controls">
+          <button class="btn-primary" onclick="genXCross();this.blur()">New Scramble</button>
           <button class="btn-secondary" onclick="copyScramble('xcross')">Copy</button>
-          <button class="btn-secondary" id="xcross-reveal-btn" onclick="revealSolution('xcross')" style="display:none">Reveal Solution</button>
+          <button class="btn-danger" id="xcross-delete-btn" onclick="deleteLastTime('xcross')" style="display:none">Delete Last</button>
         </div>
       </div>
       <div class="info-card">
         <div class="info-card-head"><p class="info-card-label">X-Cross</p><p class="info-card-title">Goal</p></div>
         <div class="diagram-area" style="height:150px"><canvas id="xcross-diagram" width="120" height="120"></canvas></div>
-        <div class="case-info-body">
-          <div class="case-info-row"><span class="case-info-key">Target moves</span><span class="case-info-val accent" id="xcross-target-display">6</span></div>
-          <div class="case-info-row"><span class="case-info-key">F2L pair</span><span class="case-info-val" id="xcross-pair-display"><span class="empty">—</span></span></div>
-          <div class="case-info-row"><span class="case-info-key">Solution</span><span class="case-info-val" id="xcross-solution-display"><span class="empty">—</span></span></div>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Session</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('xcross')">Clear</button>
+          </div>
+          <div id="xcross-stats-body"><p class="stats-empty">No times yet.</p></div>
         </div>
       </div>
     </div>
   </div>
 
-</div>
-
-<div class="modal-overlay" id="all-times-modal" onclick="closeAllTimes(event)">
-  <div class="modal-sheet" onclick="event.stopPropagation()">
-    <div class="modal-head">
-      <div>
-        <p class="modal-head-title" id="att-modal-title">All Times</p>
-        <p class="modal-head-sub" id="att-modal-sub"></p>
+  <!-- CROSS+1 -->
+  <div class="trainer-panel" id="panel-crossplus1">
+    <div class="trainer-layout">
+      <div class="scramble-card">
+        <p class="card-eyebrow">Cross + Two F2L Pairs</p>
+        <h2 class="card-title">Cross+1 Trainer</h2>
+        <p class="card-desc">Build the cross and two F2L pairs efficiently. Practice planning further ahead to build consistency at faster speeds.</p>
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="crossplus1-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+        <div class="timer-display">
+          <div class="timer-digits" id="crossplus1-timer-digits">0.00</div>
+          <p class="timer-hint" id="crossplus1-timer-hint">Hold Space to start</p>
+        </div>
+        <div class="controls">
+          <button class="btn-primary" onclick="genCrossPlus1();this.blur()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('crossplus1')">Copy</button>
+          <button class="btn-danger" id="crossplus1-delete-btn" onclick="deleteLastTime('crossplus1')" style="display:none">Delete Last</button>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <button class="modal-clear-all" onclick="clearAllTrainerStats()">Clear All</button>
-        <button class="modal-close" onclick="closeAllTimes()">&#215;</button>
+      <div class="info-card">
+        <div class="info-card-head"><p class="info-card-label">Cross+1</p><p class="info-card-title">Goal</p></div>
+        <div class="diagram-area" style="height:150px"><canvas id="crossplus1-diagram" width="120" height="120"></canvas></div>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Session</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('crossplus1')">Clear</button>
+          </div>
+          <div id="crossplus1-stats-body"><p class="stats-empty">No times yet.</p></div>
+        </div>
       </div>
     </div>
-    <div class="modal-body" id="att-modal-body"></div>
   </div>
+
+  <!-- CROSS+2 -->
+  <div class="trainer-panel" id="panel-crossplus2">
+    <div class="trainer-layout">
+      <div class="scramble-card">
+        <p class="card-eyebrow">Cross + Three F2L Pairs</p>
+        <h2 class="card-title">Cross+2 Trainer</h2>
+        <p class="card-desc">Push your lookahead to the limit. Plan the cross and three F2L pairs before touching the cube.</p>
+        <div class="scramble-box">
+          <p class="scramble-placeholder" id="crossplus2-scramble-display">Hit <strong>New Scramble</strong> to begin.</p>
+        </div>
+        <div class="timer-display">
+          <div class="timer-digits" id="crossplus2-timer-digits">0.00</div>
+          <p class="timer-hint" id="crossplus2-timer-hint">Hold Space to start</p>
+        </div>
+        <div class="controls">
+          <button class="btn-primary" onclick="genCrossPlus2();this.blur()">New Scramble</button>
+          <button class="btn-secondary" onclick="copyScramble('crossplus2')">Copy</button>
+          <button class="btn-danger" id="crossplus2-delete-btn" onclick="deleteLastTime('crossplus2')" style="display:none">Delete Last</button>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-head"><p class="info-card-label">Cross+2</p><p class="info-card-title">Goal</p></div>
+        <div class="diagram-area" style="height:150px"><canvas id="crossplus2-diagram" width="120" height="120"></canvas></div>
+        <div class="stats-section">
+          <div class="stats-section-head">
+            <p class="stats-section-title">Session</p>
+            <button class="stats-clear-btn" onclick="clearCaseStats('crossplus2')">Clear</button>
+          </div>
+          <div id="crossplus2-stats-body"><p class="stats-empty">No times yet.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <footer>
@@ -585,8 +653,8 @@ const F2L_CASES = [
 // ══════════════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════════════
-const pageState = { cross:{moves:4}, xcross:{moves:6} };
-const scrambleStore = {oll:'',pll:'',f2l:'',cross:'',xcross:''};
+const pageState = { cross:{}, xcross:{}, crossplus1:{}, crossplus2:{} };
+const scrambleStore = {oll:'',pll:'',f2l:'',cross:'',xcross:'',crossplus1:'',crossplus2:''};
 
 // ══════════════════════════════════════════════════════════════
 //  HELPERS
@@ -650,12 +718,17 @@ function rotateSetup(setup, slot){
 //  TIMER SYSTEM
 // ══════════════════════════════════════════════════════════════
 const STORAGE_KEY='cuberhino_trainer_times_v1';
-const TIMED=['oll','pll','f2l'];
+const TIMED=['oll','pll','f2l','cross','xcross','crossplus1','crossplus2'];
+const CROSS_TRAINERS=['cross','xcross','crossplus1','crossplus2'];
 
 const TS={
   oll:{status:'idle',start:0,elapsed:0,caseId:null,iv:null},
   pll:{status:'idle',start:0,elapsed:0,caseId:null,iv:null},
-  f2l:{status:'idle',start:0,elapsed:0,caseId:null,iv:null}
+  f2l:{status:'idle',start:0,elapsed:0,caseId:null,iv:null},
+  cross:{status:'idle',start:0,elapsed:0,caseId:'main',iv:null},
+  xcross:{status:'idle',start:0,elapsed:0,caseId:'main',iv:null},
+  crossplus1:{status:'idle',start:0,elapsed:0,caseId:'main',iv:null},
+  crossplus2:{status:'idle',start:0,elapsed:0,caseId:'main',iv:null}
 };
 
 function loadTimes(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch{return {};}}
@@ -678,10 +751,13 @@ function deleteLastTime(t){
   if(d[t]?.[k]?.length){d[t][k].pop();saveTimes(d);refreshStats(t,ts.caseId);}
 }
 function clearCaseStats(t){
-  const ts=TS[t];if(ts.caseId===null)return;
-  const d=loadTimes();const k=String(ts.caseId);
+  const ts=TS[t];if(ts.caseId===null&&!CROSS_TRAINERS.includes(t))return;
+  const k=CROSS_TRAINERS.includes(t)?'main':String(ts.caseId);
+  const d=loadTimes();
   if(d[t])delete d[t][k];
-  saveTimes(d);refreshStats(t,ts.caseId);
+  saveTimes(d);
+  const id=CROSS_TRAINERS.includes(t)?'main':ts.caseId;
+  refreshStats(t,id);
 }
 
 function fmtMs(ms){
@@ -727,6 +803,8 @@ document.addEventListener('keydown',e=>{
     const d=document.getElementById(t+'-delete-btn');if(d)d.style.display='';
     // Auto-generate next scramble immediately so it's ready
     if(t==='oll')genOLL(true);else if(t==='pll')genPLL(true);else if(t==='f2l')genF2L(true);
+    else if(t==='cross')genCross(true);else if(t==='xcross')genXCross(true);
+    else if(t==='crossplus1')genCrossPlus1(true);else if(t==='crossplus2')genCrossPlus2(true);
     setTimerHint(t,'Hold Space to start · New Scramble to retry');
     return;
   }
@@ -753,80 +831,85 @@ document.addEventListener('keyup',e=>{
 function refreshStats(t,id){
   const el=document.getElementById(t+'-stats-body');if(!el)return;
   const times=getCaseTimes(t,id);
-  if(!times.length){el.innerHTML='<p class="stats-empty">No times yet for this case.</p>';return;}
+  const isCross=CROSS_TRAINERS.includes(t);
+  if(!times.length){el.innerHTML=`<p class="stats-empty">No times yet${isCross?'.':' for this case.'}</p>`;return;}
   const best=Math.min(...times);
-  const last5=times.slice(-5);
-  const avg=last5.reduce((a,b)=>a+b,0)/last5.length;
-  const recent=[...times].slice(-5).reverse();
-  el.innerHTML=`<div class="stats-grid">
-    <div class="stat-chip"><div class="stat-chip-val">${times.length}</div><div class="stat-chip-key">Solves</div></div>
-    <div class="stat-chip"><div class="stat-chip-val green">${fmtMs(best)}</div><div class="stat-chip-key">Best</div></div>
-    <div class="stat-chip"><div class="stat-chip-val">${fmtMs(avg)}</div><div class="stat-chip-key">Avg(5)</div></div>
-  </div><div class="times-list">${recent.map(t=>`<span class="time-chip${t===best&&times.length>1?' best':''}">${fmtMs(t)}</span>`).join('')}</div>`;
+  const n=Math.min(times.length,5);
+  const lastN=times.slice(-n);
+  const avg=lastN.reduce((a,b)=>a+b,0)/lastN.length;
+  const ao12=times.length>=12?times.slice(-12).reduce((a,b)=>a+b,0)/12:null;
+  const showCount=isCross?10:5;
+  const recent=[...times].slice(-showCount).reverse();
+  const statChips=[
+    `<div class="stat-chip"><div class="stat-chip-val">${times.length}</div><div class="stat-chip-key">Solves</div></div>`,
+    `<div class="stat-chip"><div class="stat-chip-val green">${fmtMs(best)}</div><div class="stat-chip-key">Best</div></div>`,
+    `<div class="stat-chip"><div class="stat-chip-val">${fmtMs(avg)}</div><div class="stat-chip-key">Ao${n}</div></div>`,
+  ];
+  if(ao12)statChips.push(`<div class="stat-chip"><div class="stat-chip-val">${fmtMs(ao12)}</div><div class="stat-chip-key">Ao12</div></div>`);
+  el.innerHTML=`<div class="stats-grid" style="${ao12?'grid-template-columns:1fr 1fr':''}">
+    ${statChips.join('')}
+  </div><div class="times-list">${recent.map(v=>`<span class="time-chip${v===best&&times.length>1?' best':''}">${fmtMs(v)}</span>`).join('')}</div>`;
 }
 
 // ══════════════════════════════════════════════════════════════
-//  ALL TIMES MODAL
+//  SIDEBAR VIEW TOGGLE
 // ══════════════════════════════════════════════════════════════
-let _attTrainer=null;
-function openAllTimes(t){
-  _attTrainer=t;
-  const labels={oll:'OLL Trainer',pll:'PLL Trainer',f2l:'F2L Trainer'};
-  document.getElementById('att-modal-title').textContent=labels[t]||t.toUpperCase()+' Trainer';
-  renderAllTimes(t);
-  document.getElementById('all-times-modal').classList.add('open');
-  document.body.style.overflow='hidden';
+function setSidebarView(t,view,btn){
+  const caseView=document.getElementById(t+'-case-view');
+  const allView=document.getElementById(t+'-all-view');
+  btn.closest('.sidebar-tabs').querySelectorAll('.sv-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(view==='case'){
+    if(caseView)caseView.style.display='';
+    if(allView)allView.style.display='none';
+  } else {
+    if(caseView)caseView.style.display='none';
+    if(allView)allView.style.display='';
+    renderAllCasesView(t);
+  }
 }
-function closeAllTimes(e){
-  if(e&&e.target!==document.getElementById('all-times-modal'))return;
-  document.getElementById('all-times-modal').classList.remove('open');
-  document.body.style.overflow='';
-  _attTrainer=null;
-}
-function clearAllTrainerStats(){
-  if(!_attTrainer)return;
-  if(!confirm('Clear ALL '+_attTrainer.toUpperCase()+' times? This cannot be undone.'))return;
-  const d=loadTimes();delete d[_attTrainer];saveTimes(d);
-  renderAllTimes(_attTrainer);
-  const ts=TS[_attTrainer];if(ts&&ts.caseId!==null)refreshStats(_attTrainer,ts.caseId);
-}
-function renderAllTimes(t){
-  const body=document.getElementById('att-modal-body');
+
+function renderAllCasesView(t){
+  const pane=document.getElementById(t+'-all-pane');if(!pane)return;
   const d=loadTimes();
   const trainerData=d[t]||{};
   const allTimes=Object.values(trainerData).flat();
   const totalSolves=allTimes.length;
-  const overallBest=totalSolves?Math.min(...allTimes):null;
-  const overallAvg=totalSolves?allTimes.reduce((a,b)=>a+b,0)/allTimes.length:null;
-  document.getElementById('att-modal-sub').textContent=totalSolves?`${totalSolves} total solve${totalSolves===1?'':'s'}`:'No times recorded yet';
-  if(!totalSolves){body.innerHTML='<p class="att-no-data">No times recorded yet for this trainer.</p>';return;}
+  if(!totalSolves){pane.innerHTML='<p class="ac-empty">No times recorded yet.</p>';return;}
   let caseList=[];
   if(t==='oll')caseList=OLL_CASES.map(c=>({key:String(c.num),name:'OLL '+c.num,cat:c.cat}));
   else if(t==='pll')caseList=PLL_CASES.map(c=>({key:c.name,name:c.name+' Perm',cat:c.type}));
-  else if(t==='f2l')caseList=F2L_CASES.map(c=>({key:String(c.num),name:'F2L '+c.num,cat:c.name}));
+  else if(t==='f2l')caseList=F2L_CASES.map(c=>({key:String(c.num),name:'F2L '+c.num,cat:''}));
   const casesWithData=caseList.filter(c=>trainerData[c.key]&&trainerData[c.key].length>0);
+  const overallBest=Math.min(...allTimes);
+  const overallAvg=allTimes.reduce((a,b)=>a+b,0)/allTimes.length;
   const rows=casesWithData.map(c=>{
     const times=trainerData[c.key];
     const best=Math.min(...times);
     const last5=times.slice(-5);
     const avg5=last5.reduce((a,b)=>a+b,0)/last5.length;
     return `<tr>
-      <td>${c.name}<br><span style="font-size:10px;color:var(--muted);font-family:var(--font);font-weight:400">${c.cat}</span></td>
+      <td>${c.name}${c.cat?`<br><span style="font-size:10px;color:var(--muted);font-family:inherit;font-weight:400">${c.cat}</span>`:''}</td>
       <td>${times.length}</td>
-      <td class="best-val">${fmtMs(best)}</td>
+      <td class="ac-best">${fmtMs(best)}</td>
       <td>${fmtMs(avg5)}</td>
     </tr>`;
   }).join('');
-  body.innerHTML=`<div class="att-grid">
-    <div class="att-summary-chip"><div class="att-summary-val">${totalSolves}</div><div class="att-summary-key">Total Solves</div></div>
-    <div class="att-summary-chip"><div class="att-summary-val green">${fmtMs(overallBest)}</div><div class="att-summary-key">Best Overall</div></div>
-    <div class="att-summary-chip"><div class="att-summary-val">${fmtMs(overallAvg)}</div><div class="att-summary-key">Avg All</div></div>
+  pane.innerHTML=`<div class="ac-header">
+    <span class="ac-label">${casesWithData.length} case${casesWithData.length===1?'':'s'} · ${totalSolves} solve${totalSolves===1?'':'s'}</span>
+    <button class="ac-clear-btn" onclick="clearAllAndRefresh('${t}')">Clear All</button>
   </div>
-  <p class="att-section-label">Cases Practiced</p>
-  <table class="att-table">
-    <thead><tr><th>Case</th><th>Solves</th><th>Best</th><th>Avg(5)</th></tr></thead>
+  <table class="ac-table">
+    <thead><tr><th>Case</th><th>N</th><th>Best</th><th>Avg5</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
+}
+
+function clearAllAndRefresh(t){
+  if(!confirm('Clear ALL '+t.toUpperCase()+' times?'))return;
+  const d=loadTimes();delete d[t];saveTimes(d);
+  renderAllCasesView(t);
+  const ts=TS[t];if(ts&&ts.caseId!==null)refreshStats(t,ts.caseId);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -869,15 +952,47 @@ function genF2L(keepTimer=false){
   if(!keepTimer)resetTimer('f2l');
 }
 
-function genCross(){
-  showScramble('cross','[ Cross scramble engine — coming soon ]');
-  setInfo('cross-solution-display',null);
-  document.getElementById('cross-reveal-btn').style.display='none';
+// ── Random 3x3 scramble generator ──────────────────────────────
+(function(){
+  const FACES=['U','D','F','B','R','L'];
+  const AXIS_GROUP={U:0,D:0,F:1,B:1,R:2,L:2};
+  const MODS=['','\'','2'];
+  function gen333(len){
+    len=len||20;
+    const moves=[];let lastAxis=-1,secondLastAxis=-1;
+    while(moves.length<len){
+      const f=FACES[Math.floor(Math.random()*6)];
+      const ax=AXIS_GROUP[f];
+      if(ax===lastAxis)continue;
+      if(ax===secondLastAxis&&moves.length>=2)continue;
+      const mod=MODS[Math.floor(Math.random()*3)];
+      moves.push(f+mod);
+      secondLastAxis=lastAxis;lastAxis=ax;
+    }
+    return moves.join(' ');
+  }
+  window.gen333=gen333;
+})();
+
+function genCross(keepTimer=false){
+  showScramble('cross', gen333());
+  refreshStats('cross','main');
+  if(!keepTimer)resetTimer('cross');
 }
-function genXCross(){
-  showScramble('xcross','[ X-Cross scramble engine — coming soon ]');
-  setInfo('xcross-solution-display',null);setInfo('xcross-pair-display',null);
-  document.getElementById('xcross-reveal-btn').style.display='none';
+function genXCross(keepTimer=false){
+  showScramble('xcross', gen333());
+  refreshStats('xcross','main');
+  if(!keepTimer)resetTimer('xcross');
+}
+function genCrossPlus1(keepTimer=false){
+  showScramble('crossplus1', gen333());
+  refreshStats('crossplus1','main');
+  if(!keepTimer)resetTimer('crossplus1');
+}
+function genCrossPlus2(keepTimer=false){
+  showScramble('crossplus2', gen333());
+  refreshStats('crossplus2','main');
+  if(!keepTimer)resetTimer('crossplus2');
 }
 function revealSolution(t){}
 
@@ -987,6 +1102,8 @@ function drawSolvedDiagram(canvasId){
 (function init(){
   drawSolvedDiagram('cross-diagram');
   drawSolvedDiagram('xcross-diagram');
+  drawSolvedDiagram('crossplus1-diagram');
+  drawSolvedDiagram('crossplus2-diagram');
 })();
 
 </script>

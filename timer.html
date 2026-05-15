@@ -4714,15 +4714,19 @@
       const bundle = data.sessionsByEvent[eventId];
       if (!bundle) return null;
       let best = null;
+      const trim = Math.ceil(n * 0.05); // WCA: 5% from each end (1 for ao5/ao12, 5 for ao100)
       for (const session of bundle.sessions) {
-        const solves = session.solves.filter(s => s.penalty !== "DNF");
+        const solves = session.solves; // include DNFs — treat as Infinity, not filtered out
         if (solves.length < n) continue;
         for (let i = 0; i <= solves.length - n; i++) {
-          const window = solves.slice(i, i + n).map(s =>
-            (s.baseTimeMs ?? s.time ?? 0) + (s.penalty === "+2" ? 2000 : 0));
-          const sorted = [...window].sort((a,b) => a-b);
-          const trimmed = n >= 5 ? sorted.slice(1,-1) : sorted;
-          const avg = trimmed.reduce((a,b)=>a+b,0) / trimmed.length;
+          const window = solves.slice(i, i + n).map(s => {
+            if (s.penalty === "DNF") return Infinity;
+            return (s.baseTimeMs ?? s.time ?? 0) + (s.penalty === "+2" ? 2000 : 0);
+          });
+          const sorted = [...window].sort((a, b) => a - b);
+          const kept = n >= 5 ? sorted.slice(trim, n - trim) : sorted;
+          if (kept.some(v => !isFinite(v))) continue; // DNF in trimmed middle = no valid avg
+          const avg = kept.reduce((a, b) => a + b, 0) / kept.length;
           if (best == null || avg < best) best = avg;
         }
       }
@@ -5795,20 +5799,7 @@
       if (!eventId || eventId.startsWith('custom_')) return [];
       const scrambles = [];
       for (let i = 0; i < count; i++) {
-        try {
-          const alg = await randomScrambleForEvent(eventId);
-          scrambles.push(alg.toString());
-        } catch {
-          const puzzle = ALL_COMP_EVENTS.find(e => e.id === eventId)?.puzzle;
-          if (puzzle && puzzle !== eventId) {
-            try {
-              const alg = await randomScrambleForEvent(puzzle);
-              scrambles.push(alg.toString());
-              continue;
-            } catch {}
-          }
-          scrambles.push("No internet — scramble unavailable");
-        }
+        scrambles.push(await oneScramble(eventId));
       }
       return scrambles;
     }
@@ -6725,10 +6716,11 @@
       const container = cts.container;
       const compPath = comp._path || 'competitions';
 
-      // Convert -1 (DNF) values: submitCompEntry stores raw ms; renderCompDetailFull handles negatives
-      // Actually compScore treats null as DNF in some places; we store null for DNF for compatibility
+      // compScore handles -1 (DNF) and -2 (DNS) correctly via isBad().
+      // Do NOT convert -1 to null — null is filtered out of `filled`, which shrinks
+      // n below 5 and triggers the mean-of-partial path instead of a proper ao5.
       function normalizeTimes(arr) {
-        return arr.map(t => t === -1 ? null : t);
+        return arr;
       }
 
       const submitBtn = document.getElementById('ctSubmitBtn');
