@@ -169,22 +169,22 @@
       display:grid;
       grid-template-columns:minmax(var(--sidebar-min-width), var(--sidebar-width)) 10px minmax(0,1fr);
       min-height:0;
-      padding:12px 0 12px 12px;
+      padding:12px 0 0 12px;
     }
 
     .sidebar{
       grid-column:1;
       border:1px solid color-mix(in srgb, var(--line) 70%, transparent);
-      background:linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 78%, transparent) 0%, color-mix(in srgb, var(--panel) 78%, transparent) 100%);
+      background:linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 65%, transparent) 0%, color-mix(in srgb, var(--panel) 65%, transparent) 100%);
       backdrop-filter:blur(16px);
       -webkit-backdrop-filter:blur(16px);
       display:flex;
       flex-direction:column;
       min-width:0;
       min-height:0;
-      height:100%;
       overflow:hidden;
       border-radius:20px;
+      margin-bottom:12px;
       box-shadow:0 8px 32px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.06);
     }
 
@@ -412,7 +412,7 @@
       position:absolute;
       left:50%;
       top:0;
-      bottom:0;
+      bottom:12px;
       width:2px;
       transform:translateX(-50%);
       background:rgba(255,255,255,.08);
@@ -454,7 +454,7 @@
       min-height:0;
       overflow:hidden;
       position:relative;
-      padding:18px 22px 0;
+      padding:18px 22px 12px;
     }
 
     .main.hide-while-timing .top-hide{
